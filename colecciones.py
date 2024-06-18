@@ -254,6 +254,10 @@ class Pila(Secuencia):
     def extraer(self): return self.__soporte.extraer(0)
     pop = extraer
 
+    # Conveniencia para self[0]
+    @property
+    def cima(self): return self[0]
+
 class Cola(Secuencia):
 
     def anexar(self, valor): self.__soporte.anexar(valor)
@@ -261,6 +265,10 @@ class Cola(Secuencia):
 
     def extraer(self): return self.__soporte.extraer_ultimo()
     pop = extraer
+
+    # Conveniencia para self[0]
+    @property
+    def frente(self): return self[0]
 
 
 # Implementaciones alternativas pero algo más complicadas de hacer funcionar
