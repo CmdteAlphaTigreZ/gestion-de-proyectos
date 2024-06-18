@@ -31,6 +31,8 @@ def fn_agregar_proyecto(consola, linea_comando):
             "Ingrese el nombre del gerente del proyecto: ",
             "Ingrese el nombre del equipo del proyecto: "
     ))
+    argumentos[2] = datetime.strptime(argumentos[2], "%d/%m/%Y")
+    argumentos[3] = datetime.strptime(fecha_vencimiento, "%d/%m/%Y")
     proyecto = Proyecto( *([len(proyectos)] + argumentos) )
     proyectos.anexar(proyecto)
     print("El proyecto ha sido creado, su ID es " + str(proyecto.id))
