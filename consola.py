@@ -73,8 +73,6 @@ class Consola:
                                          # arbitrariamente
         self.comandos["ayuda"] = self.ayuda
         self.comandos["salir"] = lambda: None
-        #self.historial = None
-        #self.errores = None
 
     def consola(self):
         "Procedimiento que implementa la interfaz en línea de comandos."
@@ -85,36 +83,27 @@ class Consola:
         leer_comando(linea_comando)
         comando = linea_comando[0]
         while True:
-            if comando == "salir":
-                if len(linea_comando) != 1:                    
-                    mensaje_e = "Error: Sintaxis inválida: salir no toma argumentos."
-                    print(mensaje_e)
-                    registrar_error("Sintaxis", "Consola", mensaje_e)
-                elif self.salir():
-                    break
-            else:
-                try:
-                    resultado = self.comandos[comando](linea_comando)
-                    print(resultado.resultado)
-##                    if resultado.tipo_error is None:
-##                        if comando not in ["leerconfig", "errores", "historial"]:
-##                            registrar_comando(linea_comando, resultado.resultado)
-##                        else:
-##                            registrar_comando(linea_comando, "Resultado omitido...")
-##                    else:
-##                        registrar_error(resultado.tipo_error,
-##                                        comando,
-##                                        resultado.resultado)
-                except KeyError as e:
-                    mensaje_e = "Error: Comando desconocido: " + comando
-                    print(mensaje_e)
-                    registrar_error("No implementado", "Consola", mensaje_e)
-                except KeyboardInterrupt:
-                    break
-            linea_comando = []
-            leer_comando(linea_comando)
-            comando = linea_comando[0]
-        print("Saliendo de la calculadora...")
+            try:
+                if comando == "salir":
+                    if len(linea_comando) != 1:                    
+                        mensaje_e = \
+                            "Error: Sintaxis inválida: salir no toma argumentos."
+                        print(mensaje_e)
+                    elif self.salir():
+                        break
+                else:
+                    try:
+                        resultado = self.comandos[comando](linea_comando)
+                        print(resultado.resultado)
+                    except KeyError as e:
+                        mensaje_e = "Error: Comando desconocido: " + comando
+                        print(mensaje_e)
+                linea_comando = []
+                leer_comando(linea_comando)
+                comando = linea_comando[0]
+            except KeyboardInterrupt:
+                break
+        print("Saliendo del programa...")
 
     def leer_comando(linea_comando):
         "Lee una línea de comando de la entrada. linea_comando debe ser '[]'"
@@ -128,7 +117,6 @@ class Consola:
             except UnicodeError as e:
                 mensaje_e = "Error: Texto de entrada por consola inválido."
                 print(mensaje_e)
-                registrar_error("Codificación de texto", "Consola", mensaje_e)
             else:
                 if len(linea_comando) != 0:
                     continuar = False
@@ -140,7 +128,6 @@ class Consola:
         for cmd in self.comandos.values():
             ayuda.append("""  {}
                                 {}""".format(cmd.sintaxis, cmd.ayuda) )
-        #ayuda.append("  regresar" + alineacion[8:] + "Salir de la calculadora\n")
         ayuda = "\n".join(ayuda)
         return Resultado(ayuda, self)
 
@@ -151,10 +138,10 @@ class Consola:
         print("Cierre cancelado")
         return False
 
-    def leer_argumentos(linea_comando, mensajes):
+    def leer_argumentos(self, linea_comando, mensajes):
         """
         Lee argumentos de la línea de comandos y del usuario.\
-         Acepta dos listas de texto y devuelve una lista de flotantes.
+         Acepta dos listas de texto y devuelve una lista de texto.
 
         Esta función obtiene los argumentos para un comando
         de la línea de comando sólo si todos están en ella,
@@ -169,7 +156,7 @@ class Consola:
 
         Se devuelve una lista de todos los argumentos del comando
         en el orden en que se recibieron los mensajes al usuario
-        para ellos, convertido cada uno en "float".
+        para ellos.
 
         Debe capturarse desde el comando la excepción ValueError
         que puede levantar esta función.
@@ -177,12 +164,11 @@ class Consola:
 
         len_linea_comando = len(linea_comando)
         len_mensajes = len(mensajes)
-        # "argumentos = list([str])" , luego "argumentos = list([float])"
+        # "argumentos = list[str]"
         argumentos = [""] * len_mensajes
 
         if len_linea_comando - 1 == len_mensajes:
-            for i in range(len_mensajes):
-                argumentos[i] = linea_comando[i + 1]
+            argumentos[:] = linea_comando[1:]
         elif len_linea_comando == 1:
             try:
                 for i in range(len_mensajes):
@@ -195,131 +181,45 @@ class Consola:
                       from e
         else:
             raise SyntaxError(
-                "Error: Sintaxis inválida: " + info[linea_comando[0]]["sintaxis"])
-        for i in range(len_mensajes):
-            argumentos[i] = a_float(argumentos[i])
+                "Error: Sintaxis inválida: "
+                + str(self.comandos[linea_comando[0]]) )
         return argumentos
 
-##    def registrar_comando(linea_comando, resultado):
-##        "Registra los comandos ejecutados y sus resultados internamente."
+##    def cmd_leerconfig(linea_comando):
+##        "Comando leerconfig. Acepta lista de texto y devuelve diccionario de texto."
 ##
-##        self.historial.append( [" ".join(linea_comando), resultado] )
-
-##    def registrar_error(tipo, origen, mensaje):
-##        "Registra errores en un archivo de registro de errores e internamente.\
-##     Acepta tres textos."
-##
-##        self.errores.append({"tipo": tipo, "origen": origen, "mensaje": mensaje})
+##        argumentos = list()
 ##        try:
-##            with open(ruta_errores, "a") as registro:
-##                contenido = "".join([ "Tipo: ", tipo, "\n",
-##                                      "Origen: ", origen, "\n",
-##                                      mensaje, "\n\n" ])
-##                registro.write(contenido)
+##            # Este comando no tiene parámetros, serán rechazados.
+##            argumentos = leer_argumentos(linea_comando, [])
+##        except ValueError as e:
+##            return {"resultado": e.args[0], "tipo_error": "Valor"}
+##        except SyntaxError as e:
+##            return {"resultado": e.args[0], "tipo_error": "Sintaxis"}
+##        except UnicodeError as e:
+##            return {"resultado": e.args[0], "tipo_error": "Codificación de texto"}
+##        configuracion = leerconfig()
+##        return configuracion
+##
+##    info["leerconfig"]["comando"] = cmd_leerconfig
+##
+##    def leerconfig():
+##        "Devuelve el contenido del archivo de configuración"
+##
+##        configuracion = str()
+##        # Realmente es de uno de los tipos de archivo
+##        archivo = open
+##        try:
+##            archivo = open(ruta_configuracion)
+##            configuracion = archivo.read()
 ##        except OSError as e:
-##            mensaje_e = "Error: No se pudo abrir el registro de errores."
-##            print(mensaje_e +
-##                  " El error se mantendrá almacenado de manera no permanente.")
-##            self.errores.append({"tipo": "Archivo",
-##                            "origen": "Registro de errores",
-##                            "mensaje": mensaje_e})
-
-    def cmd_leerconfig(linea_comando):
-        "Comando leerconfig. Acepta lista de texto y devuelve diccionario de texto."
-
-        argumentos = list()
-        try:
-            # Este comando no tiene parámetros, serán rechazados.
-            argumentos = leer_argumentos(linea_comando, [])
-        except ValueError as e:
-            return {"resultado": e.args[0], "tipo_error": "Valor"}
-        except SyntaxError as e:
-            return {"resultado": e.args[0], "tipo_error": "Sintaxis"}
-        except UnicodeError as e:
-            return {"resultado": e.args[0], "tipo_error": "Codificación de texto"}
-        configuracion = leerconfig()
-        return configuracion
-
-    info["leerconfig"]["comando"] = cmd_leerconfig
-
-    def leerconfig():
-        "Devuelve el contenido del archivo de configuración"
-
-        configuracion = str()
-        # Realmente es de uno de los tipos de archivo
-        archivo = open
-        try:
-            archivo = open(ruta_configuracion)
-            configuracion = archivo.read()
-        except OSError as e:
-            return {\
-                "resultado": "Error: No se pudo abrir el archivo de configuración.",
-                "tipo_error": "Archivo"}
-        except UnicodeError as e:
-            return {\
-                "resultado": "Error: Archivo de configuración con texto inválido.",
-                "tipo_error": "Codificación de texto"}
-        archivo.close()
-        return {"resultado": "\n" + configuracion + "\n",
-                "tipo_error": ""}
-
-    def cmd_errores(linea_comando):
-        "Comando errores. Acepta lista de texto y devuelve diccionario de texto."
-
-        argumentos = list()
-        try:
-            # Este comando no tiene parámetros, serán rechazados.
-            argumentos = leer_argumentos(linea_comando, [])
-        except ValueError as e:
-            return {"resultado": e.args[0], "tipo_error": "Valor"}
-        except SyntaxError as e:
-            return {"resultado": e.args[0], "tipo_error": "Sintaxis"}
-        except UnicodeError as e:
-            return {"resultado": e.args[0], "tipo_error": "Codificación de texto"}
-        errores = verrores()
-        return {"resultado": errores,
-                "tipo_error": ""}
-
-    info["errores"]["comando"] = cmd_errores
-
-    def verrores():
-        "Devuelve un listado del registro de errores."
-
-        # "listado = list(str)" , luego "listado = str"
-        listado = list()
-        for error in errores:
-            listado.append("\n".join([ "Tipo: " + error["tipo"],
-                                       "Origen: " + error["origen"],
-                                       error["mensaje"],
-                                       "" ]))
-        listado = "\n".join(listado) + "\n"
-        return listado
-
-    def cmd_historial(linea_comando):
-        "Comando historial. Acepta lista de texto y devuelve diccionario de texto."
-
-        argumentos = list()
-        try:
-            # Este comando no tiene parámetros, serán rechazados.
-            argumentos = leer_argumentos(linea_comando, [])
-        except ValueError as e:
-            return {"resultado": e.args[0], "tipo_error": "Valor"}
-        except SyntaxError as e:
-            return {"resultado": e.args[0], "tipo_error": "Sintaxis"}
-        except UnicodeError as e:
-            return {"resultado": e.args[0], "tipo_error": "Codificación de texto"}
-        historial = vhistorial()
-        return {"resultado": historial,
-                "tipo_error": ""}
-
-    info["historial"]["comando"] = cmd_historial
-
-    def vhistorial():
-        "Devuelve un listado del historial."
-
-        # "listado = list(str)" , luego "listado = str"
-        listado = list()
-        for entrada in historial:
-            listado.append("\n".join(entrada) + "\n")
-        listado = "\n".join(listado) + "\n"
-        return listado
+##            return {\
+##                "resultado": "Error: No se pudo abrir el archivo de configuración.",
+##                "tipo_error": "Archivo"}
+##        except UnicodeError as e:
+##            return {\
+##                "resultado": "Error: Archivo de configuración con texto inválido.",
+##                "tipo_error": "Codificación de texto"}
+##        archivo.close()
+##        return {"resultado": "\n" + configuracion + "\n",
+##                "tipo_error": ""}

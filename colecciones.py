@@ -217,61 +217,105 @@ class ListaEnlazada:
     def __reversed__(self):
         return self.IteradorL2E(self, adelante=False)
 
-class Lista(ListaEnlazada):
+
+class Secuencia:
+
+    def __init__(self, iterable=None):
+        # Almacen de datos de soporte para la interfaz, por ahora ListaEnlazada
+        self.__soporte = ListaEnlazada(iterable)
+
+    def __len__(self): return len(self.__soporte)
+    largo = __len__
+
+    def __getitem__(self, indice): return self.__soporte[indice]
+    obtener = __getitem__
+
+    def __setitem__(self, indice, valor): self.__soporte[indice] = valor
+    cambiar = __setitem__
+
+    def limpiar(self): self.__soporte.limpiar()
+    clear = limpiar
+
+    def __iter__(self): return iter(self.__soporte)
+
+class Lista(ListaEnlazada, Secuencia):
     pass
 
-class Pila:
+class Pila(Secuencia):
 
-    def __init__(self, iterable=None):
-        ListaEnlazada.__init__(self, iterable)
-        self.__cima = self._ListaEnlazada__cabeza
+    def insertar(self, valor):
+        if valor is None:
+            self.__soporte.insertar(0, 0)
+            self.__soporte[0] = None
+        else:
+            self.__soporte.insertar(0, valor)
+    push = insertar
 
-    __len__ = ListaEnlazada.__len__
-    largo = __len__
+    def extraer(self): return self.__soporte.extraer(0)
+    pop = extraer
 
-    #__validar_indice = ListaEnlazada._ListaEnlazada__validar_indice
-    #__obtener_nodo = ListaEnlazada._ListaEnlazada__obtener_nodo
-    
-    #__getitem__ = ListaEnlazada.__getitem__
-    #__setitem__ = ListaEnlazada.__setitem__
-    #__delitem__ = ListaEnlazada.__delitem__
+class Cola(Secuencia):
 
-    insertar = ListaEnlazada.insertar
-    extraer = ListaEnlazada.extraer
-    pop = ListaEnlazada.pop
-    push = extraer
-
-    limpiar = ListaEnlazada.limpiar
-    clear = limpiar
-
-    def __iter__(self):
-        return ListaEnlazada.IteradorL2E(self)
-
-class Cola:
-    
-    def __init__(self, iterable=None):
-        ListaEnlazada.__init__(self, iterable)
-        self.__inicio = self._ListaEnlazada__cabeza
-        self.__fin = self._ListaEnlazada__cola
-
-    __len__ = ListaEnlazada.__len__
-    largo = __len__
-
-    #__validar_indice = ListaEnlazada._ListaEnlazada__validar_indice
-    #__obtener_nodo = ListaEnlazada._ListaEnlazada__obtener_nodo
-    
-    #__getitem__ = ListaEnlazada.__getitem__
-    #__setitem__ = ListaEnlazada.__setitem__
-    #__delitem__ = ListaEnlazada.__delitem__
-
-    anexar = ListaEnlazada.anexar
-    extraer = ListaEnlazada.extraer
-    pop = ListaEnlazada.pop
+    def anexar(self, valor): self.__soporte.anexar(valor)
     append = anexar
 
-    limpiar = ListaEnlazada.limpiar
-    clear = limpiar
+    def extraer(self): return self.__soporte.extraer_ultimo()
+    pop = extraer
 
-    def __iter__(self):
-        return ListaEnlazada.IteradorL2E(self)
+
+# Implementaciones alternativas pero algo más complicadas de hacer funcionar
+##class Pila:
+##
+##    def __init__(self, iterable=None):
+##        ListaEnlazada.__init__(self, iterable)
+##        self.__cima = self._ListaEnlazada__cabeza
+##
+##    __len__ = ListaEnlazada.__len__
+##    largo = __len__
+##
+##    #__validar_indice = ListaEnlazada._ListaEnlazada__validar_indice
+##    #__obtener_nodo = ListaEnlazada._ListaEnlazada__obtener_nodo
+##    
+##    #__getitem__ = ListaEnlazada.__getitem__
+##    #__setitem__ = ListaEnlazada.__setitem__
+##    #__delitem__ = ListaEnlazada.__delitem__
+##
+##    insertar = ListaEnlazada.insertar
+##    extraer = ListaEnlazada.extraer
+##    pop = ListaEnlazada.pop
+##    push = insertar
+##
+##    limpiar = ListaEnlazada.limpiar
+##    clear = limpiar
+##
+##    def __iter__(self):
+##        return ListaEnlazada.IteradorL2E(self)
+##
+##class Cola:
+##    
+##    def __init__(self, iterable=None):
+##        ListaEnlazada.__init__(self, iterable)
+##        self.__inicio = self._ListaEnlazada__cabeza
+##        self.__fin = self._ListaEnlazada__cola
+##
+##    __len__ = ListaEnlazada.__len__
+##    largo = __len__
+##
+##    #__validar_indice = ListaEnlazada._ListaEnlazada__validar_indice
+##    #__obtener_nodo = ListaEnlazada._ListaEnlazada__obtener_nodo
+##    
+##    #__getitem__ = ListaEnlazada.__getitem__
+##    #__setitem__ = ListaEnlazada.__setitem__
+##    #__delitem__ = ListaEnlazada.__delitem__
+##
+##    anexar = ListaEnlazada.anexar
+##    extraer = ListaEnlazada.extraer
+##    pop = ListaEnlazada.pop
+##    append = anexar
+##
+##    limpiar = ListaEnlazada.limpiar
+##    clear = limpiar
+##
+##    def __iter__(self):
+##        return ListaEnlazada.IteradorL2E(self)
 
