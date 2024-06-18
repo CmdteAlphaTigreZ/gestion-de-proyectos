@@ -113,6 +113,7 @@ class Consola:
         # Son públicos pero mejor no modificar arbitrariamente
         self.contextos = contextos.copiar()
         self.comandos = self.comandos["principal"]
+        self.linea_comando = []
         
         self.comandos["ayuda"] = self.ayuda
         self.comandos["salir"] = lambda: ""
@@ -122,13 +123,12 @@ class Consola:
 
         self.ayuda()
         
-        linea_comando = list()
-        leer_comando(linea_comando)
-        comando = linea_comando[0]
+        self.leer_comando()
+        comando = self.linea_comando[0]
         while True:
             try:
-                if comando == "salir" and "salir" in comandos:
-                    if len(linea_comando) != 1:                    
+                if comando == "salir" and "salir" in self.comandos:
+                    if len(self.linea_comando) != 1:                    
                         mensaje_e = \
                             "Error: Sintaxis inválida: salir no toma argumentos."
                         print(mensaje_e)
@@ -136,20 +136,21 @@ class Consola:
                         break
                 else:
                     try:
-                        resultado = self.comandos[comando](linea_comando)
+                        resultado = self.comandos[comando](self.linea_comando)
                         print(resultado.resultado, end="\n")
                     except KeyError as e:
                         mensaje_e = "Error: Comando desconocido: " + comando
                         print(mensaje_e)
-                linea_comando = []
-                leer_comando(linea_comando)
-                comando = linea_comando[0]
+                self.linea_comando = []
+                leer_comando()
+                comando = self.linea_comando[0]
             except KeyboardInterrupt:
                 break
         print("Saliendo del programa...")
 
-    def leer_comando(linea_comando):
+    def leer_comando(linea_comando=None):
         "Lee una línea de comando de la entrada. linea_comando debe ser '[]'"
+        if linea_comando is None: linea_comando = self.linea_comando
         continuar = True
         while continuar:
             try:
@@ -193,7 +194,7 @@ class Consola:
         self.contextos.actual = nombre
         self.comandos = self.contextos[nombre]
 
-    def leer_argumentos(self, linea_comando, mensajes):
+    def leer_argumentos(self, nombres, mensajes, linea_comando=None):
         """
         Lee argumentos de la línea de comandos y del usuario.\
          Acepta dos listas de texto y devuelve una lista de texto.
@@ -217,17 +218,23 @@ class Consola:
         que puede levantar esta función.
         """
 
+        if linea_comando is None: linea_comando = self.linea_comando
         len_linea_comando = len(linea_comando)
-        len_mensajes = len(mensajes)
-        # "argumentos = list[str]"
-        argumentos = [""] * len_mensajes
+        len_argumentos = len(nombres)
+        if len_argumentos != len(mensajes):
+            raise ValueError(
+                "'nombres' y 'mensajes' deben tener la misma longitud")
+        
+        # "argumentos = dict[str, str]"
+        argumentos = {}
 
-        if len_linea_comando - 1 == len_mensajes:
-            argumentos[:] = linea_comando[1:]
+        if len_linea_comando - 1 == len_argumentos:
+            for nombre, valor in zip(nombres, linea_comando[1:]):
+                argumentos[nombre] = valor
         elif len_linea_comando == 1:
             try:
-                for i in range(len_mensajes):
-                    argumentos[i] = input(mensajes[i])
+                for nombre, mensaje in zip(nombres, mensajes):
+                    argumentos[nombre] = input(mensaje)
             except EOFError as e:
                 raise ValueError("Error: No se proporcionó el dato.")\
                       from e
