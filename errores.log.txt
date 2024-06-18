@@ -1,0 +1,216 @@
+Tipo: Archivo
+Origen: Registro de errores
+Error: No se pudo abrir el registro de errores para cargarlo.
+
+Tipo: Archivo
+Origen: Historial
+Error: No se pudo abrir el historial para cargarlo.
+
+Tipo: No implementado
+Origen: Consola
+Error: Comando desconocido: comando
+
+Tipo: Valor
+Origen: prectangulo
+Error: Valor numérico inválido: invalido
+
+Tipo: Valor
+Origen: prectangulo
+Error: Las medidas deben ser positivas.
+
+Tipo: Sintaxis
+Origen: prectangulo
+Error: Sintaxis inválida: prectangulo [base altura]
+
+Tipo: Sintaxis
+Origen: prectangulo
+Error: Sintaxis inválida: prectangulo [base altura]
+
+Tipo: Valor
+Origen: vpiramide
+Error: Valor numérico inválido: invalido
+
+Tipo: Valor
+Origen: vpiramide
+Error: Las medidas deben ser positivas.
+
+Tipo: Sintaxis
+Origen: vpiramide
+Error: Sintaxis inválida: vpiramide [base altura]
+
+Tipo: Sintaxis
+Origen: vpiramide
+Error: Sintaxis inválida: vpiramide [base altura]
+
+Tipo: Sintaxis
+Origen: ctiempo
+Error: Sintaxis inválida: ctiempo [horas]
+
+Tipo: Valor
+Origen: ctiempo
+Error: El tiempo debe ser positivo.
+
+Tipo: Sintaxis
+Origen: ctiempo
+Error: Sintaxis inválida: ctiempo [horas]
+
+Tipo: Valor
+Origen: ctiempo
+Error: Valor numérico inválido: a
+
+Tipo: Sintaxis
+Origen: vcubo
+Error: Sintaxis inválida: vcubo [arista]
+
+Tipo: Valor
+Origen: vcubo
+Error: Las medidas deben ser positivas.
+
+Tipo: Sintaxis
+Origen: vcubo
+Error: Sintaxis inválida: vcubo [arista]
+
+Tipo: Valor
+Origen: vcubo
+Error: Valor numérico inválido: a
+
+Tipo: No implementado
+Origen: Consola
+Error: Comando desconocido: comando
+
+Tipo: Valor
+Origen: prectangulo
+Error: Valor numérico inválido: invalido
+
+Tipo: Valor
+Origen: prectangulo
+Error: Las medidas deben ser positivas.
+
+Tipo: Sintaxis
+Origen: prectangulo
+Error: Sintaxis inválida: prectangulo [base altura]
+
+Tipo: Sintaxis
+Origen: prectangulo
+Error: Sintaxis inválida: prectangulo [base altura]
+
+Tipo: Valor
+Origen: vpiramide
+Error: Valor numérico inválido: invalido
+
+Tipo: Valor
+Origen: vpiramide
+Error: Las medidas deben ser positivas.
+
+Tipo: Sintaxis
+Origen: vpiramide
+Error: Sintaxis inválida: vpiramide [base altura]
+
+Tipo: Sintaxis
+Origen: vpiramide
+Error: Sintaxis inválida: vpiramide [base altura]
+
+Tipo: Sintaxis
+Origen: ctiempo
+Error: Sintaxis inválida: ctiempo [horas]
+
+Tipo: Valor
+Origen: ctiempo
+Error: El tiempo debe ser positivo.
+
+Tipo: Sintaxis
+Origen: ctiempo
+Error: Sintaxis inválida: ctiempo [horas]
+
+Tipo: Valor
+Origen: ctiempo
+Error: Valor numérico inválido: a
+
+Tipo: Sintaxis
+Origen: vcubo
+Error: Sintaxis inválida: vcubo [arista]
+
+Tipo: Valor
+Origen: vcubo
+Error: Las medidas deben ser positivas.
+
+Tipo: Sintaxis
+Origen: vcubo
+Error: Sintaxis inválida: vcubo [arista]
+
+Tipo: Valor
+Origen: vcubo
+Error: Valor numérico inválido: a
+
+Tipo: No implementado
+Origen: Consola
+Error: Comando desconocido: comando
+
+Tipo: Valor
+Origen: prectangulo
+Error: Valor numérico inválido: invalido
+
+Tipo: Valor
+Origen: prectangulo
+Error: Las medidas deben ser positivas.
+
+Tipo: Sintaxis
+Origen: prectangulo
+Error: Sintaxis inválida: prectangulo [base altura]
+
+Tipo: Sintaxis
+Origen: prectangulo
+Error: Sintaxis inválida: prectangulo [base altura]
+
+Tipo: Valor
+Origen: vpiramide
+Error: Valor numérico inválido: invalido
+
+Tipo: Valor
+Origen: vpiramide
+Error: Las medidas deben ser positivas.
+
+Tipo: Sintaxis
+Origen: vpiramide
+Error: Sintaxis inválida: vpiramide [base altura]
+
+Tipo: Sintaxis
+Origen: vpiramide
+Error: Sintaxis inválida: vpiramide [base altura]
+
+Tipo: Sintaxis
+Origen: ctiempo
+Error: Sintaxis inválida: ctiempo [horas]
+
+Tipo: Valor
+Origen: ctiempo
+Error: El tiempo debe ser positivo.
+
+Tipo: Sintaxis
+Origen: ctiempo
+Error: Sintaxis inválida: ctiempo [horas]
+
+Tipo: Valor
+Origen: ctiempo
+Error: Valor numérico inválido: a
+
+Tipo: Sintaxis
+Origen: vcubo
+Error: Sintaxis inválida: vcubo [arista]
+
+Tipo: Valor
+Origen: vcubo
+Error: Las medidas deben ser positivas.
+
+Tipo: Sintaxis
+Origen: vcubo
+Error: Sintaxis inválida: vcubo [arista]
+
+Tipo: Valor
+Origen: vcubo
+Error: Valor numérico inválido: a
+
+Tipo: No implementado
+Origen: Consola
+Error: Comando desconocido: arriba
+

@@ -1,0 +1,345 @@
+Calculadora científica.
+
+Comandos disponibles:
+  prectangulo [base altura]    Perímetro de un rectángulo
+  vpiramide [base altura]      Volumen de una pirámide
+  ctiempo [horas]              Horas a días, minutos y segundos
+  vcubo [arista]               Volumen de un cubo
+  leerconfig                   Ver el archivo de configuración
+  errores                      Ver el registro de errores
+  historial                    Ver el historial de operaciones
+  regresar                     Salir de la calculadora
+
+>> Error: Comando desconocido: comando
+>> Indique la longitud de la base del rectángulo: Indique la altura del rectángulo: El perímetro del rectángulo es: 60.0
+>> El perímetro del rectángulo es: 60.0
+>> El perímetro del rectángulo es: 37.400000000000006
+>> Error: Valor numérico inválido: invalido
+>> Error: Las medidas deben ser positivas.
+>> Error: Sintaxis inválida: prectangulo [base altura]
+>> Error: Sintaxis inválida: prectangulo [base altura]
+>> Indique el área de la base de la pirámide: Indique la altura de la pirámide: El volumen de la pirámide es: 66.66666666666667
+>> El volumen de la pirámide es: 66.66666666666667
+>> El perímetro del rectángulo es: 37.400000000000006
+>> Error: Valor numérico inválido: invalido
+>> Error: Las medidas deben ser positivas.
+>> Error: Sintaxis inválida: vpiramide [base altura]
+>> Error: Sintaxis inválida: vpiramide [base altura]
+>> Indique la cantidad de horas: La cantidad de horas es equivalente a 0 días, 600 minutos y 0.0 segundos.
+>> La cantidad de horas es equivalente a 0 días, 600 minutos y 0.0 segundos.
+>> La cantidad de horas es equivalente a 0 días, 588 minutos y 0.0 segundos.
+>> Error: Sintaxis inválida: ctiempo [horas]
+>> Error: El tiempo debe ser positivo.
+>> Error: Sintaxis inválida: ctiempo [horas]
+>> La cantidad de horas es equivalente a 0 días, 484 minutos y 4.799999999999045 segundos.
+>> Error: Valor numérico inválido: a
+>> Indique la cantidad de horas: La cantidad de horas es equivalente a 0 días, 600 minutos y 0.0 segundos.
+>> El volumen del cubo es: 1000.0
+>> El volumen del cubo es: 941.1920000000002
+>> Error: Sintaxis inválida: vcubo [arista]
+>> Error: Las medidas deben ser positivas.
+>> Error: Sintaxis inválida: vcubo [arista]
+>> El volumen del cubo es: 525.167290432
+>> Error: Valor numérico inválido: a
+>> 
+[Registros]
+Errores = errores.log.txt
+Historial = historial.log.txt
+
+[Modulos]
+prectangulo = 1
+vpiramide = 1
+ctiempo = 1
+vcubo = 1
+leerconfig = 1
+errores = 1
+historial = 1
+
+
+>> Tipo: Tipo de error.
+Origen: Componente de origen del error.
+Mensaje de error.
+
+Tipo: Archivo
+Origen: Registro de errores
+Error: No se pudo abrir el registro de errores para cargarlo.
+
+Tipo: Archivo
+Origen: Historial
+Error: No se pudo abrir el historial para cargarlo.
+
+Tipo: No implementado
+Origen: Consola
+Error: Comando desconocido: comando
+
+Tipo: Valor
+Origen: prectangulo
+Error: Valor numérico inválido: invalido
+
+Tipo: Valor
+Origen: prectangulo
+Error: Las medidas deben ser positivas.
+
+Tipo: Sintaxis
+Origen: prectangulo
+Error: Sintaxis inválida: prectangulo [base altura]
+
+Tipo: Sintaxis
+Origen: prectangulo
+Error: Sintaxis inválida: prectangulo [base altura]
+
+Tipo: Valor
+Origen: vpiramide
+Error: Valor numérico inválido: invalido
+
+Tipo: Valor
+Origen: vpiramide
+Error: Las medidas deben ser positivas.
+
+Tipo: Sintaxis
+Origen: vpiramide
+Error: Sintaxis inválida: vpiramide [base altura]
+
+Tipo: Sintaxis
+Origen: vpiramide
+Error: Sintaxis inválida: vpiramide [base altura]
+
+Tipo: Sintaxis
+Origen: ctiempo
+Error: Sintaxis inválida: ctiempo [horas]
+
+Tipo: Valor
+Origen: ctiempo
+Error: El tiempo debe ser positivo.
+
+Tipo: Sintaxis
+Origen: ctiempo
+Error: Sintaxis inválida: ctiempo [horas]
+
+Tipo: Valor
+Origen: ctiempo
+Error: Valor numérico inválido: a
+
+Tipo: Sintaxis
+Origen: vcubo
+Error: Sintaxis inválida: vcubo [arista]
+
+Tipo: Valor
+Origen: vcubo
+Error: Las medidas deben ser positivas.
+
+Tipo: Sintaxis
+Origen: vcubo
+Error: Sintaxis inválida: vcubo [arista]
+
+Tipo: Valor
+Origen: vcubo
+Error: Valor numérico inválido: a
+
+Tipo: No implementado
+Origen: Consola
+Error: Comando desconocido: comando
+
+Tipo: Valor
+Origen: prectangulo
+Error: Valor numérico inválido: invalido
+
+Tipo: Valor
+Origen: prectangulo
+Error: Las medidas deben ser positivas.
+
+Tipo: Sintaxis
+Origen: prectangulo
+Error: Sintaxis inválida: prectangulo [base altura]
+
+Tipo: Sintaxis
+Origen: prectangulo
+Error: Sintaxis inválida: prectangulo [base altura]
+
+Tipo: Valor
+Origen: vpiramide
+Error: Valor numérico inválido: invalido
+
+Tipo: Valor
+Origen: vpiramide
+Error: Las medidas deben ser positivas.
+
+Tipo: Sintaxis
+Origen: vpiramide
+Error: Sintaxis inválida: vpiramide [base altura]
+
+Tipo: Sintaxis
+Origen: vpiramide
+Error: Sintaxis inválida: vpiramide [base altura]
+
+Tipo: Sintaxis
+Origen: ctiempo
+Error: Sintaxis inválida: ctiempo [horas]
+
+Tipo: Valor
+Origen: ctiempo
+Error: El tiempo debe ser positivo.
+
+Tipo: Sintaxis
+Origen: ctiempo
+Error: Sintaxis inválida: ctiempo [horas]
+
+Tipo: Valor
+Origen: ctiempo
+Error: Valor numérico inválido: a
+
+Tipo: Sintaxis
+Origen: vcubo
+Error: Sintaxis inválida: vcubo [arista]
+
+Tipo: Valor
+Origen: vcubo
+Error: Las medidas deben ser positivas.
+
+Tipo: Sintaxis
+Origen: vcubo
+Error: Sintaxis inválida: vcubo [arista]
+
+Tipo: Valor
+Origen: vcubo
+Error: Valor numérico inválido: a
+
+
+>> Línea de comando
+Resultado
+
+prectangulo
+
+El perímetro del rectángulo es: 60.0
+
+
+
+
+prectangulo 10 20
+
+
+
+
+prectangulo 8.9 9,8
+
+
+
+
+vpiramide
+
+
+
+
+vpiramide 10 20
+
+
+
+
+prectangulo 8.9 9,8
+
+
+
+
+ctiempo
+
+
+
+
+ctiempo 10
+
+
+
+
+ctiempo 9,8
+
+
+
+
+ctiempo 8.068
+
+
+
+
+ctiempo
+
+
+
+
+vcubo 10
+
+
+
+
+vcubo 9,8
+
+
+
+
+vcubo 8.068
+
+
+
+
+leerconfig
+
+
+
+
+errores
+
+
+
+
+historial
+
+
+prectangulo
+El perímetro del rectángulo es: 60.0
+
+prectangulo 10 20
+El perímetro del rectángulo es: 60.0
+
+prectangulo 8.9 9,8
+El perímetro del rectángulo es: 37.400000000000006
+
+vpiramide
+El volumen de la pirámide es: 66.66666666666667
+
+vpiramide 10 20
+El volumen de la pirámide es: 66.66666666666667
+
+prectangulo 8.9 9,8
+El perímetro del rectángulo es: 37.400000000000006
+
+ctiempo
+La cantidad de horas es equivalente a 0 días, 600 minutos y 0.0 segundos.
+
+ctiempo 10
+La cantidad de horas es equivalente a 0 días, 600 minutos y 0.0 segundos.
+
+ctiempo 9,8
+La cantidad de horas es equivalente a 0 días, 588 minutos y 0.0 segundos.
+
+ctiempo 8.068
+La cantidad de horas es equivalente a 0 días, 484 minutos y 4.799999999999045 segundos.
+
+ctiempo
+La cantidad de horas es equivalente a 0 días, 600 minutos y 0.0 segundos.
+
+vcubo 10
+El volumen del cubo es: 1000.0
+
+vcubo 9,8
+El volumen del cubo es: 941.1920000000002
+
+vcubo 8.068
+El volumen del cubo es: 525.167290432
+
+leerconfig
+Resultado omitido...
+
+errores
+Resultado omitido...
+
+
+>> Saliendo de la calculadora...

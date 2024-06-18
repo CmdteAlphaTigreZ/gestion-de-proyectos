@@ -1,0 +1,43 @@
+comando inexistente
+prectangulo
+10
+20
+prectangulo 10 20
+prectangulo 8.9 9,8
+prectangulo invalido 2
+prectangulo -5 0
+prectangulo 5 6 7
+prectangulo 2
+vpiramide
+10
+20
+vpiramide 10 20
+prectangulo 8.9 9,8
+vpiramide invalido 2
+vpiramide -5 0
+vpiramide 5 6 7
+vpiramide 2
+ctiempo
+10
+ctiempo 10
+ctiempo 9,8
+ctiempo invalido 2
+ctiempo -5
+ctiempo 5 6 7
+ctiempo 8.068
+ctiempo a
+ctiempo
+10
+vcubo 10
+vcubo 9,8
+vcubo invalido, 2
+vcubo -5
+vcubo 5 6 7
+vcubo 8.068
+vcubo a
+leerconfig
+errores
+historial
+ 
+arriba hay espacio en blanco
+regresar

@@ -1,0 +1,553 @@
+prectangulo
+El perímetro del rectángulo es: 60.0
+
+prectangulo 10 20
+El perímetro del rectángulo es: 60.0
+
+prectangulo 8.9 9,8
+El perímetro del rectángulo es: 37.400000000000006
+
+vpiramide
+El volumen de la pirámide es: 66.66666666666667
+
+vpiramide 10 20
+El volumen de la pirámide es: 66.66666666666667
+
+prectangulo 8.9 9,8
+El perímetro del rectángulo es: 37.400000000000006
+
+ctiempo
+La cantidad de horas es equivalente a 0 días, 600 minutos y 0.0 segundos.
+
+ctiempo 10
+La cantidad de horas es equivalente a 0 días, 600 minutos y 0.0 segundos.
+
+ctiempo 9,8
+La cantidad de horas es equivalente a 0 días, 588 minutos y 0.0 segundos.
+
+ctiempo 8.068
+La cantidad de horas es equivalente a 0 días, 484 minutos y 4.799999999999045 segundos.
+
+ctiempo
+La cantidad de horas es equivalente a 0 días, 600 minutos y 0.0 segundos.
+
+vcubo 10
+El volumen del cubo es: 1000.0
+
+vcubo 9,8
+El volumen del cubo es: 941.1920000000002
+
+vcubo 8.068
+El volumen del cubo es: 525.167290432
+
+leerconfig
+Resultado omitido...
+
+errores
+Resultado omitido...
+
+historial
+Resultado omitido...
+
+prectangulo
+
+El perímetro del rectángulo es: 60.0
+
+
+
+
+prectangulo 10 20
+
+
+
+
+prectangulo 8.9 9,8
+
+
+
+
+vpiramide
+
+
+
+
+vpiramide 10 20
+
+
+
+
+prectangulo 8.9 9,8
+
+
+
+
+ctiempo
+
+
+
+
+ctiempo 10
+
+
+
+
+ctiempo 9,8
+
+
+
+
+ctiempo 8.068
+
+
+
+
+ctiempo
+
+
+
+
+vcubo 10
+
+
+
+
+vcubo 9,8
+
+
+
+
+vcubo 8.068
+
+
+
+
+leerconfig
+
+
+
+
+errores
+
+
+
+
+historial
+
+
+prectangulo
+El perímetro del rectángulo es: 60.0
+
+prectangulo 10 20
+El perímetro del rectángulo es: 60.0
+
+prectangulo 8.9 9,8
+El perímetro del rectángulo es: 37.400000000000006
+
+vpiramide
+El volumen de la pirámide es: 66.66666666666667
+
+vpiramide 10 20
+El volumen de la pirámide es: 66.66666666666667
+
+prectangulo 8.9 9,8
+El perímetro del rectángulo es: 37.400000000000006
+
+ctiempo
+La cantidad de horas es equivalente a 0 días, 600 minutos y 0.0 segundos.
+
+ctiempo 10
+La cantidad de horas es equivalente a 0 días, 600 minutos y 0.0 segundos.
+
+ctiempo 9,8
+La cantidad de horas es equivalente a 0 días, 588 minutos y 0.0 segundos.
+
+ctiempo 8.068
+La cantidad de horas es equivalente a 0 días, 484 minutos y 4.799999999999045 segundos.
+
+ctiempo
+La cantidad de horas es equivalente a 0 días, 600 minutos y 0.0 segundos.
+
+vcubo 10
+El volumen del cubo es: 1000.0
+
+vcubo 9,8
+El volumen del cubo es: 941.1920000000002
+
+vcubo 8.068
+El volumen del cubo es: 525.167290432
+
+leerconfig
+Resultado omitido...
+
+errores
+Resultado omitido...
+
+historial
+Resultado omitido...
+
+prectangulo
+
+El perímetro del rectángulo es: 60.0
+
+
+
+
+prectangulo 10 20
+
+
+
+
+prectangulo 8.9 9,8
+
+
+
+
+vpiramide
+
+
+
+
+vpiramide 10 20
+
+
+
+
+prectangulo 8.9 9,8
+
+
+
+
+ctiempo
+
+
+
+
+ctiempo 10
+
+
+
+
+ctiempo 9,8
+
+
+
+
+ctiempo 8.068
+
+
+
+
+ctiempo
+
+
+
+
+vcubo 10
+
+
+
+
+vcubo 9,8
+
+
+
+
+vcubo 8.068
+
+
+
+
+leerconfig
+
+
+
+
+errores
+
+
+
+
+historial
+
+
+
+
+prectangulo
+
+
+El perímetro del rectángulo es: 60.0
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+prectangulo 8.9 9,8
+
+
+
+
+
+
+
+vpiramide
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+prectangulo 8.9 9,8
+
+
+
+
+
+
+
+ctiempo
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ctiempo 9,8
+
+
+
+
+
+
+
+ctiempo 8.068
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+vcubo 10
+
+
+
+
+
+
+
+vcubo 9,8
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+leerconfig
+
+
+
+
+
+
+
+errores
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+El perímetro del rectángulo es: 60.0
+
+
+
+
+El perímetro del rectángulo es: 60.0
+
+
+
+
+El perímetro del rectángulo es: 37.400000000000006
+
+
+
+
+El volumen de la pirámide es: 66.66666666666667
+
+
+
+
+El volumen de la pirámide es: 66.66666666666667
+
+
+
+
+El perímetro del rectángulo es: 37.400000000000006
+
+
+
+
+La cantidad de horas es equivalente a 0 días, 600 minutos y 0.0 segundos.
+
+
+
+
+La cantidad de horas es equivalente a 0 días, 600 minutos y 0.0 segundos.
+
+
+
+
+La cantidad de horas es equivalente a 0 días, 588 minutos y 0.0 segundos.
+
+
+
+
+La cantidad de horas es equivalente a 0 días, 484 minutos y 4.799999999999045 segundos.
+
+
+
+
+La cantidad de horas es equivalente a 0 días, 600 minutos y 0.0 segundos.
+
+
+
+
+El volumen del cubo es: 1000.0
+
+
+
+
+El volumen del cubo es: 941.1920000000002
+
+
+
+
+El volumen del cubo es: 525.167290432
+
+
+
+
+Resultado omitido...
+
+
+
+
+Resultado omitido...
+
+
+
+
+Resultado omitido...
+
+
+
+
+prectangulo
+El perímetro del rectángulo es: 60.0
+
+prectangulo 10 20
+El perímetro del rectángulo es: 60.0
+
+prectangulo 8.9 9,8
+El perímetro del rectángulo es: 37.400000000000006
+
+vpiramide
+El volumen de la pirámide es: 66.66666666666667
+
+vpiramide 10 20
+El volumen de la pirámide es: 66.66666666666667
+
+prectangulo 8.9 9,8
+El perímetro del rectángulo es: 37.400000000000006
+
+ctiempo
+La cantidad de horas es equivalente a 0 días, 600 minutos y 0.0 segundos.
+
+ctiempo 10
+La cantidad de horas es equivalente a 0 días, 600 minutos y 0.0 segundos.
+
+ctiempo 9,8
+La cantidad de horas es equivalente a 0 días, 588 minutos y 0.0 segundos.
+
+ctiempo 8.068
+La cantidad de horas es equivalente a 0 días, 484 minutos y 4.799999999999045 segundos.
+
+ctiempo
+La cantidad de horas es equivalente a 0 días, 600 minutos y 0.0 segundos.
+
+vcubo 10
+El volumen del cubo es: 1000.0
+
+vcubo 9,8
+El volumen del cubo es: 941.1920000000002
+
+vcubo 8.068
+El volumen del cubo es: 525.167290432
+
+leerconfig
+Resultado omitido...
+
+errores
+Resultado omitido...
+
+historial
+Resultado omitido...
+
