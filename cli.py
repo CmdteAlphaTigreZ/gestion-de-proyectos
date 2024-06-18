@@ -9,6 +9,7 @@ contextos.agregar("proyectos", {})
 contextos.agregar("tareas", {})
 proyectos = Lista()
 
+
 def fn_proyectos(consola, linea_comando):
     "Cambiar al menú de proyectos"
     consola.cambiar_contexto("proyectos")
@@ -19,7 +20,7 @@ def fn_agregar_proyecto(consola, linea_comando):
     "Añade un nuevo proyecto"
     #nombre, descripcion, fecha_inicio, fecha_vencimiento, estado_actual, \
     #    empresa, gerente, equipo \
-    argumentos
+    argumentos \
         = consola.leer_comando(linea_comando, (
             "Ingrese el nombre del proyecto: ",
             "Ingrese la descripción del proyecto: ",
@@ -44,4 +45,10 @@ contextos["principal"]["tareas"] = Comando(fn_tareas, "tareas")
 
 
 def main():
-    
+    consola = Consola(contextos)
+    consola.consola()
+    # Por ahora es todo
+
+if __name__ == "__main__":
+    main()
+
