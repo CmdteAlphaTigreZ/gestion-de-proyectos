@@ -35,7 +35,8 @@ def fn_agregar_proyecto(consola, linea_comando):
     argumentos[3] = datetime.strptime(fecha_vencimiento, "%d/%m/%Y")
     proyecto = Proyecto( *([len(proyectos)] + argumentos) )
     proyectos.anexar(proyecto)
-    print("El proyecto ha sido creado, su ID es " + str(proyecto.id))
+    return Resultado("El proyecto ha sido creado, su ID es " + str(proyecto.id),
+                     self)
 contextos["proyectos"]["agregar"] = Comando(fn_agregar_proyecto, "agregar")
 
 
