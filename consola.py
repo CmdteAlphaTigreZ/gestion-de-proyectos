@@ -37,8 +37,8 @@ class Comando:
         self.descripcion = descripcion
         self.funcion = funcion
 
-    def __call__(self, linea_comando):
-        resultado = self.funcion(linea_comando)
+    def __call__(self, consola, linea_comando):
+        resultado = self.funcion(consola, linea_comando)
         util.comprobar_tipos(("resultado",), (resultado,), (Resultado))
         return resultado
 
@@ -59,20 +59,63 @@ class Resultado:
         self.tipo_error = tipo_error
 
 
+def __comprobar_comandos(comandos):
+    util.comprobar_tipos(("comandos",), (comandos,), (dict,))
+    util.comprobar_tipos(("comando",) * len(comandos),
+                         tuple(comandos.values()),
+                         (Comando,) * len(comandos))
+
+
+# Nótese el plural, es un contenedor
+class Contextos:
+    "Contextos de Comandos"
+
+    def __init__(self):
+        self.__contextos = {"principal": {}}
+        self.actual = "principal"
+
+    def agregar(self, nombre, comandos):
+        util.comprobar_tipos(("nombre",), (nombre,), (str,))
+        __comprobar_comandos(comandos)
+        if nombre in self.__contextos:
+            raise ValueError(
+                "Tiene que utilizar 'reemplazar' para cambiar un contexto existente")
+        self.__contextos[nombre] = comandos
+
+    def reemplazar(self, nombre, comandos):
+        util.comprobar_tipos(("nombre",), (nombre,), (str,))
+        __comprobar_comandos(comandos)
+        if nombre not in self.__contextos:
+            raise ValueError(
+                "Tiene que utilizar 'agregar' para agregar un nuevo contexto")
+        self.__contextos[nombre] = comandos
+
+    def __getitem__(self, nombre):
+        return self.__contextos[nombre]
+    obtener = __getitem__
+
+    def __iter__(self):
+        return iter(self.__contextos)
+
+    def copiar(self):
+        copia = Contextos()
+        for nombre, comandos in self.__contextos.items():
+            copia.__contextos[nombre] = comandos.copy()
+        return copia
+
+
 class Consola:
     "Interfaz en línea de comandos"
 
-    def __init__(self, comandos):
+    def __init__(self, contextos):
         # ¿Algo que añadir aquí?
-        util.comprobar_tipos(("comandos",), (comandos,), (dict,))
-        util.comprobar_tipos(("comando",) * len(comandos),
-                             tuple(comandos.values()),
-                             (Comando,) * len(comandos))
 
-        self.comandos = comandos.copy()  # Es público pero mejor no modificar
-                                         # arbitrariamente
+        # Son públicos pero mejor no modificar arbitrariamente
+        self.contextos = contextos.copiar()
+        self.comandos = self.comandos["principal"]
+        
         self.comandos["ayuda"] = self.ayuda
-        self.comandos["salir"] = lambda: None
+        self.comandos["salir"] = lambda: ""
 
     def consola(self):
         "Procedimiento que implementa la interfaz en línea de comandos."
@@ -84,7 +127,7 @@ class Consola:
         comando = linea_comando[0]
         while True:
             try:
-                if comando == "salir":
+                if comando == "salir" and "salir" in comandos:
                     if len(linea_comando) != 1:                    
                         mensaje_e = \
                             "Error: Sintaxis inválida: salir no toma argumentos."
@@ -94,7 +137,7 @@ class Consola:
                 else:
                     try:
                         resultado = self.comandos[comando](linea_comando)
-                        print(resultado.resultado)
+                        print(resultado.resultado, end="\n")
                     except KeyError as e:
                         mensaje_e = "Error: Comando desconocido: " + comando
                         print(mensaje_e)
@@ -121,6 +164,12 @@ class Consola:
                 if len(linea_comando) != 0:
                     continuar = False
 
+    def saludar(self):
+        print("Nota: No se pueden añadir tareas si no hay proyectos creados",
+              "y no se pueden crear subtareas si no hay tareas creadas",
+              "-----Menu Principal-----",
+              sep="\n")
+
     def ayuda(self, linea_comando=None):
         # POR HACER!!!
         # Implementar ayuda con argumentos para ver la descripción de un comando
@@ -137,6 +186,12 @@ class Consola:
             return True
         print("Cierre cancelado")
         return False
+
+    def cambiar_contexto(self, nombre=None):
+        if nombre is None:
+            nombre = "principal"
+        self.contextos.actual = nombre
+        self.comandos = self.contextos[nombre]
 
     def leer_argumentos(self, linea_comando, mensajes):
         """
