@@ -9,9 +9,9 @@ class Proyecto:
         id_,
         nombre,
         descripcion,
-        fecha_de_inicio,
-        fecha_de_vencimiento,
-        estado_actual,
+        fecha_inicio,
+        fecha_vencimiento,
+        estado,
         empresa,
         gerente,
         equipo,
@@ -19,9 +19,9 @@ class Proyecto:
         self.id = id_
         self.nombre = nombre
         self.descripcion = descripcion
-        self.fecha_de_inicio = fecha_de_inicio
-        self.fecha_de_vencimiento = fecha_de_vencimiento
-        self.estado_actual = estado_actual
+        self.fecha_inicio = fecha_inicio
+        self.fecha_vencimiento = fecha_vencimiento
+        self.estado = estado
         self.empresa = empresa
         self.gerente = gerente
         self.equipo = equipo
