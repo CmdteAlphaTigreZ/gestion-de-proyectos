@@ -10,6 +10,21 @@ contextos.agregar("tareas", {})
 proyectos = {}
 id_max = len(proyectos)
 
+def leer_id_proyecto(consola, mensaje):
+    "Solicita un ID de proyecto al usuario."
+    " Devuelve un resultado de error si aplica."
+    id_proyecto = consola.leer_argumentos( ("id",),
+        (mensaje,) )["id"]
+    try:
+        id_proyecto = int(id_proyecto)
+    except ValueError:
+        return Resultado("Error: el dato ingresado no es un ID válido: "
+                         + id_proyecto, None, tipo_error="Valor")
+    if id_proyecto not in proyectos:
+        return Resultado("Error: no existe un proyecto con ese ID: "+ str(id_proyecto),
+                         None, tipo_error="Valor")
+    return id_proyecto
+
 def leer_fecha_proyecto(argumentos, nombre):
     "Interpreta una fecha desde los argumentos de línea de comandos."
     " Devuelve un resultado de error si aplica."
@@ -62,11 +77,11 @@ contextos["proyectos"]["agregar"] = Comando(fn_agregar_proyecto, "agregar")
 
 def fn_modificar_proyecto(consola, linea_comando):
     "Modifica un proyecto existente"
-    id_proyecto = consola.leer_argumentos( ("id",),
-        ("Ingrese el ID del Proyecto que desea modificar: ",), linea_comando)["id"]
-    id_proyecto = int(id_proyecto)
-    if id_proyecto not in proyectos:
-        return Resultado("El ID del proyecto no existe", self)
+    id_proyecto = leer_id_proyecto(
+        consola, "Ingrese el ID del proyecto que desea modificar: ")
+    if isinstance(id_proyecto, Resultado):  # Resultado de error
+        id_proyecto.origen = fn_modificar_proyecto
+        return id_proyecto
     
     print("Para mantener una propiedad del proyecto intacta"
           " solo presione 'Enter'")
