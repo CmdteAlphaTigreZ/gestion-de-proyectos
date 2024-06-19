@@ -101,7 +101,7 @@ class Contextos:
     obtener = __getitem__
 
     def __iter__(self):
-        return iter(self.__contextos)
+        return iter(self.__contextos.values())
 
     def copiar(self):
         copia = Contextos()
@@ -120,9 +120,14 @@ class Consola:
         self.contextos = contextos.copiar()
         self.comandos = self.contextos["principal"]
         self.linea_comando = []
-        
-        self.comandos["ayuda"] = Comando(self.ayuda, "ayuda")
-        self.comandos["salir"] = Comando(self.salir, "salir")
+
+        comando_ayuda = Comando(self.ayuda, "ayuda")
+        comando_salir = Comando(self.salir, "salir")
+        for comandos in contextos:
+            for comando in ("ayuda", "salir"):
+                comandos.pop(comando, None)
+            comandos["ayuda"] = comando_ayuda
+            comandos["salir"] = comando_salir
 
     def consola(self):
         "Procedimiento que implementa la interfaz en línea de comandos."
