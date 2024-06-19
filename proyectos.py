@@ -51,6 +51,36 @@ class Proyecto:
     def agregar_cola(self, cola_vencimientos):
         self.cola_vencimientos.append(cola_vencimientos)
 
+    def __format__(self, formato):
+        if formato == "":
+            return str(self)
+        elif formato != "g":
+            raise ValueError("la especificación de formato debe ser ' ' o 'g'")
+        resultado = ['ID: {self.id}',
+                     'Nombre: "{self.nombre}',
+                     'Descripcion:\n{descripcion}',
+                     'Fecha de inicio: {fecha_inicio}',
+                     'Fecha de vencimiento: {fecha_vencimiento}',
+                     'Estado actual: "{self.estado}"',
+                     'Empresa: {self.empresa}',
+                     'Gerente: {self.gerente}',
+                     'Equipo: {self.equipo}' ]
+        resultado = "\n".join(resultado)
+        resultado = resultado.format(
+            self=self,
+            fecha_inicio=util.fecha_a_str(self.fecha_inicio),
+            fecha_vencimiento=util.fecha_a_str(self.fecha_vencimiento),
+            descripcion=util.envolver_y_sangrar(self.descripcion)
+        )
+        return resultado
+
+    def __str__(self):
+        resultado = ['ID: {self.id}',
+                     'Nombre: "{self.nombre}',
+                     'Estado actual: "{self.estado}"' ]
+        resultado = "\n".join(resultado)
+        return resultado.format(self=self)
+
 
 class Tarea:
     
