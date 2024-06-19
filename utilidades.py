@@ -1,5 +1,7 @@
 # Biblioteca de utilidades genéricas de programación
 
+from datetime import datetime
+
 # Definición de tipo 'funcion_t' para usarse en validación de tipos
 def f():
     pass
@@ -32,8 +34,41 @@ def comprobar_tipos(nombres, valores, tipos):
 
                             % (nombre, tipo.__name__, valor))
 def leer_fecha(fecha):
-    "Convierte fechas en formato 'YY-MM-DDDD' a 'datetime.date'"
-    return datetime.strptime(fecha, "%Y-%m-%d").date()
+    "Convierte fechas en formato 'DD-MM-YYYY' a 'datetime.date'"
+    return datetime.strptime(fecha, "%d/%m/%Y").date()
+
+def fecha_a_str(fecha):
+    "Convierte fechas 'datetime.date' al formato 'DD-MM-YYYY'"
+    return fecha.strftime("%d/%m/%Y")
+
+def envolver_y_sangrar(texto, ancho=72):
+    "Inserta saltos de línea y sangra texto para salida formateada"
+    SANGRADO = "  "
+    ancho -= len(SANGRADO)
+    i = 0; len_texto = len(texto)
+    resultado = []
+    texto = texto.split(" ")
+    len_palabras = len(texto) - 1   # Cuenta una por adelantado
+    while len_texto > 0:
+        j = i + 1; len_linea = len(texto[i]); linea = ""
+        while j <= len_palabras:
+            len_linea += len(texto[j]) + 1
+            if len_linea > ancho:
+                break
+            j += 1
+        if j != len_palabras + 1:   # Se contó una palabra de más
+            len_linea -= len(texto[j])
+        if len(texto[i]) > ancho:   # Palabra muy larga, sola en una línea
+            linea = texto[i][:ancho]
+            texto[i] = texto[i][ancho:]
+            len_linea = ancho
+            j -= 1
+        else:
+            linea = " ".join(texto[i:j])
+        resultado.append(SANGRADO + linea)
+        len_texto -= len_linea
+        i = j
+    return "\n".join(resultado)
 
 def a_float(valor):
     "Conversion a número de coma flotante."
