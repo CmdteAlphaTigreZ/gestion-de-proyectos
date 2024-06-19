@@ -74,7 +74,7 @@ def _comprobar_comandos(comandos):
 
 # Nótese el plural, es un contenedor
 class Contextos:
-    "Contextos de Comandos"
+    "Contextos de Comandos.  Un contexto es un diccionario de comandos."
 
     def __init__(self):
         self.__contextos = {"principal": {}}
@@ -192,9 +192,9 @@ class Consola:
                     continuar = False
 
     def saludar(self):
-        print("Nota: No se pueden añadir tareas si no hay proyectos creados",
-              "y no se pueden crear subtareas si no hay tareas creadas",
-              "-----Menu Principal-----",
+        print("Nota: No se pueden añadir tareas si no hay proyectos creados"
+              " y no se pueden crear subtareas si no hay tareas creadas",
+              "\n-----Menu Principal-----",
               sep="\n")
 
     def ayuda(self, linea_comando=None):
