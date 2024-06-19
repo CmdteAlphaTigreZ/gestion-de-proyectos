@@ -1,7 +1,7 @@
 from proyectos import *
 from colecciones import *
 from consola import *
-from datetime import datetime
+import utilidades as util
 
 
 contextos = Contextos()
@@ -9,6 +9,18 @@ contextos.agregar("proyectos", {})
 contextos.agregar("tareas", {})
 proyectos = {}
 id_max = len(proyectos)
+
+def leer_fecha_proyecto(argumentos, nombre):
+    "Interpreta una fecha desde los argumentos de línea de comandos."
+    " Devuelve un resultado de error si aplica."
+    try:
+       argumentos[nombre] = util.leer_fecha(argumentos[nombre])
+    except ValueError as e:
+        return Resultado("Error: '%s' no es una fecha válida: %s"
+                         % (nombre, argumentos[nombre]),
+                         None,
+                         tipo_error="Valor" )
+
 
 def fn_proyectos(consola, linea_comando):
     "Cambiar al menú de proyectos"
@@ -33,10 +45,13 @@ def fn_agregar_proyecto(consola, linea_comando):
         "Ingrese el nombre del gerente del proyecto: ",
         "Ingrese el nombre del equipo del proyecto: "
     ), linea_comando)
-    argumentos["fecha_inicio"] = \
-       datetime.strptime(argumentos["fecha_inicio"], "%d/%m/%Y")
-    argumentos["fecha_vencimiento"] = \
-        datetime.strptime(argumentos["fecha_vencimiento"], "%d/%m/%Y")
+    for nombre in ("fecha_inicio", "fecha_vencimiento"):
+        if argumentos[nombre] != "":
+            res = leer_fecha_proyecto(argumentos, nombre)
+            if isinstance(res, Resultado):  # Resultado de error
+                res.origen = fn_agregar_proyecto
+                return res
+
     id_max += 1
     proyecto = Proyecto( *([id_max] + list(argumentos.values())) )
     proyectos[id_max] = proyecto
@@ -69,8 +84,10 @@ def fn_modificar_proyecto(consola, linea_comando):
     ), linea_comando)
     for nombre in ("fecha_inicio", "fecha_vencimiento"):
         if argumentos[nombre] != "":
-            argumentos[nombre] = \
-                datetime.strptime(argumentos[nombre], "%d/%m/%Y")
+            res = leer_fecha_proyecto(argumentos, nombre)
+            if isinstance(res, Resultado):
+                res.origen = fn_modificar_proyecto
+                return res
 
     proyecto = proyectos[id_proyecto]
     for nombre, valor in argumentos.items():
