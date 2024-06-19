@@ -3,7 +3,7 @@ from colecciones import *
 
 
 class Proyecto:
-    
+
     def __init__(
         self,
         id_,
@@ -83,7 +83,7 @@ class Proyecto:
 
 
 class Tarea:
-    
+
     def __init__(
         self,
         id_,

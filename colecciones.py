@@ -283,7 +283,7 @@ class Cola(Secuencia):
 ##
 ##    #__validar_indice = ListaEnlazada._ListaEnlazada__validar_indice
 ##    #__obtener_nodo = ListaEnlazada._ListaEnlazada__obtener_nodo
-##    
+##
 ##    #__getitem__ = ListaEnlazada.__getitem__
 ##    #__setitem__ = ListaEnlazada.__setitem__
 ##    #__delitem__ = ListaEnlazada.__delitem__
@@ -300,7 +300,7 @@ class Cola(Secuencia):
 ##        return ListaEnlazada.IteradorL2E(self)
 ##
 ##class Cola:
-##    
+##
 ##    def __init__(self, iterable=None):
 ##        ListaEnlazada.__init__(self, iterable)
 ##        self.__inicio = self._ListaEnlazada__cabeza
@@ -311,7 +311,7 @@ class Cola(Secuencia):
 ##
 ##    #__validar_indice = ListaEnlazada._ListaEnlazada__validar_indice
 ##    #__obtener_nodo = ListaEnlazada._ListaEnlazada__obtener_nodo
-##    
+##
 ##    #__getitem__ = ListaEnlazada.__getitem__
 ##    #__setitem__ = ListaEnlazada.__setitem__
 ##    #__delitem__ = ListaEnlazada.__delitem__

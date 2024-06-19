@@ -134,20 +134,20 @@ class Consola:
 
         self.saludar()
         self.ayuda()
-        
+
         self.leer_comando()
         comando = self.linea_comando[0]
         while True:
             try:
                 if comando == "salir" and "salir" in self.comandos:
-                    if len(self.linea_comando) != 1:                    
+                    if len(self.linea_comando) != 1:
                         mensaje_e = \
                             "Error: Sintaxis inválida: salir no toma argumentos."
                         print(mensaje_e)
                     elif self.salir():
                         break
                 if comando == "ayuda":
-                    if len(self.linea_comando) != 1:                    
+                    if len(self.linea_comando) != 1:
                         mensaje_e = \
                             "Error: Sintaxis inválida: ayuda no toma argumentos."
                         print(mensaje_e)
@@ -249,7 +249,7 @@ class Consola:
         if len_argumentos != len(mensajes):
             raise ValueError(
                 "'nombres' y 'mensajes' deben tener la misma longitud")
-        
+
         # "argumentos = dict[str, str]"
         argumentos = {}
 
