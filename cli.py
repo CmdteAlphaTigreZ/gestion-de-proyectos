@@ -69,11 +69,31 @@ def fn_agregar_proyecto(consola, linea_comando):
                 return res
 
     id_max += 1
-    proyecto = Proyecto( *([id_max] + list(argumentos.values())) )
+    argumentos["id_"] = id_max
+    proyecto = Proyecto(**argumentos)
     proyectos[id_max] = proyecto
     return Resultado("El proyecto ha sido creado, su ID es " + str(proyecto.id),
                      fn_agregar_proyecto)
 contextos["proyectos"]["agregar"] = Comando(fn_agregar_proyecto, "agregar")
+
+def fn_enumerar_proyectos(consola, linea_comando):
+    "Enumera los proyectos registrados"
+    if len(proyectos) == 0:
+        return Resultado("No hay proyectos para mostrar.", fn_enumerar_proyectos)
+    resultado = "\n\n".join(str(proyecto) for proyecto in proyectos.values())
+    return Resultado(resultado, fn_enumerar_proyectos)
+contextos["proyectos"]["mostrar"] = Comando(fn_enumerar_proyectos, "mostrar")
+
+def fn_consultar_proyecto(consola, linea_comando):
+    "Consulta un proyecto existente"
+    id_proyecto = leer_id_proyecto(
+        consola, "Ingrese el ID del proyecto que desea consultar: ")
+    if isinstance(id_proyecto, Resultado):  # Resultado de error
+        id_proyecto.origen = fn_consultar_proyecto
+        return id_proyecto
+
+    return Resultado(format(proyectos[id_proyecto], "g"), fn_consultar_proyecto)
+contextos["proyectos"]["consultar"] = Comando(fn_consultar_proyecto, "consultar")
 
 def fn_modificar_proyecto(consola, linea_comando):
     "Modifica un proyecto existente"
@@ -111,6 +131,24 @@ def fn_modificar_proyecto(consola, linea_comando):
         setattr(proyecto, nombre, valor)
     return Resultado("Proyecto modificado exitosamente", self)
 contextos["proyectos"]["modificar"] = Comando(fn_modificar_proyecto, "modificar")
+
+def fn_eliminar_proyecto(consola, linea_comando):
+    "Elimina un proyecto"
+    id_proyecto = leer_id_proyecto(
+        consola, "Ingrese el ID del Proyecto que desea modificar: ")
+    if isinstance(id_proyecto, Resultado):  # Resultado de error
+        id_proyecto.origen = fn_consultar_proyecto
+        return id_proyecto
+
+    print(proyectos[id_proyecto])
+    if consola.confirmar("Está seguro que desea eliminar este proyecto?"):
+        return Resultado(
+            "El proyecto con ID %d ha sido eliminado." % id_proyecto,
+            fn_eliminar_proyecto)
+    return Resultado("", fn_eliminar_proyecto)
+contextos["proyectos"]["eliminar"] = Comando(fn_eliminar_proyecto, "eliminar")
+
+contextos["proyectos"]["regresar"] = cmd_regresar
 
 
 def fn_tareas(consola, linea_comando):
