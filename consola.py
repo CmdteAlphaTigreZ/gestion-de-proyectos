@@ -155,10 +155,18 @@ class Consola:
                 else:
                     try:
                         resultado = self.comandos[comando](self, self.linea_comando)
-                        print(resultado.resultado, end="\n")
+                        if resultado.resultado != "":
+                            print(resultado.resultado, end="\n")
                     except KeyError as e:
                         mensaje_e = "Error: Comando desconocido: " + comando
                         print(mensaje_e)
+                    except (ValueError, SyntaxError, UnicodeError) as e:
+                        mensaje_e = e.args[0]
+                        print(mensaje_e)
+            except KeyboardInterrupt:
+                print("Operación cancelada.")
+
+            try:
                 self.linea_comando = []
                 self.leer_comando()
                 comando = self.linea_comando[0]
