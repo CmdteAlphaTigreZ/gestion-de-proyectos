@@ -102,6 +102,7 @@ def fn_modificar_proyecto(consola, linea_comando):
     if isinstance(id_proyecto, Resultado):  # Resultado de error
         id_proyecto.origen = fn_modificar_proyecto
         return id_proyecto
+    print(format(proyectos[id_proyecto], "g"))
     
     print("Para mantener una propiedad del proyecto intacta"
           " solo presione 'Enter'")
@@ -153,6 +154,9 @@ contextos["proyectos"]["regresar"] = cmd_regresar
 
 def fn_tareas(consola, linea_comando):
     "Cambiar al menú de tareas"
+    if len(proyectos) == 0:
+        return Resultado("Error: debe crear al menos un proyecto antes"
+                         " de ingresar en el menú de tareas", fn_tareas)
     consola.cambiar_contexto("tareas")
     consola.ayuda()
     return Resultado("", fn_tareas)
