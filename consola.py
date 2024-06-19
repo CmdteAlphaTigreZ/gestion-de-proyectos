@@ -8,7 +8,7 @@
 
 
 import utilidades as util
-funcion_t = util.funcion_t
+funcion_t = util.funcion_t; metodo_t = util.metodo_t
 
 
 class Comando:
@@ -37,8 +37,11 @@ class Comando:
         self.descripcion = descripcion
         if isinstance(funcion, funcion_t):
             self.funcion = funcion
-        else:
+        elif isinstance(funcion, metodo_t):
             self.funcion = funcion.__func__
+        else:
+            raise TypeError("'funcion' no es de tipo 'function' o 'method': %s"
+                            % funcion)
 
     def __call__(self, consola, linea_comando):
         resultado = self.funcion(consola, linea_comando)
