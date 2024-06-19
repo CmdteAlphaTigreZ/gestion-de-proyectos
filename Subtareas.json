@@ -1,0 +1,14 @@
+{
+	"tareas": [
+	{
+		"id_tarea": id_tarea,
+		"nombre_tarea": nombre_tarea,
+        	"empresa_tarea": empresa_tarea,
+	        "descripcion_tarea": descripcion_tarea,
+	        "fecha_de_inicio_tarea": fecha_inicio_tarea,
+	        "fecha_de_vencimiento_tarea": fecha_vencimiento_tarea,
+	        "estado_tarea": estado_tarea,
+	        "porcentaje": porcentaje_tarea,
+	}
+	]
+}

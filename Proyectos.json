@@ -1,0 +1,15 @@
+{
+	"proyectos": [
+	{
+		"id": id,
+		"nombre": nombre,
+	        "descripcion": descripcion,
+        	"fecha_inicio": fecha_inicio,
+	        "fecha_vencimiento": fecha_vencimiento,
+        	"estado_actual": estado_actual,
+	        "empresa": empresa,
+        	"gerente": gerente,
+	        "equipo": equipo,
+	}
+	]
+}

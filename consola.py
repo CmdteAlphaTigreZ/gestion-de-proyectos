@@ -28,18 +28,21 @@ class Comando:
 
     def __init__(self, funcion, sintaxis, descripcion=""):
         util.comprobar_tipos(
-            ("ayuda", "sintaxis", "descripcion", "funcion"),
-            (funcion.__doc__, sintaxis, descripcion, funcion),
-            (str, str, str, funcion_t)
+            ("ayuda", "sintaxis", "descripcion"),
+            (funcion.__doc__, sintaxis, descripcion),
+            (str, str, str)
         )
         self.ayuda = funcion.__doc__
         self.sintaxis = sintaxis
         self.descripcion = descripcion
-        self.funcion = funcion
+        if isinstance(funcion, funcion_t):
+            self.funcion = funcion
+        else:
+            self.funcion = funcion.__func__
 
     def __call__(self, consola, linea_comando):
         resultado = self.funcion(consola, linea_comando)
-        util.comprobar_tipos(("resultado",), (resultado,), (Resultado))
+        util.comprobar_tipos(("resultado",), (resultado,), (Resultado,))
         return resultado
 
     def __str__(self):
@@ -59,7 +62,7 @@ class Resultado:
         self.tipo_error = tipo_error
 
 
-def __comprobar_comandos(comandos):
+def _comprobar_comandos(comandos):
     util.comprobar_tipos(("comandos",), (comandos,), (dict,))
     util.comprobar_tipos(("comando",) * len(comandos),
                          tuple(comandos.values()),
@@ -76,7 +79,7 @@ class Contextos:
 
     def agregar(self, nombre, comandos):
         util.comprobar_tipos(("nombre",), (nombre,), (str,))
-        __comprobar_comandos(comandos)
+        _comprobar_comandos(comandos)
         if nombre in self.__contextos:
             raise ValueError(
                 "Tiene que utilizar 'reemplazar' para cambiar un contexto existente")
@@ -84,7 +87,7 @@ class Contextos:
 
     def reemplazar(self, nombre, comandos):
         util.comprobar_tipos(("nombre",), (nombre,), (str,))
-        __comprobar_comandos(comandos)
+        _comprobar_comandos(comandos)
         if nombre not in self.__contextos:
             raise ValueError(
                 "Tiene que utilizar 'agregar' para agregar un nuevo contexto")
@@ -112,16 +115,16 @@ class Consola:
 
         # Son públicos pero mejor no modificar arbitrariamente
         self.contextos = contextos.copiar()
-        self.comandos = self.comandos["principal"]
+        self.comandos = self.contextos["principal"]
         self.linea_comando = []
         
-        self.comandos["ayuda"] = self.ayuda
-        self.comandos["salir"] = lambda: ""
+        self.comandos["ayuda"] = Comando(self.ayuda, "ayuda")
+        self.comandos["salir"] = Comando(self.salir, "salir")
 
     def consola(self):
         "Procedimiento que implementa la interfaz en línea de comandos."
 
-        self.ayuda()
+        print(self.ayuda().resultado)
         
         self.leer_comando()
         comando = self.linea_comando[0]
@@ -134,21 +137,27 @@ class Consola:
                         print(mensaje_e)
                     elif self.salir():
                         break
+                if comando == "ayuda":
+                    if len(self.linea_comando) != 1:                    
+                        mensaje_e = \
+                            "Error: Sintaxis inválida: ayuda no toma argumentos."
+                        print(mensaje_e)
+                    print(self.ayuda().resultado)
                 else:
                     try:
-                        resultado = self.comandos[comando](self.linea_comando)
+                        resultado = self.comandos[comando](self, self.linea_comando)
                         print(resultado.resultado, end="\n")
                     except KeyError as e:
                         mensaje_e = "Error: Comando desconocido: " + comando
                         print(mensaje_e)
                 self.linea_comando = []
-                leer_comando()
+                self.leer_comando()
                 comando = self.linea_comando[0]
             except KeyboardInterrupt:
                 break
         print("Saliendo del programa...")
 
-    def leer_comando(linea_comando=None):
+    def leer_comando(self, linea_comando=None):
         "Lee una línea de comando de la entrada. linea_comando debe ser '[]'"
         if linea_comando is None: linea_comando = self.linea_comando
         continuar = True
@@ -172,6 +181,7 @@ class Consola:
               sep="\n")
 
     def ayuda(self, linea_comando=None):
+        "Mostrar ayuda"
         # POR HACER!!!
         # Implementar ayuda con argumentos para ver la descripción de un comando
         ayuda = ["Comandos disponibles:"]
@@ -181,7 +191,8 @@ class Consola:
         ayuda = "\n".join(ayuda)
         return Resultado(ayuda, self)
 
-    def salir(self):
+    def salir(self, linea_comando=None):
+        "Salir de la consola"
         confirmacion = input("Seguro que desea salir (S/N): ")
         if confirmacion in ("S", "s"):
             return True
