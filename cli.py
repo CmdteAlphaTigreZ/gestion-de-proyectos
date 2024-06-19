@@ -28,13 +28,14 @@ def fn_proyectos(consola, linea_comando):
     consola.ayuda()
     return Resultado("", fn_proyectos)
 contextos["principal"]["proyectos"] = Comando(fn_proyectos, "proyectos")
+# Recordar añadir regresar al final de cada sección
 
 def fn_agregar_proyecto(consola, linea_comando):
     "Añade un nuevo proyecto"
     global id_max
     argumentos = consola.leer_argumentos((
         "nombre", "descripcion", "fecha_inicio", "fecha_vencimiento",
-        "estado_actual", "empresa", "gerente", "equipo"
+        "estado", "empresa", "gerente", "equipo"
     ), (
         "Ingrese el nombre del proyecto: ",
         "Ingrese la descripción del proyecto: ",
@@ -44,7 +45,7 @@ def fn_agregar_proyecto(consola, linea_comando):
         "Ingrese el nombre de la empresa del proyecto: ",
         "Ingrese el nombre del gerente del proyecto: ",
         "Ingrese el nombre del equipo del proyecto: "
-    ), linea_comando)
+    ))
     for nombre in ("fecha_inicio", "fecha_vencimiento"):
         if argumentos[nombre] != "":
             res = leer_fecha_proyecto(argumentos, nombre)
@@ -71,7 +72,7 @@ def fn_modificar_proyecto(consola, linea_comando):
           " solo presione 'Enter'")
     argumentos = consola.leer_argumentos((
         "nombre", "descripcion", "fecha_inicio", "fecha_vencimiento",
-        "estado_actual", "empresa", "gerente", "equipo"
+        "estado", "empresa", "gerente", "equipo"
     ), (
         "Ingrese el nombre del proyecto: ",
         "Ingrese la descripción del proyecto: ",
@@ -81,7 +82,7 @@ def fn_modificar_proyecto(consola, linea_comando):
         "Ingrese el nombre de la empresa del proyecto: ",
         "Ingrese el nombre del gerente del proyecto: ",
         "Ingrese el nombre del equipo del proyecto: "
-    ), linea_comando)
+    ))
     for nombre in ("fecha_inicio", "fecha_vencimiento"):
         if argumentos[nombre] != "":
             res = leer_fecha_proyecto(argumentos, nombre)
