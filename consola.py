@@ -195,8 +195,7 @@ class Consola:
         # Implementar ayuda con argumentos para ver la descripción de un comando
         ayuda = ["Comandos disponibles:"]
         for cmd in self.comandos.values():
-            ayuda.append("""  {}
-                                {}""".format(cmd.sintaxis, cmd.ayuda) )
+            ayuda.append("%s\n  %s" % (cmd.sintaxis, cmd.ayuda))
         ayuda = "\n".join(ayuda)
         if linea_comando is None:
             print(ayuda)
