@@ -130,7 +130,7 @@ def fn_modificar_proyecto(consola, linea_comando):
     for nombre, valor in argumentos.items():
         if valor == "": continue
         setattr(proyecto, nombre, valor)
-    return Resultado("Proyecto modificado exitosamente", self)
+    return Resultado("Proyecto modificado exitosamente.", fn_modificar_proyecto)
 contextos["proyectos"]["modificar"] = Comando(fn_modificar_proyecto, "modificar")
 
 def fn_eliminar_proyecto(consola, linea_comando):
