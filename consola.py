@@ -203,11 +203,7 @@ class Consola:
 
     def salir(self, linea_comando=None):
         "Salir de la consola"
-        confirmacion = input("Seguro que desea salir (S/N): ")
-        if confirmacion in ("S", "s"):
-            return True
-        print("Cierre cancelado")
-        return False
+        return self.confirmar("Seguro que desea salir?")
 
     def cambiar_contexto(self, nombre=None):
         if nombre is None:
@@ -267,6 +263,14 @@ class Consola:
                 "Error: Sintaxis inválida: "
                 + str(self.comandos[linea_comando[0]]) )
         return argumentos
+
+    def confirmar(self, mensaje):
+        "Solicita confirmación.  El mensaje no debe contener ' (S/N): '"
+        confirmacion = input(mensaje + " (S/N): ")
+        if confirmacion in ("S", "s"):
+            return True
+        print("Operación cancelada")
+        return False
 
 ##    def cmd_leerconfig(linea_comando):
 ##        "Comando leerconfig. Acepta lista de texto y devuelve diccionario de texto."
