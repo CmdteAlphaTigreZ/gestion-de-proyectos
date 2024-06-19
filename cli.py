@@ -36,6 +36,13 @@ def leer_fecha_proyecto(argumentos, nombre):
                          None,
                          tipo_error="Valor" )
 
+def fn_regresar(consola, linea_comando):
+    "Regresa al menú principal"
+    consola.cambiar_contexto("principal")
+    consola.ayuda()
+    return Resultado("", fn_regresar)
+cmd_regresar = Comando(fn_regresar, "regresar")
+
 
 def fn_proyectos(consola, linea_comando):
     "Cambiar al menú de proyectos"
@@ -161,6 +168,7 @@ def fn_tareas(consola, linea_comando):
     consola.ayuda()
     return Resultado("", fn_tareas)
 contextos["principal"]["tareas"] = Comando(fn_tareas, "tareas")
+contextos["tareas"]["regresar"] = cmd_regresar
 
 
 def main():
