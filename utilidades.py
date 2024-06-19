@@ -6,6 +6,13 @@ def f():
 funcion_t = type(f)
 del f
 
+# Definición de tipo 'metodo_t', misma idea
+class A:
+    def f():
+        pass
+metodo_t = type(A().f)
+del A
+
 
 def comprobar_tipos(nombres, valores, tipos):
     """
