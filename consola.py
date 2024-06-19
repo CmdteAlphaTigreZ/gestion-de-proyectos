@@ -132,7 +132,8 @@ class Consola:
     def consola(self):
         "Procedimiento que implementa la interfaz en línea de comandos."
 
-        print(self.ayuda().resultado)
+        self.saludar()
+        self.ayuda()
         
         self.leer_comando()
         comando = self.linea_comando[0]
@@ -150,7 +151,7 @@ class Consola:
                         mensaje_e = \
                             "Error: Sintaxis inválida: ayuda no toma argumentos."
                         print(mensaje_e)
-                    print(self.ayuda().resultado)
+                    self.ayuda()
                 else:
                     try:
                         resultado = self.comandos[comando](self, self.linea_comando)
@@ -197,6 +198,8 @@ class Consola:
             ayuda.append("""  {}
                                 {}""".format(cmd.sintaxis, cmd.ayuda) )
         ayuda = "\n".join(ayuda)
+        if linea_comando is None:
+            print(ayuda)
         return Resultado(ayuda, self)
 
     def salir(self, linea_comando=None):
