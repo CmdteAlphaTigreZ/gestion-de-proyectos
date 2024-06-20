@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 from proyectos import *
 from colecciones import *
 from consola import *
