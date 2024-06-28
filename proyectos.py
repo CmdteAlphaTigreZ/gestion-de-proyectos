@@ -55,9 +55,9 @@ class Proyecto:
         if formato == "":
             return str(self)
         elif formato != "g":
-            raise ValueError("la especificación de formato debe ser ' ' o 'g'")
+            raise ValueError("la especificación de formato debe ser '' o 'g'")
         resultado = ['ID: {self.id}',
-                     'Nombre: "{self.nombre}',
+                     'Nombre: "{self.nombre}"',
                      'Descripcion:\n{descripcion}',
                      'Fecha de inicio: {fecha_inicio}',
                      'Fecha de vencimiento: {fecha_vencimiento}',

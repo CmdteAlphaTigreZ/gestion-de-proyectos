@@ -151,6 +151,7 @@ def fn_eliminar_proyecto(consola, linea_comando):
 
     print(proyectos[id_proyecto])
     if consola.confirmar("Está seguro que desea eliminar este proyecto?"):
+        del proyectos[id_proyecto]
         return Resultado(
             "El proyecto con ID %d ha sido eliminado." % id_proyecto,
             fn_eliminar_proyecto)
