@@ -78,7 +78,7 @@ class Proyecto:
 
     def __str__(self):
         resultado = ['ID: {self.id}',
-                     'Nombre: "{self.nombre}',
+                     'Nombre: "{self.nombre}"',
                      'Estado actual: "{self.estado}"' ]
         resultado = "\n".join(resultado)
         return resultado.format(self=self)
@@ -133,7 +133,7 @@ class Tarea:
 
     def __str__(self):
         resultado = ['ID: {self.id}',
-                     'Nombre: "{self.nombre}',
+                     'Nombre: "{self.nombre}"',
                      'Estado actual: "{self.estado}"' ]
         resultado = "\n".join(resultado)
         return resultado.format(self=self)
