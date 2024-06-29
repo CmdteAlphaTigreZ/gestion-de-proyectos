@@ -11,6 +11,22 @@ contextos.agregar("tareas", {})
 proyectos = {}
 id_max = len(proyectos)
 
+# Tomado del constructor de Proyecto en proyectos.py.  Mantener sincronizado
+nombres_argumentos_proyecto = (
+    "nombre", "descripcion", "fecha_inicio", "fecha_vencimiento",
+    "estado", "empresa", "gerente", "equipo" )
+mensajes_argumentos_proyecto = (
+    "Ingrese el nombre del proyecto: ",
+    "Ingrese la descripción del proyecto: ",
+    "Ingrese la fecha de inicio del proyecto (dd/mm/yyyy): ",
+    "Ingrese la fecha de vencimiento del proyecto (dd/mm/yyyy): ",
+    "Ingrese el estado actual del proyecto: ",
+    "Ingrese el nombre de la empresa del proyecto: ",
+    "Ingrese el nombre del gerente del proyecto: ",
+    "Ingrese el nombre del equipo del proyecto: " )
+# Tomado del constructor de Tarea en proyectos.py.  Mantener sincronizado
+
+
 def leer_id_proyecto(consola, mensaje):
     "Solicita un ID de proyecto al usuario."
     " Devuelve un resultado de error si aplica."
@@ -56,19 +72,8 @@ contextos["principal"]["proyectos"] = Comando(fn_proyectos, "proyectos")
 def fn_agregar_proyecto(consola, linea_comando):
     "Añade un nuevo proyecto"
     global id_max
-    argumentos = consola.leer_argumentos((
-        "nombre", "descripcion", "fecha_inicio", "fecha_vencimiento",
-        "estado", "empresa", "gerente", "equipo"
-    ), (
-        "Ingrese el nombre del proyecto: ",
-        "Ingrese la descripción del proyecto: ",
-        "Ingrese la fecha de inicio del proyecto (dd/mm/yyyy): ",
-        "Ingrese la fecha de vencimiento del proyecto (dd/mm/yyyy): ",
-        "Ingrese el estado actual del proyecto: ",
-        "Ingrese el nombre de la empresa del proyecto: ",
-        "Ingrese el nombre del gerente del proyecto: ",
-        "Ingrese el nombre del equipo del proyecto: "
-    ))
+    argumentos = consola.leer_argumentos(nombres_argumentos_proyecto,
+                                         mensajes_argumentos_proyecto)
     for nombre in ("fecha_inicio", "fecha_vencimiento"):
         res = leer_fecha_proyecto(argumentos, nombre)
         if isinstance(res, Resultado):  # Resultado de error
@@ -111,21 +116,10 @@ def fn_modificar_proyecto(consola, linea_comando):
         return id_proyecto
     print(format(proyectos[id_proyecto], "g"))
     
-    print("Para mantener una propiedad del proyecto intacta"
+    print("\nPara mantener una propiedad del proyecto intacta"
           " solo presione 'Enter'")
-    argumentos = consola.leer_argumentos((
-        "nombre", "descripcion", "fecha_inicio", "fecha_vencimiento",
-        "estado", "empresa", "gerente", "equipo"
-    ), (
-        "Ingrese el nombre del proyecto: ",
-        "Ingrese la descripción del proyecto: ",
-        "Ingrese la fecha de inicio del proyecto (dd/mm/yyyy): ",
-        "Ingrese la fecha de vencimiento del proyecto (dd/mm/yyyy): ",
-        "Ingrese el estado actual del proyecto: ",
-        "Ingrese el nombre de la empresa del proyecto: ",
-        "Ingrese el nombre del gerente del proyecto: ",
-        "Ingrese el nombre del equipo del proyecto: "
-    ))
+    argumentos = consola.leer_argumentos(nombres_argumentos_proyecto,
+                                         mensajes_argumentos_proyecto)
     for nombre in ("fecha_inicio", "fecha_vencimiento"):
         if argumentos[nombre] != "":
             res = leer_fecha_proyecto(argumentos, nombre)
