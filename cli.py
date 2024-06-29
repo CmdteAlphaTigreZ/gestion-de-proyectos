@@ -46,7 +46,7 @@ def leer_fecha_proyecto(argumentos, nombre):
     "Interpreta una fecha desde los argumentos de línea de comandos."
     " Devuelve un resultado de error si aplica."
     try:
-       argumentos[nombre] = util.leer_fecha(argumentos[nombre])
+       argumentos[nombre] = util.str_a_fecha(argumentos[nombre])
     except ValueError as e:
         return Resultado("Error: '%s' no es una fecha válida: %s"
                          % (nombre, argumentos[nombre]),

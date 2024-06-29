@@ -33,7 +33,7 @@ def comprobar_tipos(nombres, valores, tipos):
             raise TypeError("'%s' no es de tipo '%s': %s"
 
                             % (nombre, tipo.__name__, valor))
-def leer_fecha(fecha):
+def str_a_fecha(fecha):
     "Convierte fechas en formato 'DD-MM-YYYY' a 'datetime.date'"
     return datetime.strptime(fecha, "%d/%m/%Y").date()
 
