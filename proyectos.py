@@ -64,12 +64,14 @@ class Proyecto:
                      'Estado actual: "{self.estado}"',
                      'Empresa: {self.empresa}',
                      'Gerente: {self.gerente}',
-                     'Equipo: {self.equipo}' ]
+                     'Equipo: {self.equipo}',
+                     'No. de tareas: {cant_tareas}']
         resultado = "\n".join(resultado)
         resultado = resultado.format(
             self=self,
             fecha_inicio=util.fecha_a_str(self.fecha_inicio),
             fecha_vencimiento=util.fecha_a_str(self.fecha_vencimiento),
+            cant_tareas=len(self.__tareas),
             descripcion=util.envolver_y_sangrar(self.descripcion)
         )
         return resultado
@@ -104,6 +106,37 @@ class Tarea:
         self.estado = estado
         self.porcentaje = porcentaje
         self.subtareas = Lista()
+
+    def __format__(self, formato):
+        if formato == "":
+            return str(self)
+        elif formato != "g":
+            raise ValueError("la especificación de formato debe ser '' o 'g'")
+        resultado = ['ID: {self.id}',
+                     'Nombre: "{self.nombre}"',
+                     'Descripcion:\n{descripcion}',
+                     'Fecha de inicio: {fecha_inicio}',
+                     'Fecha de vencimiento: {fecha_vencimiento}',
+                     'Estado actual: "{self.estado}"',
+                     'Porcentaje de completación: {self.porcentaje:.2f}%',
+                     'Empresa cliente: {self.empresa_cliente}',
+                     'No. de subtareas: {cant_subtareas}' ]
+        resultado = "\n".join(resultado)
+        resultado = resultado.format(
+            self=self,
+            fecha_inicio=util.fecha_a_str(self.fecha_inicio),
+            fecha_vencimiento=util.fecha_a_str(self.fecha_vencimiento),
+            cant_subtareas=len(self.subtareas),
+            descripcion=util.envolver_y_sangrar(self.descripcion)
+        )
+        return resultado
+
+    def __str__(self):
+        resultado = ['ID: {self.id}',
+                     'Nombre: "{self.nombre}',
+                     'Estado actual: "{self.estado}"' ]
+        resultado = "\n".join(resultado)
+        return resultado.format(self=self)
 
 
 class Subtarea:
