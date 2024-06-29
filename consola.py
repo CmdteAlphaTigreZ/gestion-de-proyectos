@@ -123,9 +123,9 @@ class Consola:
 
         comando_ayuda = Comando(self.ayuda, "ayuda")
         comando_salir = Comando(self.salir, "salir")
-        for comandos in contextos:
-            for comando in ("ayuda", "salir"):
-                comandos.pop(comando, None)
+        for comandos in self.contextos:
+##            for comando in ("ayuda", "salir"):
+##                comandos.pop(comando, None)
             comandos["ayuda"] = comando_ayuda
             comandos["salir"] = comando_salir
 
