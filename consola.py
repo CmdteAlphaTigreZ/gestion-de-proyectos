@@ -121,7 +121,7 @@ class Consola:
         self.comandos = self.contextos["principal"]
         self.linea_comando = []
 
-        comando_ayuda = Comando(self.ayuda, "ayuda")
+        comando_ayuda = Comando(self.ayuda, "ayuda [nombre_comando]")
         comando_salir = Comando(self.salir, "salir")
         for comandos in self.contextos:
 ##            for comando in ("ayuda", "salir"):
@@ -146,12 +146,12 @@ class Consola:
                         print(mensaje_e)
                     elif self.salir():
                         break
-                if comando == "ayuda":
-                    if len(self.linea_comando) != 1:
-                        mensaje_e = \
-                            "Error: Sintaxis inválida: ayuda no toma argumentos."
-                        print(mensaje_e)
-                    self.ayuda()
+##                if comando == "ayuda":
+##                    if len(self.linea_comando) != 1:
+##                        mensaje_e = \
+##                            "Error: Sintaxis inválida: ayuda no toma argumentos."
+##                        print(mensaje_e)
+##                    self.ayuda()
                 else:
                     try:
                         resultado = self.comandos[comando](self, self.linea_comando)
@@ -198,15 +198,37 @@ class Consola:
               sep="\n")
 
     def ayuda(self, linea_comando=None):
-        "Mostrar ayuda"
-        # POR HACER!!!
-        # Implementar ayuda con argumentos para ver la descripción de un comando
-        ayuda = ["Comandos disponibles:"]
-        for cmd in self.comandos.values():
-            ayuda.append("%s\n  %s" % (cmd.sintaxis, cmd.ayuda))
-        ayuda = "\n".join(ayuda)
-        if linea_comando is None:
-            print(ayuda)
+        "Muestra los comandos disponibles o la ayuda para un comando particular"
+        if linea_comando is None or len(linea_comando) == 1:
+            SANGRADO = 36
+            FORMATO = "%-{}s%s".format(SANGRADO - 1)
+            ayuda = ["Comandos disponibles:"]
+            for cmd in self.comandos.values():
+                if len(cmd.sintaxis) < SANGRADO:
+                    cmd_ayuda = " " \
+                        + util.envolver_y_sangrar(cmd.ayuda, 72, SANGRADO).lstrip()
+                else:
+                    cmd_ayuda = "\n" \
+                        + util.envolver_y_sangrar(cmd.ayuda, 72, SANGRADO)
+                ayuda.append(FORMATO % (cmd.sintaxis, cmd_ayuda))
+            ayuda = "\n".join(ayuda)
+            if linea_comando is None:
+                print(ayuda)
+                ayuda = ""
+        elif len(linea_comando) == 2:
+            try:
+                comando = self.comandos[linea_comando[1]]
+            except KeyError:
+                ayuda = "Error: Comando desconocido: " + linea_comando[1]
+            else:
+                ayuda = [comando.ayuda, "  " + comando.sintaxis]
+                if comando.descripcion != "":
+                    ayuda.extend(
+                        ["", util.envolver_y_sangrar(comando.descripcion)] )
+                ayuda = "\n".join(ayuda)
+        else:
+            return Resultado("Error: Sintaxis inválida: "
+                + str(self.comandos["ayuda"]), self, tipo_error="Sintaxis")
         return Resultado(ayuda, self)
 
     def salir(self, linea_comando=None):
