@@ -41,10 +41,11 @@ def fecha_a_str(fecha):
     "Convierte fechas 'datetime.date' al formato 'DD-MM-YYYY'"
     return fecha.strftime("%d/%m/%Y")
 
-def envolver_y_sangrar(texto, ancho=72):
+def envolver_y_sangrar(texto, ancho=72, sangrado=2):
     "Inserta saltos de línea y sangra texto para salida formateada"
-    SANGRADO = "  "
-    ancho -= len(SANGRADO)
+    ancho -= sangrado
+    if ancho < 1: raise ValueError("El ancho debe ser mayor que el sangrado")
+    sangrado = " " * sangrado
     i = 0; len_texto = len(texto)
     resultado = []
     texto = texto.split(" ")
@@ -65,7 +66,7 @@ def envolver_y_sangrar(texto, ancho=72):
             j -= 1
         else:
             linea = " ".join(texto[i:j])
-        resultado.append(SANGRADO + linea)
+        resultado.append(sangrado + linea)
         len_texto -= len_linea
         i = j
     return "\n".join(resultado)
