@@ -70,11 +70,10 @@ def fn_agregar_proyecto(consola, linea_comando):
         "Ingrese el nombre del equipo del proyecto: "
     ))
     for nombre in ("fecha_inicio", "fecha_vencimiento"):
-        if argumentos[nombre] != "":
-            res = leer_fecha_proyecto(argumentos, nombre)
-            if isinstance(res, Resultado):  # Resultado de error
-                res.origen = fn_agregar_proyecto
-                return res
+        res = leer_fecha_proyecto(argumentos, nombre)
+        if isinstance(res, Resultado):  # Resultado de error
+            res.origen = fn_agregar_proyecto
+            return res
 
     id_max += 1
     argumentos["id_"] = id_max
