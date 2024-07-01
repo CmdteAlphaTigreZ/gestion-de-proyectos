@@ -163,14 +163,14 @@ class Consola:
                     except (ValueError, SyntaxError, UnicodeError) as e:
                         mensaje_e = e.args[0]
                         print(mensaje_e)
-            except KeyboardInterrupt:
+            except (KeyboardInterrupt, EOFError):
                 print("Operación cancelada.")
 
             try:
                 self.linea_comando = []
                 self.leer_comando()
                 comando = self.linea_comando[0]
-            except KeyboardInterrupt:
+            except (KeyboardInterrupt, EOFError):
                 break
         print("Saliendo del programa...")
 
@@ -181,9 +181,6 @@ class Consola:
         while continuar:
             try:
                 linea_comando.extend( input(">> ").split() )
-            # Esta excepcion que sigue no debe ser capturada, está mal.
-            #except EOFError as e:
-            #    pass
             except UnicodeError as e:
                 mensaje_e = "Error: Texto de entrada por consola inválido."
                 print(mensaje_e)
