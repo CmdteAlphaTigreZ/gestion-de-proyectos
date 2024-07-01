@@ -183,6 +183,13 @@ class ListaEnlazada:
     def __delitem__(self, indice):
         self.extraer(indice)
 
+    indice = util.indice
+    index = indice
+
+    buscar = util.buscar
+
+    buscar_por_atributo = util.buscar_por_atributo
+
     def limpiar(self):
         "Vacía la lista"
         self.__cabeza = self.__cola = None
@@ -223,6 +230,9 @@ class ListaEnlazada:
     def __reversed__(self):
         return self.IteradorL2E(self, adelante=False)
 
+    def __str__(self):
+        return str(list(self))
+
 
 class Secuencia:
 
@@ -239,10 +249,20 @@ class Secuencia:
     def __setitem__(self, indice, valor): self.__soporte[indice] = valor
     cambiar = __setitem__
 
+    def indice(self, valor_buscado): return self.__soporte.indice(valor_buscado)
+    index = indice
+
+    def buscar(self, funcion): return self.__soporte.buscar(funcion)
+
+    def buscar_por_atributo(self, nombre, valor):
+        return self.__soporte.buscar_por_atributo(nombre, valor)
+
     def limpiar(self): self.__soporte.limpiar()
     clear = limpiar
 
     def __iter__(self): return iter(self.__soporte)
+
+    def __str__(self): return str(self.__soporte)
 
 class Lista(ListaEnlazada, Secuencia):
     pass
