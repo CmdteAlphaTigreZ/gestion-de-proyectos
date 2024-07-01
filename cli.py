@@ -1,4 +1,11 @@
 #!/usr/bin/env python3
+# Interfaz en línea de comandos para la gestión de proyectos
+# Autor: Francisco Román, Francisco Unda y Santiago Pinto
+# Fecha: 2024-07-01
+# Cambios:
+#   v1
+#     * Versión inicial
+
 from proyectos import *
 from colecciones import *
 from consola import *

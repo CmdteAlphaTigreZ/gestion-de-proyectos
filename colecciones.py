@@ -1,9 +1,13 @@
 # Biblioteca de clases abstractas y concretas de colecciones
 # Autor: Francisco Román, Francisco Unda y Santiago Pinto
-# Fecha: 2024-06-14
+# Fecha: 2024-07-01
 # Cambios:
 #   v1
 #     * Versión inicial
+#   v2
+#     * Funciones de búsqueda
+#     * Conversiones a 'str'
+#     * NodoArbolBinario
 
 import utilidades as util
 
@@ -339,61 +343,3 @@ class Cola(Secuencia):
     # Conveniencia para self[0]
     @property
     def frente(self): return self[0]
-
-
-# Implementaciones alternativas pero algo más complicadas de hacer funcionar
-##class Pila:
-##
-##    def __init__(self, iterable=None):
-##        ListaEnlazada.__init__(self, iterable)
-##        self.__cima = self._ListaEnlazada__cabeza
-##
-##    __len__ = ListaEnlazada.__len__
-##    largo = __len__
-##
-##    #__validar_indice = ListaEnlazada._ListaEnlazada__validar_indice
-##    #__obtener_nodo = ListaEnlazada._ListaEnlazada__obtener_nodo
-##
-##    #__getitem__ = ListaEnlazada.__getitem__
-##    #__setitem__ = ListaEnlazada.__setitem__
-##    #__delitem__ = ListaEnlazada.__delitem__
-##
-##    insertar = ListaEnlazada.insertar
-##    extraer = ListaEnlazada.extraer
-##    pop = ListaEnlazada.pop
-##    push = insertar
-##
-##    limpiar = ListaEnlazada.limpiar
-##    clear = limpiar
-##
-##    def __iter__(self):
-##        return ListaEnlazada.IteradorL2E(self)
-##
-##class Cola:
-##
-##    def __init__(self, iterable=None):
-##        ListaEnlazada.__init__(self, iterable)
-##        self.__inicio = self._ListaEnlazada__cabeza
-##        self.__fin = self._ListaEnlazada__cola
-##
-##    __len__ = ListaEnlazada.__len__
-##    largo = __len__
-##
-##    #__validar_indice = ListaEnlazada._ListaEnlazada__validar_indice
-##    #__obtener_nodo = ListaEnlazada._ListaEnlazada__obtener_nodo
-##
-##    #__getitem__ = ListaEnlazada.__getitem__
-##    #__setitem__ = ListaEnlazada.__setitem__
-##    #__delitem__ = ListaEnlazada.__delitem__
-##
-##    anexar = ListaEnlazada.anexar
-##    extraer = ListaEnlazada.extraer
-##    pop = ListaEnlazada.pop
-##    append = anexar
-##
-##    limpiar = ListaEnlazada.limpiar
-##    clear = limpiar
-##
-##    def __iter__(self):
-##        return ListaEnlazada.IteradorL2E(self)
-

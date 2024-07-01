@@ -1,3 +1,14 @@
+# Módulo de gestión de proyectos
+# Autor: Francisco Román, Francisco Unda y Santiago Pinto
+# Fecha: 2024-07-01
+# Cambios:
+#   v1
+#     * Versión inicial
+#   v2
+#     * Funciones de búsqueda
+#     * Gestor
+
+
 from colecciones import *
 #from datetime import datetime
 

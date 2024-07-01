@@ -1,4 +1,14 @@
 # Biblioteca de utilidades genéricas de programación
+# Autor: Francisco Román, Francisco Unda y Santiago Pinto
+# Fecha: 2024-07-01
+# Cambios:
+#   v1
+#     * Versión inicial
+#   v2
+#     * Función de formato estilo párrafo (envolver_y_sangrar)
+#     * Funciones de búsqueda en iterables
+#     * Comprobación de tipos simplificada
+
 
 from datetime import datetime
 

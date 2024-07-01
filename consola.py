@@ -1,10 +1,11 @@
-# Módulo de interfaz en línea de comandos para el programa de
-# gestión de proyectos
+# Módulo de interfaz en línea de comandos genérica
 # Autor: Francisco Román, Francisco Unda y Santiago Pinto
-# Fecha: 2024-06-15
+# Fecha: 2024-07-01
 # Cambios:
 #   v1
 #     * Versión inicial
+#   v2
+#     * Ayuda mejorada
 
 
 import utilidades as util
