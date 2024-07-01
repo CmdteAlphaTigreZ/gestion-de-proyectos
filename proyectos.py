@@ -134,4 +134,14 @@ class Tarea:
         resultado = "\n".join(resultado)
         return resultado.format(self=self)
 
+class Gestor:
 
+    def __init__(self):
+        self.id_proyecto_max = 0
+        self.id_tarea_max = 0
+        self.empresa = None
+        self.proyecto = None
+        self.__tareas = Pila()
+
+    @property
+    def tareas(self): return self.__tareas
