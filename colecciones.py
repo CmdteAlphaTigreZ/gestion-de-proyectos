@@ -148,6 +148,8 @@ class ListaEnlazada:
         if self.__cola is not None:
             a_extraer.enlazar_desde(None)
             self.__cola.enlazar_a(None)
+        else:
+            self.__cabeza = None
         self.__longitud -= 1
         return a_extraer.valor
 
@@ -164,6 +166,8 @@ class ListaEnlazada:
             if self.__cabeza is not None:
                 a_extraer.enlazar_a(None)
                 self.__cabeza.enlazar_desde(None)
+            else:
+                self.__cola = None
         else:
             self.__validar_indice(indice)
             anterior = self.__obtener_nodo(indice - 1)
