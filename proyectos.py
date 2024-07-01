@@ -31,7 +31,11 @@ class Proyecto:
     def tareas(self): return self.__tareas
 
     def agregar_tarea(self, tarea):
-        self.tareas.append(tarea)
+        if self.tareas.indice(tarea) == -1:
+            self.tareas.anexar(tarea)
+
+    def buscar_tarea(self, atributo, valor):
+        return self.tareas.buscar_por_atributo(atributo, valor)
 
     def __format__(self, formato):
         if formato == "":
@@ -91,6 +95,13 @@ class Tarea:
 
     @property
     def subtareas(self): return self.__subtareas
+
+    def agregar_subtarea(self, tarea):
+        if self.subtareas.indice(tarea) == -1:
+            self.subtareas.anexar(tarea)
+
+    def buscar_subtarea(self, atributo, valor):
+        return self.subtareas.buscar_por_atributo(atributo, valor)
 
     def __format__(self, formato):
         if formato == "":
