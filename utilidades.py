@@ -25,14 +25,26 @@ def comprobar_tipos(nombres, valores, tipos):
     nombres debe contener datos tipo 'str'
     valores debe contener datos tipo 'tipo'
     tipos debe contener datos tipo 'type' que representen el 'tipo' del valor
-    """
-    if not len(nombres) == len(valores) == len(tipos):
-        raise ValueError("debe haber la misma cantidad de nombres, valores y tipos")
-    for nombre, valor, tipo in zip(nombres, valores, tipos):
-        if not isinstance(valor, tipo):
-            raise TypeError("'%s' no es de tipo '%s': %s"
 
-                            % (nombre, tipo.__name__, valor))
+    Alternativamente, si nombres es tipo 'str' en sí, los argumentos
+    se toman como los valores directos en lugar de secuencias.
+    Permite comprobar el tipo de un solo valor sin insertarlo en una
+    secuencia previamente.
+    """
+    unico = isinstance(nombres, str)
+    if unico:
+        if not isinstance(valores, tipos):
+            raise TypeError("'%s' no es de tipo '%s': %s"
+                            % (nombres, tipos.__name__, valores))
+    else:
+        if not len(nombres) == len(valores) == len(tipos):
+            raise ValueError(
+                "debe haber la misma cantidad de nombres, valores y tipos")
+        for nombre, valor, tipo in zip(nombres, valores, tipos):
+            if not isinstance(valor, tipo):
+                raise TypeError("'%s' no es de tipo '%s': %s"
+                                % (nombre, tipo.__name__, valor))
+
 def str_a_fecha(fecha):
     "Convierte fechas en formato 'DD-MM-YYYY' a 'datetime.date'"
     return datetime.strptime(fecha, "%d/%m/%Y").date()
