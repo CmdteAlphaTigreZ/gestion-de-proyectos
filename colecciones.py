@@ -7,7 +7,7 @@
 
 import utilidades as util
 
-class Nodo:
+class NodoLista:
     "Nodo doblemente enlazado conteniendo un valor cualquiera"
 
     def __init__(self, valor=None):
@@ -22,7 +22,7 @@ class Nodo:
         return self.__nodo_siguiente
 
     def enlazar_a(self, siguiente):
-        "Enlaza al 'Nodo' como el siguiente"
+        "Enlaza al 'NodoLista' como el siguiente"
         if siguiente is not None:
             util.comprobar_tipos("siguiente", siguiente, NodoLista)
         self.__nodo_siguiente = siguiente
@@ -30,7 +30,7 @@ class Nodo:
             siguiente.__nodo_anterior = self
 
     def enlazar_desde(self, anterior):
-        "Enlaza al 'Nodo' como el anterior"
+        "Enlaza al 'NodoLista' como el anterior"
         if anterior is not None:
             util.comprobar_tipos("anterior", anterior, NodoLista)
         self.__nodo_anterior = anterior
@@ -51,13 +51,13 @@ class ListaEnlazada:
             # Copiado de 'anexar' para evitar la comparación innecesaria
             # de la cabeza con 'None'.  Mantener sincronizado con 'anexar'
             try:
-                nuevo = Nodo(next(iterable))
+                nuevo = NodoLista(next(iterable))
             except StopIteration:
                 return
             self.__cabeza = self.__cola = nuevo
             self.__longitud += 1
             for valor in iterable:
-                nuevo = Nodo(valor)
+                nuevo = NodoLista(valor)
                 nuevo.enlazar_desde(self.__cola)
                 self.__cola = nuevo
                 self.__longitud += 1
@@ -100,7 +100,7 @@ class ListaEnlazada:
     cambiar = __setitem__
 
     def anexar(self, valor):
-        nuevo = Nodo(valor)
+        nuevo = NodoLista(valor)
         nuevo.enlazar_desde(self.__cola)
         self.__cola = nuevo
         if self.__cabeza is None:
@@ -123,7 +123,7 @@ class ListaEnlazada:
         if indice == self.__longitud:
             self.anexar(valor)
             return
-        nuevo = Nodo(valor)
+        nuevo = NodoLista(valor)
         if indice == 0:
             nuevo.enlazar_a(self.__cabeza)
             self.__cabeza = nuevo
@@ -209,10 +209,10 @@ class ListaEnlazada:
             util.comprobar_tipos("lista", lista, ListaEnlazada)
             if adelante:
                 self.__nodo = lista._ListaEnlazada__cabeza
-                self.__funcion = Nodo.siguiente
+                self.__funcion = NodoLista.siguiente
             else:
                 self.__nodo = lista._ListaEnlazada__cola
-                self.__funcion = Nodo.anterior
+                self.__funcion = NodoLista.anterior
 
         def __iter__(self):
             return self
@@ -232,6 +232,50 @@ class ListaEnlazada:
 
     def __str__(self):
         return str(list(self))
+
+
+class NodoArbolBinario():
+
+    def __init__(self, valor=None):
+        self.valor = valor
+        self.__nodo_padre = None
+        self.__nodo_izquierdo = None
+        self.__nodo_derecho = None
+
+    def padre(self):
+        return self.__nodo_padre
+
+    def izquierdo(self):
+        return self.__nodo_izquierdo
+
+    def derecho(self):
+        return self.__nodo_derecho
+
+    def enlazar_a_izquierdo(self, izquierdo):
+        "Enlaza al 'NodoArbolBinario' como el izquierdo"
+        if izquierdo is not None:
+            util.comprobar_tipos("izquierdo", izquierdo, NodoArbolBinario)
+        self.__nodo_izquierdo = izquierdo
+        if izquierdo is not None:
+            izquierdo.__nodo_padre = self
+
+    def enlazar_a_derecho(self, derecho):
+        "Enlaza al 'NodoArbolBinario' como el derecho"
+        if derecho is not None:
+            util.comprobar_tipos("derecho", derecho, NodoArbolBinario)
+        self.__nodo_derecho = derecho
+        if derecho is not None:
+            derecho.__nodo_padre = self
+
+    def desenlazar_padre(self):
+        "Desenlaza el 'NodoArbolBinario' padre."
+        " También desenlaza este nodo en el padre."
+        if self.__nodo_padre is not None:
+            if self == self.__nodo_padre.__nodo_izquierdo:
+                self.__nodo_padre.__nodo_izquierdo = None
+            elif self == self.__nodo_padre.__nodo_derecho:
+                self.__nodo_padre.__nodo_derecho = None
+            self.__nodo_padre = None
 
 
 class Secuencia:
