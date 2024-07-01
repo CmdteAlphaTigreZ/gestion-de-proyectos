@@ -1,345 +1,218 @@
-Calculadora cient韋ica.
+Nota: No se pueden a帽adir tareas si no hay proyectos creados y no se pueden crear subtareas si no hay tareas creadas
 
+-----Menu Principal-----
 Comandos disponibles:
-  prectangulo [base altura]    Per韒etro de un rect醤gulo
-  vpiramide [base altura]      Volumen de una pir醡ide
-  ctiempo [horas]              Horas a d韆s, minutos y segundos
-  vcubo [arista]               Volumen de un cubo
-  leerconfig                   Ver el archivo de configuraci髇
-  errores                      Ver el registro de errores
-  historial                    Ver el historial de operaciones
-  regresar                     Salir de la calculadora
-
+proyectos                           Cambia al men煤 de proyectos
+ayuda [nombre_comando]              Muestra los comandos disponibles o
+                                    la ayuda para un comando particular
+salir                               Salir de la consola
 >> Error: Comando desconocido: comando
->> Indique la longitud de la base del rect醤gulo: Indique la altura del rect醤gulo: El per韒etro del rect醤gulo es: 60.0
->> El per韒etro del rect醤gulo es: 60.0
->> El per韒etro del rect醤gulo es: 37.400000000000006
->> Error: Valor num閞ico inv醠ido: invalido
->> Error: Las medidas deben ser positivas.
->> Error: Sintaxis inv醠ida: prectangulo [base altura]
->> Error: Sintaxis inv醠ida: prectangulo [base altura]
->> Indique el 醨ea de la base de la pir醡ide: Indique la altura de la pir醡ide: El volumen de la pir醡ide es: 66.66666666666667
->> El volumen de la pir醡ide es: 66.66666666666667
->> El per韒etro del rect醤gulo es: 37.400000000000006
->> Error: Valor num閞ico inv醠ido: invalido
->> Error: Las medidas deben ser positivas.
->> Error: Sintaxis inv醠ida: vpiramide [base altura]
->> Error: Sintaxis inv醠ida: vpiramide [base altura]
->> Indique la cantidad de horas: La cantidad de horas es equivalente a 0 d韆s, 600 minutos y 0.0 segundos.
->> La cantidad de horas es equivalente a 0 d韆s, 600 minutos y 0.0 segundos.
->> La cantidad de horas es equivalente a 0 d韆s, 588 minutos y 0.0 segundos.
->> Error: Sintaxis inv醠ida: ctiempo [horas]
->> Error: El tiempo debe ser positivo.
->> Error: Sintaxis inv醠ida: ctiempo [horas]
->> La cantidad de horas es equivalente a 0 d韆s, 484 minutos y 4.799999999999045 segundos.
->> Error: Valor num閞ico inv醠ido: a
->> Indique la cantidad de horas: La cantidad de horas es equivalente a 0 d韆s, 600 minutos y 0.0 segundos.
->> El volumen del cubo es: 1000.0
->> El volumen del cubo es: 941.1920000000002
->> Error: Sintaxis inv醠ida: vcubo [arista]
->> Error: Las medidas deben ser positivas.
->> Error: Sintaxis inv醠ida: vcubo [arista]
->> El volumen del cubo es: 525.167290432
->> Error: Valor num閞ico inv醠ido: a
->> 
-[Registros]
-Errores = errores.log.txt
-Historial = historial.log.txt
-
-[Modulos]
-prectangulo = 1
-vpiramide = 1
-ctiempo = 1
-vcubo = 1
-leerconfig = 1
-errores = 1
-historial = 1
-
-
->> Tipo: Tipo de error.
-Origen: Componente de origen del error.
-Mensaje de error.
-
-Tipo: Archivo
-Origen: Registro de errores
-Error: No se pudo abrir el registro de errores para cargarlo.
-
-Tipo: Archivo
-Origen: Historial
-Error: No se pudo abrir el historial para cargarlo.
-
-Tipo: No implementado
-Origen: Consola
-Error: Comando desconocido: comando
-
-Tipo: Valor
-Origen: prectangulo
-Error: Valor num閞ico inv醠ido: invalido
-
-Tipo: Valor
-Origen: prectangulo
-Error: Las medidas deben ser positivas.
-
-Tipo: Sintaxis
-Origen: prectangulo
-Error: Sintaxis inv醠ida: prectangulo [base altura]
-
-Tipo: Sintaxis
-Origen: prectangulo
-Error: Sintaxis inv醠ida: prectangulo [base altura]
-
-Tipo: Valor
-Origen: vpiramide
-Error: Valor num閞ico inv醠ido: invalido
-
-Tipo: Valor
-Origen: vpiramide
-Error: Las medidas deben ser positivas.
-
-Tipo: Sintaxis
-Origen: vpiramide
-Error: Sintaxis inv醠ida: vpiramide [base altura]
-
-Tipo: Sintaxis
-Origen: vpiramide
-Error: Sintaxis inv醠ida: vpiramide [base altura]
-
-Tipo: Sintaxis
-Origen: ctiempo
-Error: Sintaxis inv醠ida: ctiempo [horas]
-
-Tipo: Valor
-Origen: ctiempo
-Error: El tiempo debe ser positivo.
-
-Tipo: Sintaxis
-Origen: ctiempo
-Error: Sintaxis inv醠ida: ctiempo [horas]
-
-Tipo: Valor
-Origen: ctiempo
-Error: Valor num閞ico inv醠ido: a
-
-Tipo: Sintaxis
-Origen: vcubo
-Error: Sintaxis inv醠ida: vcubo [arista]
-
-Tipo: Valor
-Origen: vcubo
-Error: Las medidas deben ser positivas.
-
-Tipo: Sintaxis
-Origen: vcubo
-Error: Sintaxis inv醠ida: vcubo [arista]
-
-Tipo: Valor
-Origen: vcubo
-Error: Valor num閞ico inv醠ido: a
-
-Tipo: No implementado
-Origen: Consola
-Error: Comando desconocido: comando
-
-Tipo: Valor
-Origen: prectangulo
-Error: Valor num閞ico inv醠ido: invalido
-
-Tipo: Valor
-Origen: prectangulo
-Error: Las medidas deben ser positivas.
-
-Tipo: Sintaxis
-Origen: prectangulo
-Error: Sintaxis inv醠ida: prectangulo [base altura]
-
-Tipo: Sintaxis
-Origen: prectangulo
-Error: Sintaxis inv醠ida: prectangulo [base altura]
-
-Tipo: Valor
-Origen: vpiramide
-Error: Valor num閞ico inv醠ido: invalido
-
-Tipo: Valor
-Origen: vpiramide
-Error: Las medidas deben ser positivas.
-
-Tipo: Sintaxis
-Origen: vpiramide
-Error: Sintaxis inv醠ida: vpiramide [base altura]
-
-Tipo: Sintaxis
-Origen: vpiramide
-Error: Sintaxis inv醠ida: vpiramide [base altura]
-
-Tipo: Sintaxis
-Origen: ctiempo
-Error: Sintaxis inv醠ida: ctiempo [horas]
-
-Tipo: Valor
-Origen: ctiempo
-Error: El tiempo debe ser positivo.
-
-Tipo: Sintaxis
-Origen: ctiempo
-Error: Sintaxis inv醠ida: ctiempo [horas]
-
-Tipo: Valor
-Origen: ctiempo
-Error: Valor num閞ico inv醠ido: a
-
-Tipo: Sintaxis
-Origen: vcubo
-Error: Sintaxis inv醠ida: vcubo [arista]
-
-Tipo: Valor
-Origen: vcubo
-Error: Las medidas deben ser positivas.
-
-Tipo: Sintaxis
-Origen: vcubo
-Error: Sintaxis inv醠ida: vcubo [arista]
-
-Tipo: Valor
-Origen: vcubo
-Error: Valor num閞ico inv醠ido: a
-
-
->> L韓ea de comando
-Resultado
-
-prectangulo
-
-El per韒etro del rect醤gulo es: 60.0
-
-
-
-
-prectangulo 10 20
-
-
-
-
-prectangulo 8.9 9,8
-
-
-
-
-vpiramide
-
-
-
-
-vpiramide 10 20
-
-
-
-
-prectangulo 8.9 9,8
-
-
-
-
-ctiempo
-
-
-
-
-ctiempo 10
-
-
-
-
-ctiempo 9,8
-
-
-
-
-ctiempo 8.068
-
-
-
-
-ctiempo
-
-
-
-
-vcubo 10
-
-
-
-
-vcubo 9,8
-
-
-
-
-vcubo 8.068
-
-
-
-
-leerconfig
-
-
-
-
-errores
-
-
-
-
-historial
-
-
-prectangulo
-El per韒etro del rect醤gulo es: 60.0
-
-prectangulo 10 20
-El per韒etro del rect醤gulo es: 60.0
-
-prectangulo 8.9 9,8
-El per韒etro del rect醤gulo es: 37.400000000000006
-
-vpiramide
-El volumen de la pir醡ide es: 66.66666666666667
-
-vpiramide 10 20
-El volumen de la pir醡ide es: 66.66666666666667
-
-prectangulo 8.9 9,8
-El per韒etro del rect醤gulo es: 37.400000000000006
-
-ctiempo
-La cantidad de horas es equivalente a 0 d韆s, 600 minutos y 0.0 segundos.
-
-ctiempo 10
-La cantidad de horas es equivalente a 0 d韆s, 600 minutos y 0.0 segundos.
-
-ctiempo 9,8
-La cantidad de horas es equivalente a 0 d韆s, 588 minutos y 0.0 segundos.
-
-ctiempo 8.068
-La cantidad de horas es equivalente a 0 d韆s, 484 minutos y 4.799999999999045 segundos.
-
-ctiempo
-La cantidad de horas es equivalente a 0 d韆s, 600 minutos y 0.0 segundos.
-
-vcubo 10
-El volumen del cubo es: 1000.0
-
-vcubo 9,8
-El volumen del cubo es: 941.1920000000002
-
-vcubo 8.068
-El volumen del cubo es: 525.167290432
-
-leerconfig
-Resultado omitido...
-
-errores
-Resultado omitido...
-
-
->> Saliendo de la calculadora...
+>> >> Comandos disponibles:
+agregar                             A帽ade un nuevo proyecto
+mostrar                             Enumera los proyectos registrados
+consultar [id]                      Consulta un proyecto existente
+modificar                           Modifica un proyecto existente
+eliminar [id]                       Elimina un proyecto
+tareas [id]                         Gestiona las tareas de un proyecto
+regresar                            Regresa al men煤 principal
+ayuda [nombre_comando]              Muestra los comandos disponibles o
+                                    la ayuda para un comando particular
+salir                               Salir de la consola
+>> Error: Comando desconocido: pepe
+>> Ingrese el nombre del proyecto: Ingrese la descripci贸n del proyecto: Ingrese la fecha de inicio del proyecto (dd/mm/yyyy): Ingrese la fecha de vencimiento del proyecto (dd/mm/yyyy): Ingrese el estado actual del proyecto: Ingrese el nombre de la empresa del proyecto: Ingrese el nombre del gerente del proyecto: Ingrese el nombre del equipo del proyecto: El proyecto ha sido creado, su ID es 1
+>> ID: 1
+Nombre: "Proyecto #1"
+Estado actual: "En curso"
+>> ID: 1
+Nombre: "Proyecto #1"
+Estado actual: "En curso"
+>> Ingrese el ID del proyecto que desea consultar: ID: 1
+Nombre: "Proyecto #1"
+Descripci贸n:
+  Una descripci贸n tremendamente larga. Una descripci贸n tremendamente
+  larga. Una descripci贸n tremendamente larga. Una descripci贸n
+  tremendamente larga. Una descripci贸n tremendamente larga. Una
+  descripci贸n tremendamente larga.
+Fecha de inicio: 01/07/2024
+Fecha de vencimiento: 01/08/2024
+Estado actual: "En curso"
+Empresa: TechSolutions Innovations, Inc.
+Gerente: Mr. Serious
+Equipo: Un grupo de 3 personas
+No. de tareas: 0
+>> ID: 1
+Nombre: "Proyecto #1"
+Descripci贸n:
+  Una descripci贸n tremendamente larga. Una descripci贸n tremendamente
+  larga. Una descripci贸n tremendamente larga. Una descripci贸n
+  tremendamente larga. Una descripci贸n tremendamente larga. Una
+  descripci贸n tremendamente larga.
+Fecha de inicio: 01/07/2024
+Fecha de vencimiento: 01/08/2024
+Estado actual: "En curso"
+Empresa: TechSolutions Innovations, Inc.
+Gerente: Mr. Serious
+Equipo: Un grupo de 3 personas
+No. de tareas: 0
+>> Ingrese el ID del proyecto que desea modificar: ID: 1
+Nombre: "Proyecto #1"
+Descripci贸n:
+  Una descripci贸n tremendamente larga. Una descripci贸n tremendamente
+  larga. Una descripci贸n tremendamente larga. Una descripci贸n
+  tremendamente larga. Una descripci贸n tremendamente larga. Una
+  descripci贸n tremendamente larga.
+Fecha de inicio: 01/07/2024
+Fecha de vencimiento: 01/08/2024
+Estado actual: "En curso"
+Empresa: TechSolutions Innovations, Inc.
+Gerente: Mr. Serious
+Equipo: Un grupo de 3 personas
+No. de tareas: 0
+
+Para mantener una propiedad del proyecto intacta solo presione 'Enter'
+Ingrese el nombre del proyecto: Ingrese la descripci贸n del proyecto: Ingrese la fecha de inicio del proyecto (dd/mm/yyyy): Ingrese la fecha de vencimiento del proyecto (dd/mm/yyyy): Ingrese el estado actual del proyecto: Ingrese el nombre de la empresa del proyecto: Ingrese el nombre del gerente del proyecto: Ingrese el nombre del equipo del proyecto: Proyecto modificado exitosamente.
+>> Ingrese el ID del proyecto cuyas tareas desea gestionar: Comandos disponibles:
+agregar                             A帽ade una nueva tarea al proyecto
+mostrar                             Enumera las tareas asignadas al
+                                    proyecto
+consultar [id]                      Consulta una tarea existente
+modificar                           Modifica una tarea existente
+eliminar [id]                       Elimina una tarea del proyecto
+regresar                            Regresa al men煤 de proyectos
+ayuda [nombre_comando]              Muestra los comandos disponibles o
+                                    la ayuda para un comando particular
+salir                               Salir de la consola
+>> Ingrese el nombre de la tarea: Ingrese la descripci贸n de la tarea: Ingrese la fecha de inicio de la tarea (dd/mm/yyyy): Ingrese la fecha de vencimiento de la tarea (dd/mm/yyyy): Ingrese el estado actual de la tarea: Ingrese del 0 al 100 el porcentaje de progreso de la tarea: Ingrese el nombre de la empresa cliente a la que va dirigida la tarea: La tarea ha sido creada, su ID es 1
+>> ID: 1
+Nombre: "Tarea #1"
+Estado actual: "No iniciada"
+>> ID: 1
+Nombre: "Tarea #1"
+Descripci贸n:
+  Terminar el
+  proyectooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
+  oooooooooooooooooooooooooooooooooooo
+Fecha de inicio: 02/07/2024
+Fecha de vencimiento: 07/07/2024
+Estado actual: "No iniciada"
+Porcentaje de completaci贸n: 0.00%
+Empresa cliente: Self, Inc.
+No. de subtareas: 0
+>> Ingrese el ID de la tarea que desea modificar: ID: 1
+Nombre: "Tarea #1"
+Descripci贸n:
+  Terminar el
+  proyectooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
+  oooooooooooooooooooooooooooooooooooo
+Fecha de inicio: 02/07/2024
+Fecha de vencimiento: 07/07/2024
+Estado actual: "No iniciada"
+Porcentaje de completaci贸n: 0.00%
+Empresa cliente: Self, Inc.
+No. de subtareas: 0
+
+Para mantener una propiedad de la tarea intacta solo presione 'Enter'
+Ingrese el nombre de la tarea: Ingrese la descripci贸n de la tarea: Ingrese la fecha de inicio de la tarea (dd/mm/yyyy): Ingrese la fecha de vencimiento de la tarea (dd/mm/yyyy): Ingrese el estado actual de la tarea: Ingrese del 0 al 100 el porcentaje de progreso de la tarea: Ingrese el nombre de la empresa cliente a la que va dirigida la tarea: Error: 'fecha_inicio' no es una fecha v谩lida: 3/30/3000
+>> ID: 1
+Nombre: "Tarea #1"
+Descripci贸n:
+  Terminar el
+  proyectooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
+  oooooooooooooooooooooooooooooooooooo
+Fecha de inicio: 02/07/2024
+Fecha de vencimiento: 07/07/2024
+Estado actual: "No iniciada"
+Porcentaje de completaci贸n: 0.00%
+Empresa cliente: Self, Inc.
+No. de subtareas: 0
+
+Para mantener una propiedad de la tarea intacta solo presione 'Enter'
+Error: Sintaxis inv谩lida: modificar
+>> Error: Comando desconocido: none
+>> Ingrese el ID de la tarea que desea modificar: ID: 1
+Nombre: "Tarea #1"
+Descripci贸n:
+  Terminar el
+  proyectooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
+  oooooooooooooooooooooooooooooooooooo
+Fecha de inicio: 02/07/2024
+Fecha de vencimiento: 07/07/2024
+Estado actual: "No iniciada"
+Porcentaje de completaci贸n: 0.00%
+Empresa cliente: Self, Inc.
+No. de subtareas: 0
+
+Para mantener una propiedad de la tarea intacta solo presione 'Enter'
+Ingrese el nombre de la tarea: Ingrese la descripci贸n de la tarea: Ingrese la fecha de inicio de la tarea (dd/mm/yyyy): Ingrese la fecha de vencimiento de la tarea (dd/mm/yyyy): Ingrese el estado actual de la tarea: Ingrese del 0 al 100 el porcentaje de progreso de la tarea: Ingrese el nombre de la empresa cliente a la que va dirigida la tarea: Tarea modificada exitosamente.
+>> Comandos disponibles:
+agregar                             A帽ade un nuevo proyecto
+mostrar                             Enumera los proyectos registrados
+consultar [id]                      Consulta un proyecto existente
+modificar                           Modifica un proyecto existente
+eliminar [id]                       Elimina un proyecto
+tareas [id]                         Gestiona las tareas de un proyecto
+regresar                            Regresa al men煤 principal
+ayuda [nombre_comando]              Muestra los comandos disponibles o
+                                    la ayuda para un comando particular
+salir                               Salir de la consola
+>> ID: 1
+Nombre: "Proyecto #1"
+Descripci贸n:
+  Una descripci贸n tremendamente larga. Una descripci贸n tremendamente
+  larga. Una descripci贸n tremendamente larga. Una descripci贸n
+  tremendamente larga. Una descripci贸n tremendamente larga. Una
+  descripci贸n tremendamente larga.
+Fecha de inicio: 01/07/2024
+Fecha de vencimiento: 07/07/2024
+Estado actual: "En curso"
+Empresa: TechSolutions Innovations, Inc.
+Gerente: Mr. Serious
+Equipo: Un grupo de 3 personas
+No. de tareas: 1
+>> Ingrese el ID del proyecto cuyas tareas desea gestionar: Comandos disponibles:
+agregar                             A帽ade una nueva tarea al proyecto
+mostrar                             Enumera las tareas asignadas al
+                                    proyecto
+consultar [id]                      Consulta una tarea existente
+modificar                           Modifica una tarea existente
+eliminar [id]                       Elimina una tarea del proyecto
+regresar                            Regresa al men煤 de proyectos
+ayuda [nombre_comando]              Muestra los comandos disponibles o
+                                    la ayuda para un comando particular
+salir                               Salir de la consola
+>> ID: 1
+Nombre: "Tarea #1"
+Estado actual: "En curso"
+Est谩 seguro que desea eliminar esta tarea? (S/N): La tarea con ID 1 ha sido eliminada.
+>> Error: no existe una tarea en este proyecto con ese ID: 1
+>> Comandos disponibles:
+agregar                             A帽ade un nuevo proyecto
+mostrar                             Enumera los proyectos registrados
+consultar [id]                      Consulta un proyecto existente
+modificar                           Modifica un proyecto existente
+eliminar [id]                       Elimina un proyecto
+tareas [id]                         Gestiona las tareas de un proyecto
+regresar                            Regresa al men煤 principal
+ayuda [nombre_comando]              Muestra los comandos disponibles o
+                                    la ayuda para un comando particular
+salir                               Salir de la consola
+>> >> ID: 1
+Nombre: "Proyecto #1"
+Descripci贸n:
+  Una descripci贸n tremendamente larga. Una descripci贸n tremendamente
+  larga. Una descripci贸n tremendamente larga. Una descripci贸n
+  tremendamente larga. Una descripci贸n tremendamente larga. Una
+  descripci贸n tremendamente larga.
+Fecha de inicio: 01/07/2024
+Fecha de vencimiento: 07/07/2024
+Estado actual: "En curso"
+Empresa: TechSolutions Innovations, Inc.
+Gerente: Mr. Serious
+Equipo: Un grupo de 3 personas
+No. de tareas: 0
+>> ID: 1
+Nombre: "Proyecto #1"
+Estado actual: "En curso"
+Est谩 seguro que desea eliminar este proyecto? (S/N): El proyecto con ID 1 ha sido eliminado.
+>> No hay proyectos para mostrar.
+>> Seguro que desea salir? (S/N): Saliendo del programa...

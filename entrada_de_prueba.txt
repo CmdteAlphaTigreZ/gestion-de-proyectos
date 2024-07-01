@@ -1,43 +1,75 @@
+Utilice_la_terminación_de_línea_del_sistema_donde_se_ejecuta
 comando inexistente
-prectangulo
-10
-20
-prectangulo 10 20
-prectangulo 8.9 9,8
-prectangulo invalido 2
-prectangulo -5 0
-prectangulo 5 6 7
-prectangulo 2
-vpiramide
-10
-20
-vpiramide 10 20
-prectangulo 8.9 9,8
-vpiramide invalido 2
-vpiramide -5 0
-vpiramide 5 6 7
-vpiramide 2
-ctiempo
-10
-ctiempo 10
-ctiempo 9,8
-ctiempo invalido 2
-ctiempo -5
-ctiempo 5 6 7
-ctiempo 8.068
-ctiempo a
-ctiempo
-10
-vcubo 10
-vcubo 9,8
-vcubo invalido, 2
-vcubo -5
-vcubo 5 6 7
-vcubo 8.068
-vcubo a
-leerconfig
-errores
-historial
- 
-arriba hay espacio en blanco
+
+proyectos
+pepe
+agregar
+Proyecto #1
+Una descripción tremendamente larga. Una descripción tremendamente larga. Una descripción tremendamente larga. Una descripción tremendamente larga. Una descripción tremendamente larga. Una descripción tremendamente larga.
+1/7/2024
+01/08/2024
+En curso
+TechSolutions Innovations, Inc.
+Mr. Serious
+Un grupo de 3 personas
+mostrar
+mostrar 1
+consultar
+1
+consultar 1
+modificar
+1
+
+
+
+07/07/2024
+
+
+
+
+tareas
+1
+agregar
+Tarea #1
+Terminar el proyectooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
+2/7/2024
+7/7/2024
+No iniciada
+0
+Self, Inc.
+mostrar
+consultar 1
+modificar
+1
+
+
+3/30/3000
+
+
+
+
+modificar 1
+none
+modificar
+1
+
+
+
+
+En curso
+
+
 regresar
+consultar 1
+tareas 1
+eliminar 1
+s
+consultar 1
+regresar
+
+consultar 1
+eliminar 1
+s
+mostrar
+salir
+s
