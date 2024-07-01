@@ -26,23 +26,39 @@ mensajes_argumentos_proyecto = (
     "Ingrese el nombre del equipo del proyecto: " )
 # Tomado del constructor de Tarea en proyectos.py.  Mantener sincronizado
 
+def leer_id(consola, mensaje):
+    "Solicita un ID al usuario."
+    " Devuelve un resultado de error si aplica."
+    id_ = consola.leer_argumentos( ("id",),
+        (mensaje,) )["id"]
+    try:
+        id_ = int(id_)
+    except ValueError:
+        return Resultado("Error: el dato ingresado no es un ID válido: "
+                         + id_, None, tipo_error="Valor")
+    return id_
 
 def leer_id_proyecto(consola, mensaje):
     "Solicita un ID de proyecto al usuario."
     " Devuelve un resultado de error si aplica."
-    id_proyecto = consola.leer_argumentos( ("id",),
-        (mensaje,) )["id"]
-    try:
-        id_proyecto = int(id_proyecto)
-    except ValueError:
-        return Resultado("Error: el dato ingresado no es un ID válido: "
-                         + id_proyecto, None, tipo_error="Valor")
+    id_proyecto = leer_id(consola, mensaje)
+    if isinstance(id_proyecto, Resultado): return id_proyecto
     if id_proyecto not in proyectos:
-        return Resultado("Error: no existe un proyecto con ese ID: "+ str(id_proyecto),
-                         None, tipo_error="Valor")
+        return Resultado("Error: no existe un proyecto con ese ID: "
+                         + str(id_proyecto), None, tipo_error="Valor")
     return id_proyecto
 
-def leer_fecha_proyecto(argumentos, nombre):
+def leer_id_tarea(consola, mensaje):
+    "Solicita un ID de tarea al usuario."
+    " Devuelve un resultado de error si aplica."
+    id_tarea = leer_id(consola, mensaje)
+    if isinstance(id_tarea, Resultado): return id_tarea
+    if proyecto_seleccionado.buscar_tarea("id", id_tarea) is None:
+        return Resultado("Error: no existe una tarea en este proyecto con ese ID: "
+                         + str(id_tarea), None, tipo_error="Valor")
+    return id_tarea
+
+def leer_fecha(argumentos, nombre):
     "Interpreta una fecha desde los argumentos de línea de comandos."
     " Devuelve un resultado de error si aplica."
     try:
@@ -53,12 +69,16 @@ def leer_fecha_proyecto(argumentos, nombre):
                          None,
                          tipo_error="Valor" )
 
-def fn_regresar(consola, linea_comando):
-    "Regresa al menú principal"
-    consola.cambiar_contexto("principal")
-    consola.ayuda()
-    return Resultado("", fn_regresar)
-cmd_regresar = Comando(fn_regresar, "regresar")
+# Plantilla para función de cambio de contexto
+# Recomendaciones:
+#   * Cambiar el nombre
+#   * Cambiar la cadena de documentación que está debajo del nombre
+#   * Cambiar el nombre del contexto
+##def fn_cambiar_contexto(consola, linea_comando):
+##    "Regresa al menú principal"
+##    consola.cambiar_contexto("principal")
+##    consola.ayuda()
+##    return Resultado("", fn_regresar)
 
 
 def fn_proyectos(consola, linea_comando):
@@ -75,7 +95,7 @@ def fn_agregar_proyecto(consola, linea_comando):
     argumentos = consola.leer_argumentos(nombres_argumentos_proyecto,
                                          mensajes_argumentos_proyecto)
     for nombre in ("fecha_inicio", "fecha_vencimiento"):
-        res = leer_fecha_proyecto(argumentos, nombre)
+        res = leer_fecha(argumentos, nombre)
         if isinstance(res, Resultado):  # Resultado de error
             res.origen = fn_agregar_proyecto
             return res
@@ -123,7 +143,7 @@ def fn_modificar_proyecto(consola, linea_comando):
                                          mensajes_argumentos_proyecto)
     for nombre in ("fecha_inicio", "fecha_vencimiento"):
         if argumentos[nombre] != "":
-            res = leer_fecha_proyecto(argumentos, nombre)
+            res = leer_fecha(argumentos, nombre)
             if isinstance(res, Resultado):
                 res.origen = fn_modificar_proyecto
                 return res
@@ -153,7 +173,14 @@ def fn_eliminar_proyecto(consola, linea_comando):
 contextos["proyectos"]["eliminar"] = \
     Comando(fn_eliminar_proyecto, "eliminar [id]")
 
-contextos["proyectos"]["regresar"] = cmd_regresar
+def fn_regresar_a_principal(consola, linea_comando):
+    "Regresa al menú principal"
+    consola.cambiar_contexto("principal")
+    consola.ayuda()
+    return Resultado("", fn_regresar_a_principal)
+contextos["proyectos"]["regresar"] = Comando(fn_regresar_a_principal,
+                                             "regresar")
+
 
 
 def fn_tareas(consola, linea_comando):
