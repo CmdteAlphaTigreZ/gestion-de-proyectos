@@ -100,3 +100,34 @@ Error: Los números pueden tener sólo un separador decimal.")
                   from e
         else:
             raise
+
+def indice(iterable, valor_buscado):
+    """Obtiene el índice del primer elemento igual a 'valor_buscado'.
+
+    Devuelve -1 si no se encuentra el valor buscado.
+    El índice puede ser irrelevante si el iterable no es una secuencia."""
+    for i, valor in enumerate(iterable):
+        if valor == valor_buscado:
+            return i
+    return -1
+
+def buscar(iterable, funcion):
+    """Obtiene el primer elemento para el que la funcion devuelve True.
+
+    Devuelve None si no se encuentra dicho elemento."""
+    for valor in iterable:
+        if funcion(valor):
+            return valor
+    return None
+
+def buscar_por_atributo(iterable, nombre, valor):
+    """Obtiene el primer elemento cuyo atributo 'nombre' es igual a 'valor'.
+
+    Devuelve None si no se encuentra dicho elemento."""
+    for elemento in iterable:
+        try:
+            if getattr(elemento, nombre) == valor:
+                return elemento
+        except AttributeError:
+            pass
+    return None
