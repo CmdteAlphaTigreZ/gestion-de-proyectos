@@ -62,7 +62,7 @@ cmd_regresar = Comando(fn_regresar, "regresar")
 
 
 def fn_proyectos(consola, linea_comando):
-    "Cambiar al menú de proyectos"
+    "Cambia al menú de proyectos"
     consola.cambiar_contexto("proyectos")
     consola.ayuda()
     return Resultado("", fn_proyectos)
@@ -105,7 +105,8 @@ def fn_consultar_proyecto(consola, linea_comando):
         return id_proyecto
 
     return Resultado(format(proyectos[id_proyecto], "g"), fn_consultar_proyecto)
-contextos["proyectos"]["consultar"] = Comando(fn_consultar_proyecto, "consultar")
+contextos["proyectos"]["consultar"] = \
+    Comando(fn_consultar_proyecto, "consultar [id]")
 
 def fn_modificar_proyecto(consola, linea_comando):
     "Modifica un proyecto existente"
@@ -149,7 +150,8 @@ def fn_eliminar_proyecto(consola, linea_comando):
             "El proyecto con ID %d ha sido eliminado." % id_proyecto,
             fn_eliminar_proyecto)
     return Resultado("", fn_eliminar_proyecto)
-contextos["proyectos"]["eliminar"] = Comando(fn_eliminar_proyecto, "eliminar")
+contextos["proyectos"]["eliminar"] = \
+    Comando(fn_eliminar_proyecto, "eliminar [id]")
 
 contextos["proyectos"]["regresar"] = cmd_regresar
 
