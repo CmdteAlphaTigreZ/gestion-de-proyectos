@@ -23,14 +23,16 @@ class Nodo:
 
     def enlazar_a(self, siguiente):
         "Enlaza al 'Nodo' como el siguiente"
-        util.comprobar_tipos("siguiente", siguiente, Nodo)
+        if siguiente is not None:
+            util.comprobar_tipos("siguiente", siguiente, NodoLista)
         self.__nodo_siguiente = siguiente
         if siguiente is not None:
             siguiente.__nodo_anterior = self
 
     def enlazar_desde(self, anterior):
         "Enlaza al 'Nodo' como el anterior"
-        util.comprobar_tipos("anterior", anterior, Nodo)
+        if anterior is not None:
+            util.comprobar_tipos("anterior", anterior, NodoLista)
         self.__nodo_anterior = anterior
         if anterior is not None:
             anterior.__nodo_siguiente = self
