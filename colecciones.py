@@ -12,7 +12,7 @@
 import utilidades as util
 
 class NodoLista:
-    "Nodo doblemente enlazado conteniendo un valor cualquiera"
+    "Nodo doblemente enlazado conteniendo un valor cualquiera."
 
     def __init__(self, valor=None):
         self.valor = valor
@@ -42,11 +42,12 @@ class NodoLista:
             anterior.__nodo_siguiente = self
 
 class ListaEnlazada:
-    "Lista doblemente enlazada heterogénea"
+    "Lista doblemente enlazada heterogénea."
 
     __ERROR_NO_SLICE = NotImplementedError("sin soporte para 'slice'")
 
     def __init__(self, iterable=None):
+        "Se copian los elementos de 'iterable' si se proporciona."
         self.__cabeza = None
         self.__cola = None
         self.__longitud = 0
@@ -141,6 +142,7 @@ class ListaEnlazada:
         self.__longitud += 1
 
     def insert(self, indice, valor):
+        "Evita un comportamiento indeseado con None, para asemejarse más a Python."
         if valor is None:
             raise TypeError("valor no puede ser 'None'")
 
@@ -187,6 +189,7 @@ class ListaEnlazada:
     def __delitem__(self, indice):
         self.extraer(indice)
 
+    # Véase la documentación de estas funciones en utilidades.py
     indice = util.indice
     index = indice
 
@@ -202,6 +205,11 @@ class ListaEnlazada:
     clear = limpiar
 
     def copiar(self):
+        """Realiza una copia plana de la lista.
+
+        Los nodos de la copia son independientes de la lista original,
+        pero no necesariamente los valores.
+        """
         return ListaEnlazada(self)
 
     copy = copiar
@@ -210,6 +218,7 @@ class ListaEnlazada:
         "Iterador de lista doblemente enlazada"
 
         def __init__(self, lista, adelante=True):
+            "'adelante' indica la dirección de iteración"
             util.comprobar_tipos("lista", lista, ListaEnlazada)
             if adelante:
                 self.__nodo = lista._ListaEnlazada__cabeza
@@ -229,9 +238,11 @@ class ListaEnlazada:
             return valor
 
     def __iter__(self):
+        "Devuelve un iterador eficiente sobre la lista enlazada."
         return self.IteradorL2E(self)
 
     def __reversed__(self):
+        "Devuelve un iterador reverso eficiente sobre la lista enlazada."
         return self.IteradorL2E(self, adelante=False)
 
     def __str__(self):
@@ -239,6 +250,7 @@ class ListaEnlazada:
 
 
 class NodoArbolBinario():
+    "Nodo de un árbol binario."
 
     def __init__(self, valor=None):
         self.valor = valor
@@ -283,6 +295,7 @@ class NodoArbolBinario():
 
 
 class Secuencia:
+    "Interfaz común para varias colecciones secuenciales"
 
     def __init__(self, iterable=None):
         # Almacen de datos de soporte para la interfaz, por ahora ListaEnlazada
@@ -316,16 +329,21 @@ class Lista(ListaEnlazada, Secuencia):
     pass
 
 class Pila(Secuencia):
+    "Pila: el último elemento insertado es el primero extraído."
 
     def insertar(self, valor):
+        "Inserta 'valor' en la cima de la pila.  Admite None."
         if valor is None:
+            # Evasión de la deficiencia de insertar en ListaEnlazada
             self.__soporte.insertar(0, 0)
             self.__soporte[0] = None
         else:
             self.__soporte.insertar(0, valor)
     push = insertar
 
-    def extraer(self): return self.__soporte.extraer(0)
+    def extraer(self):
+        "Extrae el valor en la cima de la pila."
+        return self.__soporte.extraer(0)
     pop = extraer
 
     # Conveniencia para self[0]
@@ -333,11 +351,16 @@ class Pila(Secuencia):
     def cima(self): return self[0]
 
 class Cola(Secuencia):
+    "Cola: el primer elemento anexado es el primero extraído."
 
-    def anexar(self, valor): self.__soporte.anexar(valor)
+    def anexar(self, valor):
+        "Anexa 'valor' al final de la cola."
+        self.__soporte.anexar(valor)
     append = anexar
 
-    def extraer(self): return self.__soporte.extraer_ultimo()
+    def extraer(self):
+        "Extrae el valor en el frente de la cola."
+        return self.__soporte.extraer_ultimo()
     pop = extraer
 
     # Conveniencia para self[0]

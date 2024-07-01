@@ -13,18 +13,19 @@ funcion_t = util.funcion_t; metodo_t = util.metodo_t
 
 
 class Comando:
-    """
-    Comando de consola que llama a una función con los argumentos de consola
+    """Comando de consola que llama a una función con los argumentos de consola.
 
     'ayuda' debe estar en la cadena de documentación de la función y sirve
-      como pista para el usuario acerca de la funcionalidad del comando
+      como pista para el usuario acerca de la funcionalidad del comando;
+      no debería terminar en un punto '.'.
     'sintaxis' es un texto que muestra la sintaxis válida con que se puede
-      llamar al comando
+      llamar al comando. Ej: comando <arg_reemplazado> [arg_opcional].
     'descripción' es un texto de ayuda más extenso que describe toda la
-      funcionalidad del comando
+      funcionalidad del comando.
     'funcion' es una función que recibirá los argumentos de la línea de
       comandos, tomará el control de la consola, y luego *debe devolver su
-      resultado como un objeto 'Resultado'*, no se debe mostrar en la consola
+      resultado como un objeto 'Resultado'*, preferiblemente no se debe
+      mostrar en la consola.
     """
 
     def __init__(self, funcion, sintaxis, descripcion=""):
@@ -55,7 +56,14 @@ class Comando:
 
 
 class Resultado:
-    "Resultado de Comando"
+    """Resultado de Comando
+
+    'resultado' es el texto de resultado del comando.
+    'origen' debería ser una la función o comando que generó el resultado;
+      en este momento no está exactamente definido ni es usado.
+    'tipo_error' es un texto que indica el tipo de error ocurrido, si lo hay;
+      en este momento no está uniformizado dentro de la clase.
+    """
 
     def __init__(self, resultado, origen, tipo_error=None):
         util.comprobar_tipos(("resultado",), (resultado,), (str,))
@@ -67,6 +75,7 @@ class Resultado:
 
 
 def _comprobar_comandos(comandos):
+    "Utilizado para valida los tipos de *un* contexto."
     util.comprobar_tipos(("comandos",), (comandos,), (dict,))
     util.comprobar_tipos(("comando",) * len(comandos),
                          tuple(comandos.values()),
@@ -79,9 +88,10 @@ class Contextos:
 
     def __init__(self):
         self.__contextos = {"principal": {}}
-        self.actual = "principal"
+        self.actual = "principal"  # Guarda el nombre del contexto activo
 
     def agregar(self, nombre, comandos):
+        "Añade un nuevo contexto al contenedor."
         util.comprobar_tipos(("nombre",), (nombre,), (str,))
         _comprobar_comandos(comandos)
         if nombre in self.__contextos:
@@ -90,6 +100,7 @@ class Contextos:
         self.__contextos[nombre] = comandos
 
     def reemplazar(self, nombre, comandos):
+        "Reemplaza un contexto existente en el contenedor por otro."
         util.comprobar_tipos(("nombre",), (nombre,), (str,))
         _comprobar_comandos(comandos)
         if nombre not in self.__contextos:
@@ -102,9 +113,11 @@ class Contextos:
     obtener = __getitem__
 
     def __iter__(self):
+        "Devuelve cada contexto, no los nombres de ellos."
         return iter(self.__contextos.values())
 
     def copiar(self):
+        "Copia semi-profunda de los contextos. No copia los comandos individuales."
         copia = Contextos()
         for nombre, comandos in self.__contextos.items():
             copia.__contextos[nombre] = comandos.copy()
@@ -190,6 +203,7 @@ class Consola:
                     continuar = False
 
     def saludar(self):
+        "Muestra un mensaje inicial en la consola."
         print("Nota: No se pueden añadir tareas si no hay proyectos creados"
               " y no se pueden crear subtareas si no hay tareas creadas",
               "\n-----Menu Principal-----",
@@ -230,19 +244,22 @@ class Consola:
         return Resultado(ayuda, self)
 
     def salir(self, linea_comando=None):
-        "Salir de la consola"
+        "Sale de la consola"
         return self.confirmar("Seguro que desea salir?")
 
     def cambiar_contexto(self, nombre=None):
+        "Cambia el contexto de comandos actual, sin más."
         if nombre is None:
             nombre = "principal"
         self.contextos.actual = nombre
         self.comandos = self.contextos[nombre]
 
     def leer_argumentos(self, nombres, mensajes, linea_comando=None):
-        """
-        Lee argumentos de la línea de comandos y del usuario.\
-         Acepta dos listas de texto y devuelve una lista de texto.
+        """Lee argumentos de la línea de comandos y del usuario.
+
+        Acepta dos secuencias de texto y devuelve un diccionario
+        de todos los argumentos del comando, cuyas claves son
+        los nombres dados como parámetro.
 
         Esta función obtiene los argumentos para un comando
         de la línea de comando sólo si todos están en ella,
@@ -254,10 +271,6 @@ class Consola:
         de argumentos requeridos por el comando es la cantidad
         de mensajes para el usuario que recibe esta función
         como parámetro.
-
-        Se devuelve una lista de todos los argumentos del comando
-        en el orden en que se recibieron los mensajes al usuario
-        para ellos.
 
         Debe capturarse desde el comando la excepción ValueError
         que puede levantar esta función.

@@ -14,6 +14,11 @@ from colecciones import *
 
 
 class Proyecto:
+    """Proyecto
+
+    El 'id' debe ser un entero, y las fechas datetime.date.
+    Por ahora no hay más restricciones, y las presentes no se imponen.
+    """
 
     def __init__(
         self,
@@ -39,13 +44,23 @@ class Proyecto:
         self.__tareas = Lista()
 
     @property
-    def tareas(self): return self.__tareas
+    def tareas(self):
+        "Lista de tareas del proyecto."
+        return self.__tareas
 
     def agregar_tarea(self, tarea):
+        "Agrega una 'Tarea' al proyecto, solo si no está ya incluida."
         if self.tareas.indice(tarea) == -1:
             self.tareas.anexar(tarea)
 
     def buscar_tarea(self, atributo, valor):
+        """Busca la primera tarea cuyo atributo sea el valor dado.
+
+        'atributo' debe ser tipo 'str', el nombre del atributo buscado
+        Si el atributo no está presente en alguna tarea,
+        simplemente se ignora.
+        Devuelve None si no encuentra la tarea buscada
+        """
         return self.tareas.buscar_por_atributo(atributo, valor)
 
     def __format__(self, formato):
@@ -82,6 +97,10 @@ class Proyecto:
 
 
 class Tarea:
+    """Tarea
+
+    El 'porcentaje' debe ser un 'float'.
+    Véase la documentación de Proyecto para el resto."""
 
     def __init__(
         self,
@@ -105,13 +124,20 @@ class Tarea:
         self.__subtareas = Lista()
 
     @property
-    def subtareas(self): return self.__subtareas
+    def subtareas(self):
+        "Lista de subtareas de la tarea."
+        return self.__subtareas
 
     def agregar_subtarea(self, tarea):
+        "Agrega una 'Tarea' como subtarea, solo si no está ya incluida."
         if self.subtareas.indice(tarea) == -1:
             self.subtareas.anexar(tarea)
 
     def buscar_subtarea(self, atributo, valor):
+        """Busca la primera subtarea cuyo atributo sea el valor dado.
+
+        Véase la documentación de Proyecto.buscar_tarea.
+        """
         return self.subtareas.buscar_por_atributo(atributo, valor)
 
     def __format__(self, formato):
@@ -146,6 +172,7 @@ class Tarea:
         return resultado.format(self=self)
 
 class Gestor:
+    "Gestor de proyectos multiempresa."
 
     def __init__(self):
         self.id_proyecto_max = 0
@@ -155,4 +182,6 @@ class Gestor:
         self.__tareas = Pila()
 
     @property
-    def tareas(self): return self.__tareas
+    def tareas(self):
+        "Pila que almacena la cadena de subtareas en edición."
+        return self.__tareas

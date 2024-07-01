@@ -27,8 +27,7 @@ del A
 
 
 def comprobar_tipos(nombres, valores, tipos):
-    """
-    Comprueba los tipos de los valores, generando una excepción con \
+    """Comprueba los tipos de los valores, generando una excepción con \
     el nombre del primer valor inválido si lo hay
 
     Los tres argumentos deben ser secuencias de igual longitud:
@@ -64,7 +63,12 @@ def fecha_a_str(fecha):
     return fecha.strftime("%d/%m/%Y")
 
 def envolver_y_sangrar(texto, ancho=72, sangrado=2):
-    "Inserta saltos de línea y sangra texto para salida formateada"
+    """Inserta saltos de línea y sangra texto para salida formateada.
+
+    El ancho corresponde con el ancho total del texto resultante,
+    incluyendo el sangrado.  El ancho no vacío de la columna de texto
+    es ancho - sangrado.
+    """
     ancho -= sangrado
     if ancho < 1: raise ValueError("El ancho debe ser mayor que el sangrado")
     sangrado = " " * sangrado
@@ -115,7 +119,8 @@ def indice(iterable, valor_buscado):
     """Obtiene el índice del primer elemento igual a 'valor_buscado'.
 
     Devuelve -1 si no se encuentra el valor buscado.
-    El índice puede ser irrelevante si el iterable no es una secuencia."""
+    El índice puede ser irrelevante si el iterable no es una secuencia.
+    """
     for i, valor in enumerate(iterable):
         if valor == valor_buscado:
             return i
