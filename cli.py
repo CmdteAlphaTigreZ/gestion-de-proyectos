@@ -137,7 +137,7 @@ contextos["proyectos"]["modificar"] = Comando(fn_modificar_proyecto, "modificar"
 def fn_eliminar_proyecto(consola, linea_comando):
     "Elimina un proyecto"
     id_proyecto = leer_id_proyecto(
-        consola, "Ingrese el ID del Proyecto que desea modificar: ")
+        consola, "Ingrese el ID del proyecto que desea eliminar: ")
     if isinstance(id_proyecto, Resultado):  # Resultado de error
         id_proyecto.origen = fn_consultar_proyecto
         return id_proyecto
