@@ -135,7 +135,8 @@ def fn_modificar_proyecto(consola, linea_comando):
     if isinstance(id_proyecto, Resultado):  # Resultado de error
         id_proyecto.origen = fn_modificar_proyecto
         return id_proyecto
-    print(format(proyectos[id_proyecto], "g"))
+    proyecto = proyectos[id_proyecto]
+    print(format(proyecto, "g"))
     
     print("\nPara mantener una propiedad del proyecto intacta"
           " solo presione 'Enter'")
@@ -148,7 +149,6 @@ def fn_modificar_proyecto(consola, linea_comando):
                 res.origen = fn_modificar_proyecto
                 return res
 
-    proyecto = proyectos[id_proyecto]
     for nombre, valor in argumentos.items():
         if valor == "": continue
         setattr(proyecto, nombre, valor)
