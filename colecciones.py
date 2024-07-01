@@ -146,19 +146,19 @@ class ListaEnlazada:
         if self.__cola is not None:
             a_extraer.enlazar_desde(None)
             self.__cola.enlazar_a(None)
-        longitud -= 1
+        self.__longitud -= 1
         return a_extraer.valor
 
     def extraer(self, indice=None):
         if indice is None:
             indice = 0
-        if indice == longitud - 1:
+        if indice == self.__longitud - 1:
             return self.extraer_ultimo()
         if indice == 0:
             if self.__cabeza is None:
                 raise IndexError("la lista está vacía")
             a_extraer = self.__cabeza
-            self.__cabeza = self.__cabeza.siguiente
+            self.__cabeza = self.__cabeza.siguiente()
             if self.__cabeza is not None:
                 a_extraer.enlazar_a(None)
                 self.__cabeza.enlazar_desde(None)
