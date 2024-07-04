@@ -52,20 +52,7 @@ class ListaEnlazada:
         self.__cola = None
         self.__longitud = 0
         if iterable is not None:
-            iterable = iter(iterable)
-            # Copiado de 'anexar' para evitar la comparación innecesaria
-            # de la cabeza con 'None'.  Mantener sincronizado con 'anexar'
-            try:
-                nuevo = NodoLista(next(iterable))
-            except StopIteration:
-                return
-            self.__cabeza = self.__cola = nuevo
-            self.__longitud += 1
-            for valor in iterable:
-                nuevo = NodoLista(valor)
-                nuevo.enlazar_desde(self.__cola)
-                self.__cola = nuevo
-                self.__longitud += 1
+            self.extender(iterable)
 
     def __len__(self): return self.__longitud
 
@@ -188,6 +175,36 @@ class ListaEnlazada:
 
     def __delitem__(self, indice):
         self.extraer(indice)
+
+    def __iadd__(self, iterable):
+        "Anexa todos los elementos de iterable a la lista"
+        iterable = iter(iterable)
+        # Copiado de 'anexar' para evitar la comparación innecesaria
+        # de la cabeza con 'None'.  Mantener sincronizado con 'anexar'
+        if self.__cabeza is None:
+            try:
+                nuevo = NodoLista(next(iterable))
+            except StopIteration:
+                return
+            self.__cabeza = self.__cola = nuevo
+            self.__longitud += 1
+        for valor in iterable:
+            nuevo = NodoLista(valor)
+            nuevo.enlazar_desde(self.__cola)
+            self.__cola = nuevo
+            self.__longitud += 1
+        return self
+
+    extender = __iadd__
+    extend = extender
+
+    def __add__(self, lista):
+        if not isinstance(lista, ListaEnlazada):
+            return NotImplemented
+        union = ListaEnlazada()
+        union += self
+        union += lista
+        return union
 
     # Véase la documentación de estas funciones en utilidades.py
     indice = util.indice
@@ -312,6 +329,24 @@ class Secuencia:
 
     def indice(self, valor_buscado): return self.__soporte.indice(valor_buscado)
     index = indice
+
+    def __iadd__(self, iterable):
+        self.__soporte += iterable
+        return self
+    extender = __iadd__
+    extend = extender
+
+    def __add__(self, secuencia):
+        if isinstance(secuencia, type(self)):
+            tipo = type(self)
+        elif isinstance(self, type(secuencia)):
+            tipo = type(secuencia)
+        else:
+            return NotImplemented
+        union = tipo()
+        union += self
+        union += secuencia
+        return union
 
     def buscar(self, funcion): return self.__soporte.buscar(funcion)
 
