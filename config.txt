@@ -1,2 +1,7 @@
-[Modulos]
-leerconfig = 0
+#[Modulos]
+#leerconfig = 0
+
+[Almacenes]
+empresas = "ruta"
+proyectos = "ruta"
+tareas = "ruta"
