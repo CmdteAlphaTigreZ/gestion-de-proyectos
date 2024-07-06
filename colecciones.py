@@ -18,6 +18,7 @@ class NodoLista:
         self.valor = valor
         self.__nodo_anterior = None
         self.__nodo_siguiente = None
+        self.__repr = False  # Para __repr__
 
     def anterior(self):
         return self.__nodo_anterior
@@ -41,6 +42,15 @@ class NodoLista:
         if anterior is not None:
             anterior.__nodo_siguiente = self
 
+    def __repr__(self):
+        if self.__repr:
+            return "..."
+        else:
+            self.__repr = True
+            resultado = "NodoLista(%r)" % self.valor
+            self.__repr = False
+            return resultado
+
 class ListaEnlazada:
     "Lista doblemente enlazada heterogénea."
 
@@ -53,6 +63,7 @@ class ListaEnlazada:
         self.__longitud = 0
         if iterable is not None:
             self.extender(iterable)
+        self.__str = False  # Para __str__
 
     def __len__(self): return self.__longitud
 
@@ -263,7 +274,18 @@ class ListaEnlazada:
         return self.IteradorL2E(self, adelante=False)
 
     def __str__(self):
-        return str(list(self))
+        # Así funciona 'list'.
+        if self.__str:
+            # Protección contra llamadas recursivas
+            return "[...]"
+        else:
+            self.__str = True
+            resultado = "[%s]" % ", ".join(map(repr, self))
+            self.__str = False
+            return resultado
+
+    def __repr__(self):
+        return "ListaEnlazada(%s)" % self
 
 
 class NodoArbolBinario():
@@ -274,6 +296,7 @@ class NodoArbolBinario():
         self.__nodo_padre = None
         self.__nodo_izquierdo = None
         self.__nodo_derecho = None
+        self.__repr = False  # Para __repr__
 
     def padre(self):
         return self.__nodo_padre
@@ -309,6 +332,15 @@ class NodoArbolBinario():
             elif self == self.__nodo_padre.__nodo_derecho:
                 self.__nodo_padre.__nodo_derecho = None
             self.__nodo_padre = None
+
+    def __repr__(self):
+        if self.__repr:
+            return "..."
+        else:
+            self.__repr = True
+            resultado = "NodoArbolBinario(%r)" % self.valor
+            self.__repr = False
+            return resultado
 
 
 class Secuencia:
@@ -360,11 +392,18 @@ class Secuencia:
 
     def __str__(self): return str(self._soporte)
 
+    def __repr__(self):
+        return "%s(%s)" % (type(self).__name__, self)
+
 class Lista(ListaEnlazada, Secuencia):
     pass
 
 class Pila(Secuencia):
     "Pila: el último elemento insertado es el primero extraído."
+
+    def __init__(self, iterable=None):
+        super().__init__(iterable)
+        self._ListaEnlazada__str = False  # Para __str__
 
     def insertar(self, valor):
         "Inserta 'valor' en la cima de la pila.  Admite None."
@@ -381,6 +420,8 @@ class Pila(Secuencia):
     # Conveniencia para self[0]
     @property
     def cima(self): return self[len(self) - 1]
+
+    __str__ = ListaEnlazada.__str__
 
 class Cola(Secuencia):
     "Cola: el primer elemento anexado es el primero extraído."
