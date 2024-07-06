@@ -316,22 +316,22 @@ class Secuencia:
 
     def __init__(self, iterable=None):
         # Almacen de datos de soporte para la interfaz, por ahora ListaEnlazada
-        self.__soporte = ListaEnlazada(iterable)
+        self._soporte = ListaEnlazada(iterable)
 
-    def __len__(self): return len(self.__soporte)
+    def __len__(self): return len(self._soporte)
     largo = __len__
 
-    def __getitem__(self, indice): return self.__soporte[indice]
+    def __getitem__(self, indice): return self._soporte[indice]
     obtener = __getitem__
 
-    def __setitem__(self, indice, valor): self.__soporte[indice] = valor
+    def __setitem__(self, indice, valor): self._soporte[indice] = valor
     cambiar = __setitem__
 
-    def indice(self, valor_buscado): return self.__soporte.indice(valor_buscado)
+    def indice(self, valor_buscado): return self._soporte.indice(valor_buscado)
     index = indice
 
     def __iadd__(self, iterable):
-        self.__soporte += iterable
+        self._soporte += iterable
         return self
     extender = __iadd__
     extend = extender
@@ -348,17 +348,17 @@ class Secuencia:
         union += secuencia
         return union
 
-    def buscar(self, funcion): return self.__soporte.buscar(funcion)
+    def buscar(self, funcion): return self._soporte.buscar(funcion)
 
     def buscar_por_atributo(self, nombre, valor):
-        return self.__soporte.buscar_por_atributo(nombre, valor)
+        return self._soporte.buscar_por_atributo(nombre, valor)
 
-    def limpiar(self): self.__soporte.limpiar()
+    def limpiar(self): self._soporte.limpiar()
     clear = limpiar
 
-    def __iter__(self): return iter(self.__soporte)
+    def __iter__(self): return iter(self._soporte)
 
-    def __str__(self): return str(self.__soporte)
+    def __str__(self): return str(self._soporte)
 
 class Lista(ListaEnlazada, Secuencia):
     pass
@@ -368,34 +368,31 @@ class Pila(Secuencia):
 
     def insertar(self, valor):
         "Inserta 'valor' en la cima de la pila.  Admite None."
-        if valor is None:
-            # Evasión de la deficiencia de insertar en ListaEnlazada
-            self.__soporte.insertar(0, 0)
-            self.__soporte[0] = None
-        else:
-            self.__soporte.insertar(0, valor)
+        self._soporte.anexar(valor)
     push = insertar
 
     def extraer(self):
         "Extrae el valor en la cima de la pila."
-        return self.__soporte.extraer(0)
+        return self._soporte.extraer_ultimo()
     pop = extraer
+
+    def __iter__(self): return reversed(self._soporte)
 
     # Conveniencia para self[0]
     @property
-    def cima(self): return self[0]
+    def cima(self): return self[len(self) - 1]
 
 class Cola(Secuencia):
     "Cola: el primer elemento anexado es el primero extraído."
 
     def anexar(self, valor):
         "Anexa 'valor' al final de la cola."
-        self.__soporte.anexar(valor)
+        self._soporte.anexar(valor)
     append = anexar
 
     def extraer(self):
         "Extrae el valor en el frente de la cola."
-        return self.__soporte.extraer_ultimo()
+        return self._soporte.extraer(0)
     pop = extraer
 
     # Conveniencia para self[0]
