@@ -757,6 +757,12 @@ class NodoArbolNario:
         "Devuelve una copia de los hijos"
         return Vista(self.__nodos_hijos, list.__getitem__)
 
+    def raiz(self):
+        raiz = self
+        while raiz.__nodo_padre is not None:
+            raiz = raiz.__nodo_padre
+        return raiz
+
     def __len__(self):
         "Devuelve la cantidad de hijos"
         return len(self.__nodos_hijos)
@@ -777,10 +783,23 @@ class NodoArbolNario:
         "Elimina el hijo con posición en el índice dado."
         del self.__nodos_hijos[indice]
 
-    def agregar(self, hijo):
-        "Agrega un hijo nuevo al nodo."
-        util.comprobar_tipos("hijo", hijo, NodoArbolNario)
-        self.__nodos_hijos.append(hijo)
+    def agregar(self, hijo_s):
+        "Agrega uno o varios hijos nuevos al nodo."
+        varios = True
+        try:
+            hijo_s = list(hijo_s)
+        except TypeError:
+            varios = False
+        if varios:
+            util.comprobar_tipos(("hijo",) * len(hijo_s), hijo_s,
+                                 (NodoArbolNario,) * len(hijo_s) )
+            self.__nodos_hijos += hijo_s
+            for hijo in hijo_s:
+                hijo.__nodo_padre = self
+        else:
+            util.comprobar_tipos("hijo", hijo_s, NodoArbolNario)
+            self.__nodos_hijos.append(hijo_s)
+            hijo_s.__nodo_padre = self
 
     def remover(self, hijo):
         "Elimina un hijo por identidad.  Devuelve un booleano indicando éxito."
