@@ -49,21 +49,46 @@ class ClaveValor:
 class Vista:
     "Vista de solo lectura de una colección."
 
-    def __init__(self, coleccion, funcion_obtener=None):
+    def __init__(self, coleccion, funcion_obtener=None, funcion_tamano=None):
         self.__coleccion = coleccion
+        self.__obtener = self.__tamano = None
         if funcion_obtener is not None:
-            if hasattr(type(coleccion), funcion_obtener.__name__):
-                self.__obtener = funcion_obtener
-                return
+            self.__obtener = funcion_obtener
         else:
             for nombre in ("obtener", "buscar", "get", "__getitem__"):
                 if hasattr(type(coleccion), nombre):
                     self.__obtener = getattr(type(coleccion), nombre)
-                    return
-        raise TypeError("Función para obtener de colección desconocida")
+        if self.__obtener is None:
+            raise TypeError("Función para obtener de colección desconocida")
+        elif not hasattr(type(self.__obtener), "__call__"):
+            raise TypeError("obtener no es llamable")
+
+        if funcion_tamano is not None:
+            self.__tamano = funcion_tamano
+        else:
+            for nombre in ("largo", "longitud", "tamano", "__len__", "size"):
+                if hasattr(type(coleccion), nombre):
+                    self.__tamano = getattr(type(coleccion), nombre)
+        if self.__tamano is not None:
+            try:
+                int(funcion_tamano(self.__coleccion))
+            except (TypeError, ValueError) as e:
+                raise TypeError("tamano no es válido") from e
+        else:
+            self.__tamano = len
 
     def __getitem__(self, clave):
         return self.__obtener(self.__coleccion, clave)
+
+    def __len__(self):
+        return self.__tamano(self.__coleccion)
+
+    @property
+    def tipo(self):
+        return type(self.__coleccion)
+
+    def __repr__(self):
+        return "Vista(%r)" % self.tipo
 
 
 class NodoLista:
