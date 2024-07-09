@@ -428,6 +428,8 @@ class ArbolBinario:
     INORDEN = 0
     POSTORDEN = 1
 
+    ERROR_VALOR_INEXISTENTE = "El valor no está presente en el árbol: "
+
     def __init__(self, iterable=None):
         #"Se copian los elementos de 'iterable' si se proporciona."
         self.__raiz = None
@@ -484,10 +486,8 @@ class ArbolBinario:
             posicion = 1
         return padre, posicion
 
-    def buscar(self, valor):
-        """Obtiene el elemento que se compare igual con el valor dado.
-
-        Devuelve None si no se encuentra dicho elemento."""
+    def __buscar(self, valor):
+        "Obtiene el nodo cuyo valor se compara igual con el valor dado."
         padre, posicion = self.__buscar_padre(valor)
         if padre is None:
             nodo_encontrado = self.__raiz
@@ -495,10 +495,14 @@ class ArbolBinario:
             nodo_encontrado = padre.izquierdo()
         else:
             nodo_encontrado = padre.derecho()
-        if nodo_encontrado is None:
-            return None
-        else:
-            return nodo_encontrado.valor
+        return nodo_encontrado
+
+    def buscar(self, valor):
+        """Obtiene el elemento que se compare igual con el valor dado.
+
+        Devuelve None si no se encuentra dicho elemento."""
+        nodo_encontrado = self.__buscar()
+        return nodo_encontrado.valor if nodo_encontrado is not None else None
 
     def __insertar_aux(self, nodo, valor, cambiar):
         "Si cambiar es True, levanta KeyError, de lo contrario cambia"
@@ -548,6 +552,15 @@ class ArbolBinario:
         self.insertar(valor, cambiar=False)
 
     add = agregar
+
+    def cambiar(self, valor_viejo, valor_nuevo):
+        """Cambiar el valor del nodo con el valor viejo por el valor nuevo.
+
+        Devuelve el valor anterior."""
+        nodo = self.__buscar(valor_viejo)
+        if nodo is None:
+            raise KeyError(self.ERROR_VALOR_INEXISTENTE + str(valor_viejo))
+        return self.__insertar_aux(nodo, valor_nuevo, cambiar=True)
 
     def extender(self, iterable):
         "Inserta los elementos de iterable en el árbol, eliminando duplicados."
@@ -628,16 +641,9 @@ class ArbolBinario:
     def remover(self, valor):
         "Remueve el valor dado.  Levanta KeyError si no se halla."
         # ARREGLAR ESTO...
-        padre, posicion = self.__buscar_padre(valor)
-        if padre is None:
-            a_remover = self.__raiz
-        elif posicion == -1:
-            a_remover = padre.izquierdo()
-        else:
-            a_remover = padre.derecho()
+        a_remover = self.__buscar(valor)
         if a_remover is None:
-            raise KeyError("El valor no está presente en el árbol: "
-                           + str(valor))
+            raise KeyError(self.ERROR_VALOR_INEXISTENTE + str(valor))
         a_remover = self.__remover_nodo(a_remover)  # Puede no ser el mismo
         return a_remover.valor
 
