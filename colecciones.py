@@ -397,6 +397,388 @@ class NodoArbolBinario():
             self.__repr = False
             return resultado
 
+class ArbolBinario:
+
+    PREORDEN = -1
+    INORDEN = 0
+    POSTORDEN = 1
+
+    def __init__(self, iterable=None):
+        #"Se copian los elementos de 'iterable' si se proporciona."
+        self.__raiz = None
+        self._ultimo_padre = None
+        self._ultimo_nodo = None
+        if iterable is not None:
+            self.extender(iterable)
+
+    def __len__(self):
+        cuenta = -1
+        # Preorden es más eficiente
+        for cuenta, ignorar in enumerate(self.preorden()):
+            pass
+        return cuenta + 1
+
+    tamano = __len__
+
+    def __buscar_padre(self, valor, raiz=None):
+        """Busca el padre que tendría un nodo con el 'valor' dado.
+
+        Devuelve un par (tuple) con el padre respectivo en este
+        arbol binario, buscando el hijo a partir de 'raiz', y un entero
+        entre -1, 0 y 1 que indique en qué posición iría el nodo
+        con el valor dado como hijo.
+
+        Para la izquierda, devuelve -1.  Para la derecha, devuelve 1.
+        Devuelve (None, 0) cuando no hay padre para un nodo con tal valor.
+        El último caso implica que el nodo correspondería a la raíz.
+
+        En cualquier caso, el nodo con tal valor podría o no existir
+        actualmente en el árbol.
+        """
+        if raiz is not None:
+            padre = raiz.padre()
+            hijo = raiz
+        else:
+            padre = None
+            hijo = self.__raiz
+        while hijo is not None:
+            if valor == hijo.valor:
+                break
+            padre = hijo
+            if valor < padre.valor:
+                hijo = padre.izquierdo()
+            elif valor > padre.valor:
+                hijo = padre.derecho()
+            else:
+                raise TypeError("valor no ordenado")
+        if padre is None:
+            posicion = 0
+        elif valor < padre.valor:
+            posicion = -1
+        else:
+            posicion = 1
+        return padre, posicion
+
+    def buscar(self, valor):
+        """Obtiene el elemento que se compare igual con el valor dado.
+
+        Devuelve None si no se encuentra dicho elemento."""
+        padre, posicion = self.__buscar_padre(valor)
+        if padre is None:
+            nodo_encontrado = self.__raiz
+        elif posicion == -1:
+            nodo_encontrado = padre.izquierdo()
+        else:
+            nodo_encontrado = padre.derecho()
+        if nodo_encontrado is None:
+            return None
+        else:
+            return nodo_encontrado.valor
+
+    def __insertar_aux(self, nodo, valor, cambiar):
+        "Si cambiar es True, levanta KeyError, de lo contrario cambia"
+        " el valor del nodo por 'valor' y devuelve el valor anterior."
+        " El nodo no puede ser None."
+        if not cambiar:
+            raise KeyError("El valor ya está presente en el árbol: %s == %s"
+                           % (valor, nodo.valor))
+        self._ultimo_nodo = None  # Si no hay adición (pero cambio), señalizarlo
+        anterior, nodo.valor = nodo.valor, valor
+        return anterior
+
+    def insertar(self, valor, cambiar=False):
+        """Inserta el valor en el árbol binario.
+
+        Si el valor ya está presente y cambiar es False, levanta una
+        excepción KeyError.  Si cambiar es True, cambia el elemento
+        por el valor dado y devuelve el elemento anterior.
+        Si cambiar es False y la inserción tiene éxito devuelve None.
+        """
+        padre, posicion = self.__buscar_padre(valor)
+        anterior = None
+        if padre is None:
+            if self.__raiz is None:
+                self.__raiz = self._ultimo_nodo = NodoArbolBinario(valor)
+            else:
+                anterior = self.__insertar_aux(self.__raiz, valor, cambiar)
+        elif posicion == -1:
+            if padre.izquierdo() is None:
+                self._ultimo_nodo = NodoArbolBinario(valor)
+                padre.enlazar_a_izquierdo(self._ultimo_nodo)
+            else:
+                anterior = self.__insertar_aux(padre.izquierdo(),
+                                               valor, cambiar)
+        else:
+            if padre.derecho() is None:
+                self._ultimo_nodo = NodoArbolBinario(valor)
+                padre.enlazar_a_derecho(self._ultimo_nodo)
+            else:
+                anterior = self.__insertar_aux(padre.derecho(), valor, cambiar)
+        return anterior if cambiar else None
+
+    insert = insertar
+
+    def agregar(self, valor):
+        "Agrega el valor al árbol. Levanta KeyError si ya está presente."
+        self.insertar(valor, cambiar=False)
+
+    add = agregar
+
+    def extender(self, iterable):
+        "Inserta los elementos de iterable en el árbol, eliminando duplicados."
+        for valor in iterable:
+            self.insertar(valor, cambiar=True)
+
+    extend = extender
+
+    def __minmax_nodo(self, padre, posicion):
+        if padre is None:
+            return None
+        if posicion == -1:
+            lado = NodoArbolBinario.izquierdo
+        else:
+            lado = NodoArbolBinario.derecho
+        hijo = lado(padre)
+        while hijo is not None:
+            padre = hijo
+            hijo = lado(padre)
+        return padre
+
+    def minimo(self):
+        if self.__raiz is None:
+            raise KeyError("el árbol está vacío")
+        nodo = self.__minmax_nodo(self.__raiz, -1)
+        return nodo.valor
+
+    def maximo(self):
+        if self.__raiz is None:
+            raise KeyError("el árbol está vacío")
+        nodo = self.__minmax_nodo(self.__raiz, 1)
+        return nodo.valor
+
+    def __remover_nodo(self, a_remover):
+        if a_remover is None:
+            return None
+        padre = a_remover.padre()
+        if padre is None or padre.derecho() is a_remover:
+            este_lado = NodoArbolBinario.derecho
+            otro_lado = NodoArbolBinario.izquierdo
+            enlazar = NodoArbolBinario.enlazar_a_derecho
+        else:
+            este_lado = NodoArbolBinario.izquierdo
+            otro_lado = NodoArbolBinario.derecho
+            enlazar = NodoArbolBinario.enlazar_a_izquierdo
+
+        if otro_lado(a_remover) is not None:
+            if este_lado(a_remover) is not None:
+                if este_lado(otro_lado(a_remover)) is None:
+                    enlazar(otro_lado(a_remover), este_lado(a_remover))
+                    reemplazo = otro_lado(a_remover)
+                else:
+                    posicion = -1 if este_lado is NodoArbolBinario.derecho \
+                               else 1
+                    extremo = self.__minmax_nodo(otro_lado(a_remover), posicion)
+                    extremo.valor, a_remover.valor = \
+                       a_remover.valor, extremo.valor
+                    a_remover = extremo
+                    self.__remover_nodo(a_remover)  # No es recursivo realmente
+                    return a_remover  # Termina aquí. No hay más reemplazo
+            else:
+                reemplazo = otro_lado(a_remover)
+        else:
+            reemplazo = este_lado(a_remover)
+        if padre is None:
+            self.__raiz = reemplazo
+            if reemplazo is not None:
+                reemplazo.desenlazar_padre()
+        else:
+            enlazar(padre, reemplazo)
+        self._ultimo_nodo = reemplazo
+        self._ultimo_padre = padre
+        #a_remover.desenlazar_padre()
+        #a_remover.enlazar_a_izquierdo(None)
+        #a_remover.enlazar_a_derecho(None)
+        return a_remover
+
+    def remover(self, valor):
+        "Remueve el valor dado.  Levanta KeyError si no se halla."
+        # ARREGLAR ESTO...
+        padre, posicion = self.__buscar_padre(valor)
+        if padre is None:
+            a_remover = self.__raiz
+        elif posicion == -1:
+            a_remover = padre.izquierdo()
+        else:
+            a_remover = padre.derecho()
+        if a_remover is None:
+            raise KeyError("El valor no está presente en el árbol: "
+                           + str(valor))
+        a_remover = self.__remover_nodo(a_remover)  # Puede no ser el mismo
+        return a_remover.valor
+
+    remove = remover
+
+    def limpiar(self):
+        "Vacía el arbol"
+        self.__raiz = None
+
+    clear = limpiar
+
+    def copiar(self):
+        """Realiza una copia plana del árbol.
+
+        Los nodos de la copia son independientes del árbol original,
+        pero no necesariamente los valores.
+        """
+        return ArbolBinario(self.preorden())  # Primero los padres
+
+    copy = copiar
+
+    class IteradorArbolBinario:
+
+        # Copiar el valor de ArbolBinario.INORDEN porque Python
+        # no permite hacer referencia a la clase en los valores por defecto
+        # de los métodos.
+        def __init__(self, arbol, orden=0, nodos=False):
+            util.comprobar_tipos("arbol", arbol, ArbolBinario)
+            raiz = arbol._ArbolBinario__raiz
+            if orden == ArbolBinario.PREORDEN:
+                self.__pila = Pila()
+                if raiz is not None:
+                    self.__pila.insertar(raiz)
+                self.__funcion = self.__preorden
+            elif orden == ArbolBinario.INORDEN:
+                self.__generador = self.__inorden_generador(raiz)
+                self.__funcion = self.__inorden
+            elif orden == ArbolBinario.POSTORDEN:
+                self.__generador = self.__postorden_generador(raiz)
+                self.__funcion = self.__postorden
+            else:
+                raise ValueError("Orden de recorrido inválido: " + str(orden))
+            self.__nodos = nodos
+
+        def __iter__(self): return self
+
+        def __next__(self):
+            if self.__nodos:
+                return self.__funcion()
+            else:
+                return self.__funcion().valor
+
+        def __preorden(self):
+            if len(self.__pila) == 0:
+                raise StopIteration()
+            procesado = self.__pila.extraer()
+            if procesado.derecho() is not None:
+                self.__pila.insertar(procesado.derecho())
+            if procesado.izquierdo() is not None:
+                self.__pila.insertar(procesado.izquierdo())
+            return procesado
+
+        def __inorden_generador(self, nodo):
+            if nodo is not None:
+                yield from self.__inorden_generador(nodo.izquierdo())
+                yield nodo
+                yield from self.__inorden_generador(nodo.derecho())
+
+        def __inorden(self):
+            return next(self.__generador)
+
+        def __postorden_generador(self, nodo):
+            if nodo is not None:
+                yield from self.__postorden_generador(nodo.izquierdo())
+                yield from self.__postorden_generador(nodo.derecho())
+                yield nodo
+
+        def __postorden(self):
+            return next(self.__generador)
+
+    def __iter__(self):
+        "Devuelve un iterador inorden del arbol binario"
+        return self.IteradorArbolBinario(self)
+
+    inorden = __iter__
+
+    def preorden(self):
+        "Devuelve un iterador preorden del arbol binario"
+        return self.IteradorArbolBinario(self, ArbolBinario.PREORDEN)
+
+    def postorden(self):
+        "Devuelve un iterador postorden del arbol binario"
+        return self.IteradorArbolBinario(self, ArbolBinario.POSTORDEN)
+
+class ArbolAVL(ArbolBinario):
+    pass
+
+class NodoArbolNario:
+    "Nodo de un árbol n-ario."
+
+    def __init__(self, valor=None):
+        self.valor = valor
+        self.__nodo_padre = None
+        self.__nodos_hijos = []
+        self.__repr = False  # Para __repr__
+
+    def padre(self):
+        return self.__nodo_padre
+
+    def hijos(self):
+        "Devuelve una copia de los hijos"
+        return Vista(self.__nodos_hijos, list.__getitem__)
+
+    def __len__(self):
+        "Devuelve la cantidad de hijos"
+        return len(self.__nodos_hijos)
+
+    def __getitem__(self, indice):
+        "Devuelve el hijo con posición en el índice dado."
+        return self.__nodos_hijos[indice]
+
+    def __setitem__(self, indice, hijo):
+        """Cambia el hijo posicionado en 'indice' con 'hijo'.
+
+        Para añadir uno nuevo, úsese el método 'agregar'"""
+        util.comprobar_tipos("hijo", hijo, NodoArbolNario)
+        self.__nodos_hijos[indice] = hijo
+        hijo.__nodo_padre = self
+
+    def __delitem__(self, indice):
+        "Elimina el hijo con posición en el índice dado."
+        del self.__nodos_hijos[indice]
+
+    def agregar(self, hijo):
+        "Agrega un hijo nuevo al nodo."
+        util.comprobar_tipos("hijo", hijo, NodoArbolNario)
+        self.__nodos_hijos.append(hijo)
+
+    def remover(self, hijo):
+        "Elimina un hijo por identidad.  Devuelve un booleano indicando éxito."
+        util.comprobar_tipos("hijo", hijo, NodoArbolNario)
+        try:
+            self.__nodos_hijos.remove(hijo)
+            return True
+        except ValueError:
+            return False
+
+    def desenlazar_padre(self):
+        "Desenlaza el 'NodoArbolBinario' padre."
+        " También desenlaza este nodo en el padre."
+        if self.__nodo_padre is not None:
+            self.__nodo_padre.remover(self)
+            self.__nodo_padre = None
+
+    def __repr__(self):
+        if self.__repr:
+            return "..."
+        else:
+            self.__repr = True
+            resultado = "NodoArbolNario(%r)#%d" % (self.valor, len(self))
+            self.__repr = False
+            return resultado
+
+class ArbolNario:
+    pass
+
 
 class Secuencia:
     "Interfaz común para varias colecciones secuenciales"
