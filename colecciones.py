@@ -827,7 +827,186 @@ class NodoArbolNario:
             return resultado
 
 class ArbolNario:
-    pass
+    "Árbol n-ario"
+
+    PREORDEN = PROFUNDIDAD = -1  # Son recorridos iguales
+    ANCHURA = 0
+    POSTORDEN = 1
+
+    ERROR_VALOR_DUPLICADO = "Hijo con valor duplicado: "
+
+    def __init__(self, duplicados=True):
+        self.__raiz = None
+        self.__duplicados = duplicados
+
+    __len__ = ArbolBinario.__len__
+
+    @property
+    def raiz():
+        return self.__raiz
+
+    def en_arbol(self, nodo):
+        if self.__raiz is None: return False
+        while nodo is not None:
+            if self.__raiz is nodo:
+                return True
+            nodo = nodo.padre()
+        return False
+
+    def subarbol(self, raiz):
+        if raiz is None:
+            subarbol = self
+        else:
+            subarbol = ArbolNario()
+            subarbol.__raiz = raiz
+        return subarbol
+
+    def buscar(self, funcion, orden=-1, nodos=True, raiz=None):
+        arbol = self.subarbol(raiz)
+        return util.buscar(self.IteradorArbolNario(arbol, orden, nodos),
+                           funcion)
+
+    def buscar_por_valor(self, valor, orden=0, nodos=True, raiz=None):
+        arbol = self.subarbol(raiz)
+        iterador = self.IteradorArbolNario(arbol, orden, nodos)
+        if nodos:
+            return util.buscar_por_atributo(iterador, "valor", valor)
+        else:
+            for valor_posible in iterador:
+                if valor == valor_posible:
+                    return valor_posible
+            return None
+
+    def insertar_nodo(self, valor, padre=None):
+        nodo = valor if isinstance(valor, NodoArbolNario) \
+               else NodoArbolNario(valor)
+        if padre is None:
+            if self.__raiz is not None:
+                raise KeyError("No se permite cambio de raiz con insertar_nodo")
+            self.__raiz = nodo
+            return
+        if not self.__duplicados:
+            duplicado = util.buscar_por_atributo(padre.hijos(),
+                                                 "valor", nodo.valor)
+            if duplicado is not None:
+                raise KeyError(self.ERROR_VALOR_DUPLICADO + str(duplicado.valor))
+        if not self.en_arbol(padre):
+            raise ValueError("El padre no está en el árbol")
+        padre.agregar(nodo)
+
+    def cambiar_nodo(self, nodo, valor, heredar=False):
+        if not self.en_arbol(padre):
+            raise ValueError("El nodo original no está en el árbol")
+        valor_real = valor.valor if isinstance(valor, NodoArbolNario) else valor
+        if nodo is not self.__raiz and not self.__duplicados:
+            for hermano in nodo.padre().hijos():
+                if hermano is not nodo and hermano.valor == valor_real:
+                    raise KeyError(self.ERROR_VALOR_DUPLICADO
+                                   + str(hermano.valor))
+        if isinstance(valor, NodoArbolNario):
+            if heredar:
+                valor.agregar(nodo.hijos())
+            if nodo is self.__raiz:
+                self.__raiz = valor
+            else:
+                nodo.padre().agregar(valor)
+                nodo.desenlazar_padre()
+        else:
+            nodo.valor = valor
+
+    def remover_nodo(self, nodo, huerfanos=True, padre=None, nodos=False):
+        if not isinstance(nodo, NodoArbolNario):
+            if padre is None:
+                raise ValueError("'nodo' no es un nodo y padre es None")
+            else:
+                nodo = util.buscar_por_atributo(padre.hijos(), "valor", nodo)
+                if nodo is None:
+                    raise KeyError("No hay nodo con valor 'nodo' en el padre")
+        if nodo is self.__raiz:
+            self.__raiz = None
+        elif not huerfanos:
+            if not self.__duplicados:
+                duplicados = set(nodo.padre.hijos()) & set(nodo.hijos())
+                if len(duplicados) > 1 \
+                    or len(duplicados) == 1 and nodo not in nodo.hijos():
+                    raise KeyError(self.ERROR_VALOR_DUPLICADO
+                                   + str(nodo.valor))
+            padre = nodo.padre()
+            nodo.desenlazar_padre()
+            padre.agregar(nodo.hijos())
+        else:
+            nodo.desenlazar_padre()
+        return nodo if nodos else nodo.valor
+
+    class IteradorArbolNario:
+
+        def __init__(self, arbol, orden=-1, nodos=False):
+            util.comprobar_tipos("arbol", arbol, ArbolNario)
+            raiz = arbol._ArbolNario__raiz
+            if orden == ArbolNario.PREORDEN:
+                self.__pila = Pila()
+                if raiz is not None:
+                    self.__pila.insertar(raiz)
+                self.__funcion = self.__preorden
+            elif orden == ArbolNario.ANCHURA:
+                self.__cola = Cola()
+                if raiz is not None:
+                    self.__cola.anexar(raiz)
+                self.__funcion = self.__anchura
+            elif orden == ArbolBinario.POSTORDEN:
+                self.__generador = self.__postorden_generador(raiz)
+                self.__funcion = self.__postorden
+            else:
+                raise ValueError("Orden de recorrido inválido: " + str(orden))
+            self.__nodos = nodos
+
+        def __iter__(self): return self
+
+        def __next__(self):
+            if self.__nodos:
+                return self.__funcion()
+            else:
+                return self.__funcion().valor
+
+        def __preorden(self):
+            if len(self.__pila) == 0:
+                raise StopIteration()
+            procesado = self.__pila.extraer()
+            if len(procesado) != 0:
+                self.__pila.extender(reversed(procesado.hijos()))
+            return procesado
+
+        def __anchura(self):
+            if len(self.__cola) == 0:
+                raise StopIteration()
+            procesado = self.__cola.extraer()
+            if len(procesado) != 0:
+                self.__cola.extender(iter(procesado.hijos()))
+            return procesado
+
+        def __postorden_generador(self, nodo):
+            if nodo is not None:
+                yield from (self.__postorden_generador(hijo)
+                            for hijo in nodo.hijos())
+                yield nodo
+
+        def __postorden(self):
+            return next(self.__generador)
+
+    def __iter__(self):
+        "Devuelve un iterador preorden/en profundidad del arbol n-ario"
+        return self.IteradorArbolNario(self)
+
+    preorden = __iter__
+    en_profundidad = __iter__
+
+    def en_anchura(self):
+        "Devuelve un iterador en anchura del arbol n-ario"
+        return self.IteradorArbolNario(self, ArbolNario.ANCHURA)
+
+    def postorden(self):
+        "Devuelve un iterador postorden del arbol n-ario"
+        return self.IteradorArbolNario(self, ArbolNario.POSTORDEN)
 
 
 class Secuencia:
