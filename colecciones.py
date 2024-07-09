@@ -11,6 +11,61 @@
 
 import utilidades as util
 
+
+class ClaveValor:
+    """Par de clave y valor que se compara en términos de su clave.
+
+    No se debería cambiar directamente sus atributos una vez que forma parte
+    de una estructura que lo utiliza para realizar ordenamientos.
+    Esto no se impone; sin embargo, el funcionamiento correcto de estas
+    estructuras dependen de ello."""
+
+    def __init__(self, clave, valor):
+        self.clave = clave
+        self.valor = valor
+
+    def __eq__(self, otro):
+        if not isinstance(otro, ClaveValor):
+            return NotImplemented
+        return self.clave == otro.clave
+
+    def __ne__(self, otro):
+        return not self == otro
+
+    def __lt__(self, otro):
+        if not isinstance(otro, ClaveValor):
+            return NotImplemented
+        return self.clave < otro.clave
+
+    def __le__(self, otro):
+        return self < otro or self == otro
+
+    def __gt__(self, otro):
+        return not self <= otro
+
+    def __ge__(self, otro):
+        return not self < otro
+
+class Vista:
+    "Vista de solo lectura de una colección."
+
+    def __init__(self, coleccion, funcion_obtener=None):
+        self.__coleccion = coleccion
+        if funcion_obtener is not None:
+            if hasattr(type(coleccion), funcion_obtener.__name__):
+                self.__obtener = funcion_obtener
+                return
+        else:
+            for nombre in ("obtener", "buscar", "get", "__getitem__"):
+                if hasattr(type(coleccion), nombre):
+                    self.__obtener = getattr(type(coleccion), nombre)
+                    return
+        raise TypeError("Función para obtener de colección desconocida")
+
+    def __getitem__(self, clave):
+        return self.__obtener(self.__coleccion, clave)
+
+
 class NodoLista:
     "Nodo doblemente enlazado conteniendo un valor cualquiera."
 
