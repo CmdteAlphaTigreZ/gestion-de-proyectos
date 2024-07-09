@@ -224,13 +224,15 @@ class ListaEnlazada:
         if valor is None:
             raise TypeError("valor no puede ser 'None'")
 
+    # Los enlaces a None comentados no son estrictamente necesarios,
+    # siempre y cuando la ListaEnlazada no comparta sus nodos con nadie
     def extraer_ultimo(self):
         if self.__cola is None:
             raise IndexError("la lista está vacía")
         a_extraer = self.__cola
         self.__cola = self.__cola.anterior()
         if self.__cola is not None:
-            a_extraer.enlazar_desde(None)
+            #a_extraer.enlazar_desde(None)
             self.__cola.enlazar_a(None)
         else:
             self.__cabeza = None
@@ -248,7 +250,7 @@ class ListaEnlazada:
             a_extraer = self.__cabeza
             self.__cabeza = self.__cabeza.siguiente()
             if self.__cabeza is not None:
-                a_extraer.enlazar_a(None)
+                #a_extraer.enlazar_a(None)
                 self.__cabeza.enlazar_desde(None)
             else:
                 self.__cola = None
@@ -257,8 +259,8 @@ class ListaEnlazada:
             anterior = self.__obtener_nodo(indice - 1)
             a_extraer = anterior.siguiente()
             anterior.enlazar_a(a_extraer.siguiente())
-            a_extraer.enlazar_desde(None)
-            a_extraer.enlazar_a(None)
+            #a_extraer.enlazar_desde(None)
+            #a_extraer.enlazar_a(None)
         self.__longitud -= 1
         return a_extraer.valor
 
