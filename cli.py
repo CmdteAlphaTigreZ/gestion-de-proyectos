@@ -254,6 +254,8 @@ def fn_agregar_tarea(consola, linea_comando):
                         tipo_error="Valor")
     try:
         argumentos["porcentaje"] = util.a_float(argumentos["porcentaje"])
+        if argumentos["porcentaje"] < 0 or argumentos["porcentaje"] > 100:
+            raise ValueError("El porcentaje debe estar entre 0 y 100")
     except ValueError as e:
         return Resultado(e.args[0], fn_agregar_tarea, tipo_error="Valor")
 
@@ -316,6 +318,8 @@ def fn_modificar_tarea(consola, linea_comando):
     try:
         if argumentos["porcentaje"] != "":
             argumentos["porcentaje"] = util.a_float(argumentos["porcentaje"])
+            if argumentos["porcentaje"] < 0 or argumentos["porcentaje"] > 100:
+                raise ValueError("El porcentaje debe estar entre 0 y 100")
     except ValueError as e:
         return Resultado(e.args[0], fn_agregar_tarea, tipo_error="Valor")
 
