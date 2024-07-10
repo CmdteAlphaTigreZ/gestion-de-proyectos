@@ -88,6 +88,8 @@ def leer_fecha(argumentos, nombre):
                          % (nombre, argumentos[nombre]),
                          None,
                          tipo_error="Valor" )
+    ##if argumentos["fecha_inicio"] > argumentos["fecha_vencimiento"]:
+        ##return Resultado("La fecha de inicio debe ser anterior a la fecha de vencimiento.", tipo_error="Valor")
 
 # Plantilla para función de cambio de contexto
 # Recomendaciones:
