@@ -71,7 +71,7 @@ class Vista:
                     self.__tamano = getattr(type(coleccion), nombre)
         if self.__tamano is not None:
             try:
-                int(funcion_tamano(self.__coleccion))
+                int(self.__tamano(self.__coleccion))
             except (TypeError, ValueError) as e:
                 raise TypeError("tamano no es válido") from e
         else:
@@ -788,9 +788,12 @@ class NodoArbolNario:
     def agregar(self, hijo_s):
         "Agrega uno o varios hijos nuevos al nodo."
         varios = True
-        try:
-            hijo_s = list(hijo_s)
-        except TypeError:
+        if not isinstance(hijo_s, NodoArbolNario):
+            try:
+                hijo_s = list(hijo_s)
+            except TypeError:
+                varios = False
+        else:
             varios = False
         if varios:
             util.comprobar_tipos(("hijo",) * len(hijo_s), hijo_s,
@@ -844,7 +847,7 @@ class ArbolNario:
     __len__ = ArbolBinario.__len__
 
     @property
-    def raiz():
+    def raiz(self):
         return self.__raiz
 
     def en_arbol(self, nodo):
@@ -897,7 +900,7 @@ class ArbolNario:
         padre.agregar(nodo)
 
     def cambiar_nodo(self, nodo, valor, heredar=False):
-        if not self.en_arbol(padre):
+        if not self.en_arbol(nodo):
             raise ValueError("El nodo original no está en el árbol")
         valor_real = valor.valor if isinstance(valor, NodoArbolNario) else valor
         if nodo is not self.__raiz and not self.__duplicados:
@@ -928,7 +931,7 @@ class ArbolNario:
             self.__raiz = None
         elif not huerfanos:
             if not self.__duplicados:
-                duplicados = set(nodo.padre.hijos()) & set(nodo.hijos())
+                duplicados = set(nodo.padre().hijos()) & set(nodo.hijos())
                 if len(duplicados) > 1 \
                     or len(duplicados) == 1 and nodo not in nodo.hijos():
                     raise KeyError(self.ERROR_VALOR_DUPLICADO
@@ -988,8 +991,8 @@ class ArbolNario:
 
         def __postorden_generador(self, nodo):
             if nodo is not None:
-                yield from (self.__postorden_generador(hijo)
-                            for hijo in nodo.hijos())
+                for hijo in nodo.hijos():
+                    yield from self.__postorden_generador(hijo)
                 yield nodo
 
         def __postorden(self):
