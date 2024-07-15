@@ -6,7 +6,6 @@
 #   v1
 #     * Versión inicial
 
-from datetime import datetime
 from proyectos import *
 from colecciones import *
 from consola import *
@@ -46,6 +45,7 @@ mensajes_argumentos_tarea = (
     "Ingrese el estado actual de la tarea (No iniciado, Detenido, En progreso, Completado): ",
     "Ingrese del 0 al 100 el porcentaje de progreso de la tarea: ",
     "Ingrese el nombre de la empresa cliente a la que va dirigida la tarea: " )
+ESTADOS_VALIDOS = ["No iniciado", "Detenido", "En progreso", "Completado"]
 
 def leer_id(consola, mensaje):
     "Solicita un ID al usuario."
@@ -83,19 +83,19 @@ def leer_fecha(argumentos, nombre):
     "Interpreta una fecha desde los argumentos de línea de comandos."
     " Devuelve un resultado de error si aplica."
     try:
-       argumentos[nombre] = util.str_a_fecha(argumentos[nombre])
+        argumentos[nombre] = util.str_a_fecha(argumentos[nombre])
+
+        # Validación de que fecha_inicio sea menor a fecha_vencimiento
+        if nombre == 'fecha_inicio' and 'fecha_vencimiento' in argumentos:
+            nombre = 'fecha_vencimiento'
+            fecha_vencimiento = util.str_a_fecha(argumentos[nombre])
+            if argumentos['fecha_inicio'] > fecha_vencimiento:
+                return Resultado("Error: La fecha de inicio debe ser menor que la fecha de vencimiento",
+                                 None, tipo_error="Valor")
     except ValueError as e:
         return Resultado("Error: '%s' no es una fecha válida: %s"
                          % (nombre, argumentos[nombre]),
-                         None,
-                         tipo_error="Valor" )
-# Validación de que fecha_inicio sea menor a fecha_vencimiento
-    if nombre == 'fecha_inicio' and 'fecha_vencimiento' in argumentos:
-        fecha_vencimiento = datetime.strptime(argumentos['fecha_vencimiento'], '%d/%m/%Y').date()
-        if argumentos['fecha_inicio'] > fecha_vencimiento:
-            return Resultado("Error: La fecha de inicio debe ser menor que la fecha de vencimiento",
-                            None,
-                            tipo_error="Valor")
+                         None, tipo_error="Valor" )
     return None
 
 # Plantilla para función de cambio de contexto
@@ -128,12 +128,9 @@ def fn_agregar_proyecto(consola, linea_comando):
         if isinstance(res, Resultado):  # Resultado de error
             res.origen = fn_agregar_proyecto
             return res
-    for nombre in ("estado"):
-        estados_validos = ["No iniciado", "Detenido", "En progreso", "Completado"]
-        if argumentos['estado'] not in estados_validos:
-            return Resultado("Error: El estado no es válido",
-                        None,
-                        tipo_error="Valor")
+    if argumentos['estado'] not in ESTADOS_VALIDOS:
+        return Resultado("Error: El estado no es válido",
+                         fn_agregar_proyecto, tipo_error="Valor")
 
     id_proyecto_max += 1
     argumentos["id_"] = id_proyecto_max
@@ -183,12 +180,10 @@ def fn_modificar_proyecto(consola, linea_comando):
             if isinstance(res, Resultado):
                 res.origen = fn_modificar_proyecto
                 return res
-    for nombre in ("estado"):
-        estados_validos = ["No iniciado", "Detenido", "En progreso", "Completado"]
-        if argumentos['estado'] not in estados_validos:
-            return Resultado("Error: El estado no es válido",
-                        None,
-                        tipo_error="Valor")
+    estado = argumentos['estado']
+    if estado != "" and estado not in ESTADOS_VALIDOS:
+        return Resultado("Error: El estado no es válido",
+                         fn_modificar_proyecto, tipo_error="Valor")
 
 
     for nombre, valor in argumentos.items():
@@ -246,12 +241,9 @@ def fn_agregar_tarea(consola, linea_comando):
         if isinstance(res, Resultado):  # Resultado de error
             res.origen = fn_agregar_tarea
             return res
-    for nombre in ("estado"):
-        estados_validos = ["No iniciado", "Detenido", "En progreso", "Completado"]
-        if argumentos['estado'] not in estados_validos:
-            return Resultado("Error: El estado no es válido",
-                        None,
-                        tipo_error="Valor")
+    if argumentos['estado'] not in ESTADOS_VALIDOS:
+        return Resultado("Error: El estado no es válido",
+                         fn_agregar_tarea, tipo_error="Valor")
     try:
         argumentos["porcentaje"] = util.a_float(argumentos["porcentaje"])
         if argumentos["porcentaje"] < 0 or argumentos["porcentaje"] > 100:
@@ -309,12 +301,10 @@ def fn_modificar_tarea(consola, linea_comando):
             if isinstance(res, Resultado):
                 res.origen = fn_modificar_tarea
                 return res
-    for nombre in ("estado"):
-        estados_validos = ["No iniciado", "Detenido", "En progreso", "Completado"]
-        if argumentos['estado'] not in estados_validos:
-            return Resultado("Error: El estado no es válido",
-                        None,
-                        tipo_error="Valor")
+    estado = argumentos['estado']
+    if estado != "" and estado not in ESTADOS_VALIDOS:
+        return Resultado("Error: El estado no es válido",
+                         fn_modificar_tarea, tipo_error="Valor")
     try:
         if argumentos["porcentaje"] != "":
             argumentos["porcentaje"] = util.a_float(argumentos["porcentaje"])
