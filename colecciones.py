@@ -943,6 +943,41 @@ class ArbolNario:
             nodo.desenlazar_padre()
         return nodo if nodos else nodo.valor
 
+    def vaciar(self):
+        "Vacía el arbol"
+        self.__raiz = None
+
+    clear = vaciar
+
+    def copiar(self):
+        """Realiza una copia plana del árbol.
+
+        Los nodos de la copia son independientes del árbol original,
+        pero no necesariamente los valores.
+        """
+        nuevo_arbol = ArbolNario(duplicados=self.__duplicados)
+        if self.__raiz is None:
+            return nuevo_arbol
+        nuevo_arbol.__raiz = NodoArbolNario(self.__raiz.valor)
+        if len(self.__raiz) == 0:
+            return nuevo_arbol
+        # Tomado parcialmente de IteradorArbolNario.__preorden
+        este_nodo = self.__raiz
+        otro_nodo = nuevo_arbol.__raiz
+        pila = Pila()
+        pila.insertar((este_nodo, otro_nodo))
+        while len(pila) != 0:
+            este_nodo, otro_nodo = pila.extraer()
+            if len(este_nodo) != 0:
+                otro_nodo.agregar(NodoArbolNario(hijo.valor)
+                                  for hijo in este_nodo.hijos())
+                pila.extender((este_hijo, otro_hijo) for este_hijo, otro_hijo in
+                              zip(reversed(este_nodo.hijos()),
+                                  reversed(otro_nodo.hijos()) ) )
+        return nuevo_arbol
+
+    copy = copiar
+
     class IteradorArbolNario:
 
         def __init__(self, arbol, orden=-1, nodos=False):
