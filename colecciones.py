@@ -307,12 +307,12 @@ class ListaEnlazada:
 
     buscar_por_atributo = util.buscar_por_atributo
 
-    def limpiar(self):
+    def vaciar(self):
         "Vacía la lista"
         self.__cabeza = self.__cola = None
         self.__longitud = 0
 
-    clear = limpiar
+    clear = vaciar
 
     def copiar(self):
         """Realiza una copia plana de la lista.
@@ -651,11 +651,11 @@ class ArbolBinario:
 
     remove = remover
 
-    def limpiar(self):
+    def vaciar(self):
         "Vacía el arbol"
         self.__raiz = None
 
-    clear = limpiar
+    clear = vaciar
 
     def copiar(self):
         """Realiza una copia plana del árbol.
@@ -1056,8 +1056,8 @@ class Secuencia:
     def buscar_por_atributo(self, nombre, valor):
         return self._soporte.buscar_por_atributo(nombre, valor)
 
-    def limpiar(self): self._soporte.limpiar()
-    clear = limpiar
+    def vaciar(self): self._soporte.vaciar()
+    clear = vaciar
 
     def __iter__(self): return iter(self._soporte)
 
