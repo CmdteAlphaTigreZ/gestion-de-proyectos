@@ -10,7 +10,8 @@
 
 
 from colecciones import *
-#from datetime import datetime
+from datetime import date
+import utilidades as util
 
 
 class Proyecto:
@@ -41,17 +42,19 @@ class Proyecto:
         self.empresa = empresa
         self.gerente = gerente
         self.equipo = equipo
-        self.__tareas = Lista()
+        self.__tareas = ArbolNario(duplicados=False)
+        self.__tareas.insertar_nodo(self)
 
     @property
     def tareas(self):
-        "Lista de tareas del proyecto."
+        "Árbol n-ario de tareas del proyecto."
         return self.__tareas
 
     def agregar_tarea(self, tarea):
         "Agrega una 'Tarea' al proyecto, solo si no está ya incluida."
-        if self.tareas.indice(tarea) == -1:
-            self.tareas.anexar(tarea)
+        if self.buscar_tarea("id", tarea.id) is None:
+            self.__tareas.insertar_nodo(tarea.subtareas.raiz,
+                                        self.__tareas.raiz)
 
     def buscar_tarea(self, atributo, valor):
         """Busca la primera tarea cuyo atributo sea el valor dado.
@@ -61,7 +64,9 @@ class Proyecto:
         simplemente se ignora.
         Devuelve None si no encuentra la tarea buscada
         """
-        return self.tareas.buscar_por_atributo(atributo, valor)
+        iterador = self.__tareas.en_anchura()
+        next(iterador)  # Descartar raíz
+        return util.buscar_por_atributo(iterador, atributo, valor)
 
     def __format__(self, formato):
         if formato == "":
@@ -83,7 +88,7 @@ class Proyecto:
             self=self,
             fecha_inicio=util.fecha_a_str(self.fecha_inicio),
             fecha_vencimiento=util.fecha_a_str(self.fecha_vencimiento),
-            cant_tareas=len(self.__tareas),
+            cant_tareas=len(self.__tareas) - 1,
             descripcion=util.envolver_y_sangrar(self.descripcion)
         )
         return resultado
@@ -121,24 +126,28 @@ class Tarea:
         self.estado = estado
         self.porcentaje = porcentaje
         self.empresa_cliente = empresa_cliente
-        self.__subtareas = Lista()
+        self.__subtareas = ArbolNario(duplicados=False)
+        self.__subtareas.insertar_nodo(self)
 
     @property
     def subtareas(self):
-        "Lista de subtareas de la tarea."
+        "Subárbol n-ario de subtareas de la tarea."
         return self.__subtareas
 
     def agregar_subtarea(self, tarea):
         "Agrega una 'Tarea' como subtarea, solo si no está ya incluida."
-        if self.subtareas.indice(tarea) == -1:
-            self.subtareas.anexar(tarea)
+        if self.buscar_subtarea("id", tarea.id) is None:
+            self.__tareas.insertar_nodo(tarea.subtareas.raiz
+                                        self.__subtareas.raiz)
 
     def buscar_subtarea(self, atributo, valor):
         """Busca la primera subtarea cuyo atributo sea el valor dado.
 
         Véase la documentación de Proyecto.buscar_tarea.
         """
-        return self.subtareas.buscar_por_atributo(atributo, valor)
+        iterador = self.__subtareas.en_anchura()
+        next(iterador)  # Descartar raíz
+        return util.buscar_por_atributo(iterador, atributo, valor)
 
     def __format__(self, formato):
         if formato == "":
@@ -159,7 +168,7 @@ class Tarea:
             self=self,
             fecha_inicio=util.fecha_a_str(self.fecha_inicio),
             fecha_vencimiento=util.fecha_a_str(self.fecha_vencimiento),
-            cant_subtareas=len(self.subtareas),
+            cant_subtareas=len(self.subtareas) - 1,
             descripcion=util.envolver_y_sangrar(self.descripcion)
         )
         return resultado
