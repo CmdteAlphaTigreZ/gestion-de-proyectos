@@ -503,7 +503,7 @@ class ArbolBinario:
         """Obtiene el elemento que se compare igual con el valor dado.
 
         Devuelve None si no se encuentra dicho elemento."""
-        nodo_encontrado = self.__buscar()
+        nodo_encontrado = self.__buscar(valor)
         return nodo_encontrado.valor if nodo_encontrado is not None else None
 
     def __insertar_aux(self, nodo, valor, cambiar):
