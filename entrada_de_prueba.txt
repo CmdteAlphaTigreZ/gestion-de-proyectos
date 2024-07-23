@@ -1,14 +1,24 @@
 Utilice_la_terminación_de_línea_del_sistema_donde_se_ejecuta
 comando inexistente
 
-proyectos
+agregar
+Empresa principal
+Descripcion empresarial
+1/7/2023
+Calle vieja #3.
++582122344563
+atencion@principal.com.ve
+Gerente general
+Equipo de atención
+
+proyectos 1
 pepe
 agregar
 Proyecto #1
 Una descripción tremendamente larga. Una descripción tremendamente larga. Una descripción tremendamente larga. Una descripción tremendamente larga. Una descripción tremendamente larga. Una descripción tremendamente larga.
 1/7/2024
 01/08/2024
-En curso
+En progreso
 TechSolutions Innovations, Inc.
 Mr. Serious
 Un grupo de 3 personas
@@ -34,7 +44,7 @@ Tarea #1
 Terminar el proyectooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
 2/7/2024
 7/7/2024
-No iniciada
+No iniciado
 0
 Self, Inc.
 mostrar

@@ -2,11 +2,19 @@ Nota: No se pueden añadir tareas si no hay proyectos creados y no se pueden cre
 
 -----Menu Principal-----
 Comandos disponibles:
-proyectos                           Cambia al menú de proyectos
+agregar                             Añade una nueva empresa
+mostrar                             Enumera las empresas registradas
+consultar [id]                      Consulta una empresa existente
+modificar                           Modifica una empresa existente
+eliminar [id]                       Elimina una empresa
+proyectos [id]                      Cambia al menú de proyectos
 ayuda [nombre_comando]              Muestra los comandos disponibles o
                                     la ayuda para un comando particular
-salir                               Salir de la consola
+salir                               Sale de la consola
+>> Error: Comando desconocido: Utilice_la_terminación_de_línea_del_sistema_donde_se_ejecuta
 >> Error: Comando desconocido: comando
+>> >> Ingrese la siguiente información requerida.
+Nombre de la empresa: Descripción de la empresa: Fecha de creación de la empresa (dd/mm/yyyy): Dirección de la empresa (en una línea): Número de teléfono de la empresa (sin espacios ni guiones): Dirección de correo electrónico de la empresa: Nombre del gerente de la empresa: Nombre del equipo de contacto de la empresa: La empresa ha sido creada, su ID es 1
 >> >> Comandos disponibles:
 agregar                             Añade un nuevo proyecto
 mostrar                             Enumera los proyectos registrados
@@ -14,18 +22,19 @@ consultar [id]                      Consulta un proyecto existente
 modificar                           Modifica un proyecto existente
 eliminar [id]                       Elimina un proyecto
 tareas [id]                         Gestiona las tareas de un proyecto
-regresar                            Regresa al menú principal
+regresar                            Regresa al menú de empresas
 ayuda [nombre_comando]              Muestra los comandos disponibles o
                                     la ayuda para un comando particular
-salir                               Salir de la consola
+salir                               Sale de la consola
 >> Error: Comando desconocido: pepe
->> Ingrese el nombre del proyecto: Ingrese la descripción del proyecto: Ingrese la fecha de inicio del proyecto (dd/mm/yyyy): Ingrese la fecha de vencimiento del proyecto (dd/mm/yyyy): Ingrese el estado actual del proyecto: Ingrese el nombre de la empresa del proyecto: Ingrese el nombre del gerente del proyecto: Ingrese el nombre del equipo del proyecto: El proyecto ha sido creado, su ID es 1
+>> Ingrese la siguiente información requerida.
+Nombre del proyecto: Descripción del proyecto: Fecha de inicio del proyecto (dd/mm/yyyy): Fecha de vencimiento del proyecto (dd/mm/yyyy): Estado actual del proyecto (No iniciado, Detenido, En progreso, Completado): Nombre de la empresa del proyecto: Nombre del gerente del proyecto: Nombre del equipo del proyecto: El proyecto ha sido creado, su ID es 1
 >> ID: 1
 Nombre: "Proyecto #1"
-Estado actual: "En curso"
+Estado actual: En progreso
 >> ID: 1
 Nombre: "Proyecto #1"
-Estado actual: "En curso"
+Estado actual: En progreso
 >> Ingrese el ID del proyecto que desea consultar: ID: 1
 Nombre: "Proyecto #1"
 Descripción:
@@ -35,7 +44,7 @@ Descripción:
   descripción tremendamente larga.
 Fecha de inicio: 01/07/2024
 Fecha de vencimiento: 01/08/2024
-Estado actual: "En curso"
+Estado actual: En progreso
 Empresa: TechSolutions Innovations, Inc.
 Gerente: Mr. Serious
 Equipo: Un grupo de 3 personas
@@ -49,7 +58,7 @@ Descripción:
   descripción tremendamente larga.
 Fecha de inicio: 01/07/2024
 Fecha de vencimiento: 01/08/2024
-Estado actual: "En curso"
+Estado actual: En progreso
 Empresa: TechSolutions Innovations, Inc.
 Gerente: Mr. Serious
 Equipo: Un grupo de 3 personas
@@ -63,14 +72,14 @@ Descripción:
   descripción tremendamente larga.
 Fecha de inicio: 01/07/2024
 Fecha de vencimiento: 01/08/2024
-Estado actual: "En curso"
+Estado actual: En progreso
 Empresa: TechSolutions Innovations, Inc.
 Gerente: Mr. Serious
 Equipo: Un grupo de 3 personas
 No. de tareas: 0
 
 Para mantener una propiedad del proyecto intacta solo presione 'Enter'
-Ingrese el nombre del proyecto: Ingrese la descripción del proyecto: Ingrese la fecha de inicio del proyecto (dd/mm/yyyy): Ingrese la fecha de vencimiento del proyecto (dd/mm/yyyy): Ingrese el estado actual del proyecto: Ingrese el nombre de la empresa del proyecto: Ingrese el nombre del gerente del proyecto: Ingrese el nombre del equipo del proyecto: Proyecto modificado exitosamente.
+Nombre del proyecto: Descripción del proyecto: Fecha de inicio del proyecto (dd/mm/yyyy): Fecha de vencimiento del proyecto (dd/mm/yyyy): Estado actual del proyecto (No iniciado, Detenido, En progreso, Completado): Nombre de la empresa del proyecto: Nombre del gerente del proyecto: Nombre del equipo del proyecto: Proyecto modificado exitosamente.
 >> Ingrese el ID del proyecto cuyas tareas desea gestionar: Comandos disponibles:
 agregar                             Añade una nueva tarea al proyecto
 mostrar                             Enumera las tareas asignadas al
@@ -78,14 +87,20 @@ mostrar                             Enumera las tareas asignadas al
 consultar [id]                      Consulta una tarea existente
 modificar                           Modifica una tarea existente
 eliminar [id]                       Elimina una tarea del proyecto
+subtareas [id]                      Gestiona las subtareas de una tarea
 regresar                            Regresa al menú de proyectos
 ayuda [nombre_comando]              Muestra los comandos disponibles o
                                     la ayuda para un comando particular
-salir                               Salir de la consola
->> Ingrese el nombre de la tarea: Ingrese la descripción de la tarea: Ingrese la fecha de inicio de la tarea (dd/mm/yyyy): Ingrese la fecha de vencimiento de la tarea (dd/mm/yyyy): Ingrese el estado actual de la tarea: Ingrese del 0 al 100 el porcentaje de progreso de la tarea: Ingrese el nombre de la empresa cliente a la que va dirigida la tarea: La tarea ha sido creada, su ID es 1
+salir                               Sale de la consola
+>> Ingrese la siguiente información requerida.
+Nombre de la tarea: Descripción de la tarea: Fecha de inicio de la tarea (dd/mm/yyyy): Fecha de vencimiento de la tarea (dd/mm/yyyy): Estado actual de la tarea (No iniciado, Detenido, En progreso, Completado): Porcentaje de progreso de la tarea (de 0.00 a 100.00): Nombre de la empresa cliente a la que va dirigida la tarea: La tarea ha sido creada, su ID es 1
 >> ID: 1
+Nombre: "Proyecto #1"
+Estado actual: En progreso
+
+ID: 1
 Nombre: "Tarea #1"
-Estado actual: "No iniciada"
+Estado actual: No iniciado
 >> ID: 1
 Nombre: "Tarea #1"
 Descripción:
@@ -94,7 +109,7 @@ Descripción:
   oooooooooooooooooooooooooooooooooooo
 Fecha de inicio: 02/07/2024
 Fecha de vencimiento: 07/07/2024
-Estado actual: "No iniciada"
+Estado actual: No iniciado
 Porcentaje de completación: 0.00%
 Empresa cliente: Self, Inc.
 No. de subtareas: 0
@@ -106,13 +121,13 @@ Descripción:
   oooooooooooooooooooooooooooooooooooo
 Fecha de inicio: 02/07/2024
 Fecha de vencimiento: 07/07/2024
-Estado actual: "No iniciada"
+Estado actual: No iniciado
 Porcentaje de completación: 0.00%
 Empresa cliente: Self, Inc.
 No. de subtareas: 0
 
 Para mantener una propiedad de la tarea intacta solo presione 'Enter'
-Ingrese el nombre de la tarea: Ingrese la descripción de la tarea: Ingrese la fecha de inicio de la tarea (dd/mm/yyyy): Ingrese la fecha de vencimiento de la tarea (dd/mm/yyyy): Ingrese el estado actual de la tarea: Ingrese del 0 al 100 el porcentaje de progreso de la tarea: Ingrese el nombre de la empresa cliente a la que va dirigida la tarea: Error: 'fecha_inicio' no es una fecha válida: 3/30/3000
+Nombre de la tarea: Descripción de la tarea: Fecha de inicio de la tarea (dd/mm/yyyy): Fecha de vencimiento de la tarea (dd/mm/yyyy): Estado actual de la tarea (No iniciado, Detenido, En progreso, Completado): Porcentaje de progreso de la tarea (de 0.00 a 100.00): Nombre de la empresa cliente a la que va dirigida la tarea: Error: 'fecha_inicio' no es una fecha válida: 3/30/3000
 >> ID: 1
 Nombre: "Tarea #1"
 Descripción:
@@ -121,7 +136,7 @@ Descripción:
   oooooooooooooooooooooooooooooooooooo
 Fecha de inicio: 02/07/2024
 Fecha de vencimiento: 07/07/2024
-Estado actual: "No iniciada"
+Estado actual: No iniciado
 Porcentaje de completación: 0.00%
 Empresa cliente: Self, Inc.
 No. de subtareas: 0
@@ -137,13 +152,13 @@ Descripción:
   oooooooooooooooooooooooooooooooooooo
 Fecha de inicio: 02/07/2024
 Fecha de vencimiento: 07/07/2024
-Estado actual: "No iniciada"
+Estado actual: No iniciado
 Porcentaje de completación: 0.00%
 Empresa cliente: Self, Inc.
 No. de subtareas: 0
 
 Para mantener una propiedad de la tarea intacta solo presione 'Enter'
-Ingrese el nombre de la tarea: Ingrese la descripción de la tarea: Ingrese la fecha de inicio de la tarea (dd/mm/yyyy): Ingrese la fecha de vencimiento de la tarea (dd/mm/yyyy): Ingrese el estado actual de la tarea: Ingrese del 0 al 100 el porcentaje de progreso de la tarea: Ingrese el nombre de la empresa cliente a la que va dirigida la tarea: Tarea modificada exitosamente.
+Nombre de la tarea: Descripción de la tarea: Fecha de inicio de la tarea (dd/mm/yyyy): Fecha de vencimiento de la tarea (dd/mm/yyyy): Estado actual de la tarea (No iniciado, Detenido, En progreso, Completado): Porcentaje de progreso de la tarea (de 0.00 a 100.00): Nombre de la empresa cliente a la que va dirigida la tarea: Error: El estado no es válido: En curso
 >> Comandos disponibles:
 agregar                             Añade un nuevo proyecto
 mostrar                             Enumera los proyectos registrados
@@ -151,10 +166,10 @@ consultar [id]                      Consulta un proyecto existente
 modificar                           Modifica un proyecto existente
 eliminar [id]                       Elimina un proyecto
 tareas [id]                         Gestiona las tareas de un proyecto
-regresar                            Regresa al menú principal
+regresar                            Regresa al menú de empresas
 ayuda [nombre_comando]              Muestra los comandos disponibles o
                                     la ayuda para un comando particular
-salir                               Salir de la consola
+salir                               Sale de la consola
 >> ID: 1
 Nombre: "Proyecto #1"
 Descripción:
@@ -164,25 +179,26 @@ Descripción:
   descripción tremendamente larga.
 Fecha de inicio: 01/07/2024
 Fecha de vencimiento: 07/07/2024
-Estado actual: "En curso"
+Estado actual: En progreso
 Empresa: TechSolutions Innovations, Inc.
 Gerente: Mr. Serious
 Equipo: Un grupo de 3 personas
 No. de tareas: 1
->> Ingrese el ID del proyecto cuyas tareas desea gestionar: Comandos disponibles:
+>> Comandos disponibles:
 agregar                             Añade una nueva tarea al proyecto
 mostrar                             Enumera las tareas asignadas al
                                     proyecto
 consultar [id]                      Consulta una tarea existente
 modificar                           Modifica una tarea existente
 eliminar [id]                       Elimina una tarea del proyecto
+subtareas [id]                      Gestiona las subtareas de una tarea
 regresar                            Regresa al menú de proyectos
 ayuda [nombre_comando]              Muestra los comandos disponibles o
                                     la ayuda para un comando particular
-salir                               Salir de la consola
+salir                               Sale de la consola
 >> ID: 1
 Nombre: "Tarea #1"
-Estado actual: "En curso"
+Estado actual: No iniciado
 Está seguro que desea eliminar esta tarea? (S/N): La tarea con ID 1 ha sido eliminada.
 >> Error: no existe una tarea en este proyecto con ese ID: 1
 >> Comandos disponibles:
@@ -192,10 +208,10 @@ consultar [id]                      Consulta un proyecto existente
 modificar                           Modifica un proyecto existente
 eliminar [id]                       Elimina un proyecto
 tareas [id]                         Gestiona las tareas de un proyecto
-regresar                            Regresa al menú principal
+regresar                            Regresa al menú de empresas
 ayuda [nombre_comando]              Muestra los comandos disponibles o
                                     la ayuda para un comando particular
-salir                               Salir de la consola
+salir                               Sale de la consola
 >> >> ID: 1
 Nombre: "Proyecto #1"
 Descripción:
@@ -205,14 +221,14 @@ Descripción:
   descripción tremendamente larga.
 Fecha de inicio: 01/07/2024
 Fecha de vencimiento: 07/07/2024
-Estado actual: "En curso"
+Estado actual: En progreso
 Empresa: TechSolutions Innovations, Inc.
 Gerente: Mr. Serious
 Equipo: Un grupo de 3 personas
 No. de tareas: 0
 >> ID: 1
 Nombre: "Proyecto #1"
-Estado actual: "En curso"
+Estado actual: En progreso
 Está seguro que desea eliminar este proyecto? (S/N): El proyecto con ID 1 ha sido eliminado.
 >> No hay proyectos para mostrar.
 >> Seguro que desea salir? (S/N): Saliendo del programa...
