@@ -75,13 +75,16 @@ class Empresa:
 
         Véase la documentación de Proyecto.buscar_tarea.
         """
-        return util.buscar_por_atributo(self.__proyectos, atributo, valor)
+        return util.buscar_por_atributo((par.valor for par in self.__proyectos),
+                                        atributo, valor)
 
     def buscar_proyecto_por_id(self, id_):
         """Busca un proyecto por ID eficientemente.
 
         Devuelve None si no se encuentra el proyecto buscado."""
-        return self.__proyectos.buscar(ClaveValor(id_, None))
+        util.comprobar_tipos("id", id_, int)
+        par = self.__proyectos.buscar(ClaveValor(id_, None))
+        return par.valor if par is not None else None
 
     def modificar(self, atributos):
         """Modifica los atributos de esta empresa.
