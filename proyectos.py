@@ -15,6 +15,8 @@ import csv
 import utilidades as util
 
 
+ESTADOS_VALIDOS = ["No iniciado", "Detenido", "En progreso", "Completado"]
+
 def _comprobar_nombres_de_atributos(nombres, atributos):
     util.comprobar_tipos("atributos", atributos, dict)
     for nombre in atributos:
@@ -23,11 +25,18 @@ def _comprobar_nombres_de_atributos(nombres, atributos):
 
 
 class Empresa:
+    """Empresa
+
+    El 'telefono' debe ser un entero.
+    'direccion', 'correo' y 'equipo_contacto' deben ser texto.
+    Véase la documentación de Proyecto para el resto.
+    """
 
     _NOMBRES_ATRIBUTOS = (
         "id", "nombre", "descripcion", "fecha_creacion", "direccion",
         "telefono", "correo", "gerente", "equipo_contacto",
         "_Empresa__proyectos" )
+    _MSG_ERROR_ATRIBUTO_INEXISTENTE = "Las 'Empresa's no tienen atributo '%s'"
 
     def __init__(
         self,
@@ -41,15 +50,11 @@ class Empresa:
         gerente,
         equipo_contacto,
     ):
-        self.id = id_
-        self.nombre = nombre
-        self.descripcion = descripcion
-        self.fecha_creacion = fecha_creacion
-        self.direccion = direccion
-        self.telefono = telefono
-        self.correo = correo
-        self.gerente = gerente
-        self.equipo_contacto = equipo_contacto
+        atributos = {"id": id_, "nombre": nombre, "descripcion": descripcion,
+                     "fecha_creacion": fecha_creacion, "direccion": direccion,
+                     "telefono": telefono, "correo": correo, "gerente": gerente,
+                     "equipo_contacto": equipo_contacto }
+        self.modificar(atributos)
         self.__proyectos = ArbolBinario()
 
     @property
@@ -57,16 +62,34 @@ class Empresa:
         "Árbol binario de proyectos de la empresa."
         return self.__proyectos
 
-    @staticmethod
-    def validar_atributos(atributos):
+    def validar_atributos(self, atributos):
         "Valida los atributos de la clase Empresa"
         try:
-            _comprobar_nombres_de_atributos(_NOMBRES_ATRIBUTOS, atributos)
+            _comprobar_nombres_de_atributos(self._NOMBRES_ATRIBUTOS, atributos)
         except AttributeError as e:
-            raise AttributeError(_MSG_ERROR_ATRIBUTO_INEXISTENTE % e.args[0])
+            raise AttributeError(self._MSG_ERROR_ATRIBUTO_INEXISTENTE
+                                 % e.args[0])
+
+        for nombre in ("id", "telefono"):
+            if nombre in atributos:
+                util.comprobar_tipos(nombre, atributos[nombre], int)
+
+        if "fecha_creacion" in atributos:
+            util.comprobar_tipos("fecha_creacion", atributos["fecha_creacion"],
+                                 date)
+
+        for nombre in ("nombre", "descripcion", "direccion", "correo",
+                       "gerente", "equipo_contacto"):
+            if nombre in atributos:
+                util.comprobar_tipos(nombre, atributos[nombre], str)
+
+        if "_Empresa__proyectos" in atributos:
+            util.comprobar_tipos("_Empresa__proyectos",
+                                 atributos["_Empresa__proyectos"], ArbolBinario)
 
     def agregar_proyecto(self, proyecto):
         "Agrega un 'Proyecto' a la empresa, solo si no está ya incluida."
+        util.comprobar_tipos("proyecto", proyecto, Proyecto)
         if self.buscar_proyecto_por_id(proyecto.id) is None:
             self.__proyectos.insertar(ClaveValor(proyecto.id, proyecto))
 
@@ -132,7 +155,8 @@ class Proyecto:
     """Proyecto
 
     El 'id' debe ser un entero, y las fechas datetime.date.
-    Por ahora no hay más restricciones, y las presentes no se imponen.
+    'nombre', 'descripcion', 'estado' (por ahora), 'empresa',
+    'gerente' y 'equipo' deben ser texto.
     """
 
     _NOMBRES_ATRIBUTOS = (
@@ -152,15 +176,12 @@ class Proyecto:
         gerente,
         equipo,
     ):
-        self.id = id_
-        self.nombre = nombre
-        self.descripcion = descripcion
-        self.fecha_inicio = fecha_inicio
-        self.fecha_vencimiento = fecha_vencimiento
-        self.estado = estado
-        self.empresa = empresa
-        self.gerente = gerente
-        self.equipo = equipo
+        atributos = {"id": id_, "nombre": nombre, "descripcion": descripcion,
+                     "fecha_inicio": fecha_inicio,
+                     "fecha_vencimiento": fecha_vencimiento,
+                     "estado": estado, "empresa": empresa,
+                     "gerente": gerente, "equipo": equipo}
+        self.modificar(atributos)
         self.__tareas = ArbolNario(duplicados=False)
         self.__tareas.insertar_nodo(self)
 
@@ -169,16 +190,50 @@ class Proyecto:
         "Árbol n-ario de tareas del proyecto."
         return self.__tareas
 
-    @staticmethod
-    def validar_atributos(atributos):
+    def validar_atributos(self, atributos):
         "Valida los atributos de la clase Proyecto"
         try:
-            _comprobar_nombres_de_atributos(_NOMBRES_ATRIBUTOS, atributos)
+            _comprobar_nombres_de_atributos(self._NOMBRES_ATRIBUTOS, atributos)
         except AttributeError as e:
-            raise AttributeError(_MSG_ERROR_ATRIBUTO_INEXISTENTE % e.args[0])
+            raise AttributeError(self._MSG_ERROR_ATRIBUTO_INEXISTENTE
+                                 % e.args[0])
+
+        fecha_presente = False
+        if "fecha_inicio" in atributos:
+            fecha_presente = True
+            fecha_inicio = atributos["fecha_inicio"]
+            util.comprobar_tipos("fecha_inicio", fecha_inicio, date)
+        else:
+            fecha_inicio = self.fecha_inicio
+        if "fecha_vencimiento" in atributos:
+            fecha_presente = True
+            fecha_vencimiento = atributos["fecha_vencimiento"]
+            util.comprobar_tipos("fecha_vencimiento", fecha_vencimiento, date)
+        else:
+            fecha_vencimiento = self.fecha_vencimiento
+        if fecha_presente and None not in (fecha_inicio, fecha_vencimiento) \
+            and fecha_inicio >= fecha_vencimiento:
+            raise ValueError(
+                "La fecha de inicio debe ser menor que la fecha de vencimiento")
+
+        if "estado" in atributos and atributos["estado"] not in ESTADOS_VALIDOS:
+            raise ValueError("El estado no es válido: "
+                             + str(atributos["estado"]))
+
+        if "id" in atributos:
+            util.comprobar_tipos("id", atributos["id"], int)
+
+        for nombre in ("nombre", "descripcion", "gerente", "equipo"):
+            if nombre in atributos:
+                util.comprobar_tipos(nombre, atributos[nombre], str)
+
+        if "_Proyecto__tareas" in atributos:
+            util.comprobar_tipos("_Proyecto__tareas",
+                                 atributos["_Proyecto__tareas"], ArbolNario)
 
     def agregar_tarea(self, tarea):
         "Agrega una 'Tarea' al proyecto, solo si no está ya incluida."
+        util.comprobar_tipos("tarea", tarea, Tarea)
         if self.buscar_tarea("id", tarea.id) is None:
             self.__tareas.insertar_nodo(tarea.subtareas.raiz,
                                         self.__tareas.raiz)
@@ -206,7 +261,9 @@ class Proyecto:
         que se desean modificar.  Se levanta una excepción AttributeError
         si algún atributo no pertence a la clase Proyecto.
 
-        Si hay algún valor inválido, se levanta un ValueError."""
+        Si hay algún valor inválido, se levanta un ValueError.
+        Si algún valor es de tipo incorrecto, un TypeError.
+        """
         self.validar_atributos(atributos)
         for nombre, valor in atributos.items():
             setattr(self, nombre, valor)
@@ -221,7 +278,7 @@ class Proyecto:
                      'Descripción:\n{descripcion}',
                      'Fecha de inicio: {fecha_inicio}',
                      'Fecha de vencimiento: {fecha_vencimiento}',
-                     'Estado actual: "{self.estado}"',
+                     'Estado actual: {self.estado}',
                      'Empresa: {self.empresa}',
                      'Gerente: {self.gerente}',
                      'Equipo: {self.equipo}',
@@ -239,7 +296,7 @@ class Proyecto:
     def __str__(self):
         resultado = ['ID: {self.id}',
                      'Nombre: "{self.nombre}"',
-                     'Estado actual: "{self.estado}"' ]
+                     'Estado actual: {self.estado}' ]
         resultado = "\n".join(resultado)
         return resultado.format(self=self)
 
@@ -248,7 +305,8 @@ class Tarea:
     """Tarea
 
     El 'porcentaje' debe ser un 'float'.
-    Véase la documentación de Proyecto para el resto."""
+    Véase la documentación de Proyecto para el resto.
+    """
 
     _NOMBRES_ATRIBUTOS = (
         "id", "nombre", "descripcion", "fecha_inicio", "fecha_vencimiento",
@@ -266,14 +324,12 @@ class Tarea:
         porcentaje,
         empresa_cliente,
     ):
-        self.id = id_
-        self.nombre = nombre
-        self.descripcion = descripcion
-        self.fecha_inicio = fecha_inicio
-        self.fecha_vencimiento = fecha_vencimiento
-        self.estado = estado
-        self.porcentaje = porcentaje
-        self.empresa_cliente = empresa_cliente
+        atributos = {"id": id_, "nombre": nombre, "descripcion": descripcion,
+                     "fecha_inicio": fecha_inicio,
+                     "fecha_vencimiento": fecha_vencimiento,
+                     "estado": estado, "porcentaje": porcentaje,
+                     "empresa_cliente": empresa_cliente}
+        self.modificar(atributos)
         self.__subtareas = ArbolNario(duplicados=False)
         self.__subtareas.insertar_nodo(self)
 
@@ -282,16 +338,38 @@ class Tarea:
         "Subárbol n-ario de subtareas de la tarea."
         return self.__subtareas
 
-    @staticmethod
-    def validar_atributos(atributos):
+    def validar_atributos(self, atributos):
         "Valida los atributos de la clase Tarea"
         try:
-            _comprobar_nombres_de_atributos(_NOMBRES_ATRIBUTOS, atributos)
+            _comprobar_nombres_de_atributos(self._NOMBRES_ATRIBUTOS, atributos)
         except AttributeError as e:
-            raise AttributeError(_MSG_ERROR_ATRIBUTO_INEXISTENTE % e.args[0])
+            raise AttributeError(self._MSG_ERROR_ATRIBUTO_INEXISTENTE
+                                 % e.args[0])
+
+        atributos_comunes = {}
+        for nombre in ("fecha_inicio", "fecha_vencimiento", "estado", "id",
+                       "nombre", "descripcion"):
+            if nombre in atributos:
+                atributos_comunes[nombre] = atributos[nombre]
+        if len(atributos_comunes) != 0:
+            Proyecto.validar_atributos(atributos_comunes)
+
+        if "porcentaje" in atributos:
+            porcentaje = atributos["porcentaje"]
+            util.comprobar_tipos("porcentaje", porcentaje, float)
+            if porcentaje < 0.0 or porcentaje > 100.0:
+                raise ValueError("El porcentaje debe estar entre 0.00 y 100.00")
+
+        if "empresa_cliente" in atributos:
+            util.comprobar_tipos("empresa_cliente", empresa_cliente, str)
+
+        if "_Tareas__subtareas" in atributos:
+            util.comprobar_tipos("_Tareas__subtareas",
+                                 atributos["_Tareas__subtareas"], ArbolNario)
 
     def agregar_subtarea(self, tarea):
         "Agrega una 'Tarea' como subtarea, solo si no está ya incluida."
+        util.comprobar_tipos("tarea", tarea, Tarea)
         if self.buscar_subtarea("id", tarea.id) is None:
             self.__tareas.insertar_nodo(tarea.subtareas.raiz,
                                         self.__subtareas.raiz)
@@ -325,7 +403,7 @@ class Tarea:
                      'Descripción:\n{descripcion}',
                      'Fecha de inicio: {fecha_inicio}',
                      'Fecha de vencimiento: {fecha_vencimiento}',
-                     'Estado actual: "{self.estado}"',
+                     'Estado actual: {self.estado}',
                      'Porcentaje de completación: {self.porcentaje:.2f}%',
                      'Empresa cliente: {self.empresa_cliente}',
                      'No. de subtareas: {cant_subtareas}' ]
@@ -342,7 +420,7 @@ class Tarea:
     def __str__(self):
         resultado = ['ID: {self.id}',
                      'Nombre: "{self.nombre}"',
-                     'Estado actual: "{self.estado}"' ]
+                     'Estado actual: {self.estado}' ]
         resultado = "\n".join(resultado)
         return resultado.format(self=self)
 
