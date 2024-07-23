@@ -25,26 +25,28 @@ nombres_argumentos_proyecto = (
     "nombre", "descripcion", "fecha_inicio", "fecha_vencimiento",
     "estado", "empresa", "gerente", "equipo" )
 mensajes_argumentos_proyecto = (
-    "Ingrese el nombre del proyecto: ",
-    "Ingrese la descripción del proyecto: ",
-    "Ingrese la fecha de inicio del proyecto (dd/mm/yyyy): ",
-    "Ingrese la fecha de vencimiento del proyecto (dd/mm/yyyy): ",
-    "Ingrese el estado actual del proyecto (No iniciado, Detenido, En progreso, Completado): ",
-    "Ingrese el nombre de la empresa del proyecto: ",
-    "Ingrese el nombre del gerente del proyecto: ",
-    "Ingrese el nombre del equipo del proyecto: " )
+    "Nombre del proyecto: ",
+    "Descripción del proyecto: ",
+    "Fecha de inicio del proyecto (dd/mm/yyyy): ",
+    "Fecha de vencimiento del proyecto (dd/mm/yyyy): ",
+    "Estado actual del proyecto (No iniciado, Detenido, En progreso, Completado): ",
+    "Nombre de la empresa del proyecto: ",
+    "Nombre del gerente del proyecto: ",
+    "Nombre del equipo del proyecto: " )
+
 # Tomado del constructor de Tarea en proyectos.py.  Mantener sincronizado
 nombres_argumentos_tarea = (
     "nombre", "descripcion", "fecha_inicio", "fecha_vencimiento",
     "estado", "porcentaje", "empresa_cliente" )
 mensajes_argumentos_tarea = (
-    "Ingrese el nombre de la tarea: ",
-    "Ingrese la descripción de la tarea: ",
-    "Ingrese la fecha de inicio de la tarea (dd/mm/yyyy): ",
-    "Ingrese la fecha de vencimiento de la tarea (dd/mm/yyyy): ",
-    "Ingrese el estado actual de la tarea (No iniciado, Detenido, En progreso, Completado): ",
-    "Ingrese del 0 al 100 el porcentaje de progreso de la tarea: ",
-    "Ingrese el nombre de la empresa cliente a la que va dirigida la tarea: " )
+    "Nombre de la tarea: ",
+    "Descripción de la tarea: ",
+    "Fecha de inicio de la tarea (dd/mm/yyyy): ",
+    "Fecha de vencimiento de la tarea (dd/mm/yyyy): ",
+    "Estado actual de la tarea (No iniciado, Detenido, En progreso, Completado): ",
+    "Porcentaje de progreso de la tarea (de 0.00 a 100.00): ",
+    "Nombre de la empresa cliente a la que va dirigida la tarea: " )
+
 ESTADOS_VALIDOS = ["No iniciado", "Detenido", "En progreso", "Completado"]
 
 def leer_id(consola, mensaje):
