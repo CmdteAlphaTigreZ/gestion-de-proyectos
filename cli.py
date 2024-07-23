@@ -142,6 +142,18 @@ def leer_telefono(argumentos, nombre):
                          None, tipo_error="Valor" )
     return None
 
+def leer_porcentaje(argumentos, nombre):
+    try:
+        porcentaje = argumentos[nombre]
+        if porcentaje[-1] == "%":
+            porcentaje = porcentaje[:-1]
+        argumentos[nombre] = util.a_float(porcentaje)
+    except ValueError:
+        return Resultado("Error: '%s' no es un porcentaje válido: %s"
+                         % (nombre, argumentos[nombre]),
+                         None, tipo_error="Valor" )
+    return None
+
 # Plantilla para función de cambio de contexto
 # Recomendaciones:
 #   * Cambiar el nombre
@@ -394,6 +406,10 @@ def fn_agregar_tarea(consola, linea_comando):
         if isinstance(res, Resultado):  # Resultado de error
             res.origen = fn_agregar_tarea
             return res
+    res = leer_porcentaje(argumentos, "porcentaje")
+    if isinstance(res, Resultado):
+        res.origen = fn_agregar_tarea
+        return res
 
     try:
         tarea = gestor.agregar_tarea(argumentos)
@@ -447,6 +463,11 @@ def fn_modificar_tarea(consola, linea_comando):
             if isinstance(res, Resultado):
                 res.origen = fn_modificar_tarea
                 return res
+    if argumentos["porcentaje"] != "":
+        res = leer_porcentaje(argumentos, "porcentaje")
+        if isinstance(res, Resultado):
+            res.origen = fn_modificar_tarea
+            return res
 
     for nombre, valor in list(argumentos.items()):
         if valor == "":
