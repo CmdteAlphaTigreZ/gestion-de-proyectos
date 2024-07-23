@@ -255,7 +255,7 @@ contextos["principal"]["modificar"] = Comando(fn_modificar_empresa, "modificar")
 def fn_eliminar_empresa(consola, linea_comando):
     "Elimina una empresa"
     empresa = id_a_empresa(
-        consola, "Ingrese el ID del proyecto que desea eliminar: ")
+        consola, "Ingrese el ID de la empresa que desea eliminar: ")
     if isinstance(empresa, Resultado):  # Resultado de error
         empresa.origen = fn_eliminar_empresa
         return empresa
@@ -333,7 +333,7 @@ contextos["proyectos"]["consultar"] = \
 def fn_modificar_proyecto(consola, linea_comando):
     "Modifica un proyecto existente"
     proyecto = id_a_proyecto(
-        consola, "Ingrese el ID del proyecto que desea consultar: ")
+        consola, "Ingrese el ID del proyecto que desea modificar: ")
     if isinstance(proyecto, Resultado):  # Resultado de error
         proyecto.origen = fn_modificar_proyecto
         return proyecto
@@ -364,14 +364,14 @@ contextos["proyectos"]["modificar"] = Comando(fn_modificar_proyecto, "modificar"
 def fn_eliminar_proyecto(consola, linea_comando):
     "Elimina un proyecto"
     proyecto = id_a_proyecto(
-        consola, "Ingrese el ID del proyecto que desea consultar: ")
+        consola, "Ingrese el ID del proyecto que desea eliminar: ")
     if isinstance(proyecto, Resultado):  # Resultado de error
         proyecto.origen = fn_eliminar_proyecto
         return proyecto
 
     print(proyecto)
     if consola.confirmar("Está seguro que desea eliminar este proyecto?"):
-        gestor.eliminar_empresa(proyecto)
+        gestor.eliminar_proyecto(proyecto)
         return Resultado(
             "El proyecto con ID %d ha sido eliminado." % proyecto.id,
             fn_eliminar_proyecto)

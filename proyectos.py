@@ -352,7 +352,7 @@ class Tarea:
             if nombre in atributos:
                 atributos_comunes[nombre] = atributos[nombre]
         if len(atributos_comunes) != 0:
-            Proyecto.validar_atributos(atributos_comunes)
+            Proyecto.validar_atributos(self, atributos_comunes)
 
         if "porcentaje" in atributos:
             porcentaje = atributos["porcentaje"]
@@ -361,7 +361,8 @@ class Tarea:
                 raise ValueError("El porcentaje debe estar entre 0.00 y 100.00")
 
         if "empresa_cliente" in atributos:
-            util.comprobar_tipos("empresa_cliente", empresa_cliente, str)
+            util.comprobar_tipos("empresa_cliente",
+                                 atributos["empresa_cliente"], str)
 
         if "_Tareas__subtareas" in atributos:
             util.comprobar_tipos("_Tareas__subtareas",
@@ -559,7 +560,7 @@ class Gestor:
             proyecto = id_o_proyecto
         self.empresa.eliminar_proyecto(proyecto)
 
-    def agregar_tarea(self, tarea):
+    def agregar_tarea(self, atributos, forzar=False):
         if self.empresa is None:
             raise RuntimeError(Gestor.__MSG_ERROR_NO_EMPRESA,
                                Gestor.ERROR_NO_EMPRESA)
@@ -585,14 +586,14 @@ class Gestor:
 
     def buscar_tarea(self, atributo, valor):
         if len(self.__tareas) == 0:
-            raiz = self.proyecto.__tareas.raiz
+            raiz = self.proyecto.tareas.raiz
         else:
-            raiz = self.__tareas.cima.__subtareas.raiz
-        return util.buscar(
+            raiz = self.__tareas.cima.subtareas.raiz
+        nodo = util.buscar(raiz.hijos(),
             lambda nodo: nodo.valor is not None \
-                         and getattr(nodo.valor, atributo) == valor,
-            raiz.hijos()
+                         and getattr(nodo.valor, atributo) == valor
         )
+        return nodo.valor if nodo is not None else None
 
     def modificar_tarea(self, atributos, tarea=None):
         if self.empresa is None:
@@ -616,14 +617,14 @@ class Gestor:
         if self.proyecto is None:
             raise RuntimeError(Gestor.__MSG_ERROR_NO_PROYECTO,
                                Gestor.ERROR_NO_PROYECTO)
-        if not isinstance(id_o_tarea, Proyecto):
+        if not isinstance(id_o_tarea, Tarea):
             tarea = self.buscar_tarea("id", id_o_tarea)
             if tarea is None:
                 raise ValueError(Gestor._MSG_ERROR_TAREA_NO_ID
                                  + str(id_o_tarea))
         else:
             tarea = id_o_tarea
-        if len(self.__tarea) == 0:
+        if len(self.__tareas) == 0:
             self.proyecto.eliminar_tarea(tarea)
         else:
             self.__tareas.cima.eliminar_subtarea(tarea)
