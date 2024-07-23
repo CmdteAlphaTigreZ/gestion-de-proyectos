@@ -353,11 +353,14 @@ class Gestor:
     ERROR_NO_FORZADO = 1
     ERROR_NO_EMPRESA = 10
     __MSG_ERROR_NO_EMPRESA = "No hay empresa con proyectos siendo gestionados"
-    __MSG_ERROR_EMPRESA_NO_ID = "No existe una empresa con ese ID: "
+    _MSG_ERROR_EMPRESA_NO_ID = "No existe una empresa con ese ID: "
     ERROR_PROYECTO_NO_PERTENECE = 11
     ERROR_NO_PROYECTO = 20
+    __MSG_ERROR_NO_PROYECTO = "No hay proyecto con tareas siendo gestionadas"
+    _MSG_ERROR_PROYECTO_NO_ID = "No existe un proyecto con ese ID: "
     ERROR_TAREA_NO_PERTENECE = 21
     ERROR_NO_TAREA = 30
+    _MSG_ERROR_TAREA_NO_ID = "No existe una tarea con ese ID: "
 
     def __init__(self):
         self.id_empresa_max = 0
@@ -378,6 +381,16 @@ class Gestor:
         "Pila que almacena la cadena de subtareas en edición."
         return self.__tareas
 
+    def __manejar_id_en_atributos(self, atributos, preferido, alternativo,
+                                  forzar):
+        if alternativo in atributos:
+            if preferido in atributos:
+                del atributos[alternativo]
+            else:
+                atributos[preferido] = atributos.pop(alternativo)
+        if not forzar and preferido in atributos:
+            raise ValueError("No se puede especificar un ID")
+
     def agregar_empresa(self, atributos, forzar=False):
         """Agrega una nueva 'Empresa' al sistema de gestión.
 
@@ -386,18 +399,11 @@ class Gestor:
 
         Si se provee un 'id', también se tiene que forzar la operación;
         de lo contrario, se levanta una excepción ValueError"""
-        if not forzar:
-            if "id_" in atributos:
-                raise ValueError("No se puede especificar un ID")
-        elif "id" in atributos:
-            if "id_" in atributos:
-                del atributos["id"]
-            else:
-                atributos["id_"] = atributos.pop("id")
+        self.__manejar_id_en_atributos(atributos, "id_", "id", forzar)
         if "id_" not in atributos:
             self.id_empresa_max += 1
             atributos["id_"] = self.id_empresa_max
-        elif self.__empresas.buscar_por_atributo("id", atributos["id_"]) \
+        elif self.buscar_empresa("id", atributos["id_"]) \
             is not None:
             raise ValueError("Ya existe una empresa con ese ID")
         elif atributos["id_"] > self.id_empresa_max:
@@ -412,25 +418,137 @@ class Gestor:
 
         Véase la documentación de Proyecto.buscar_tarea.
         """
-        return util.buscar_por_atributo(self.__empresas, atributo, valor)
+        return self.__empresas.buscar_por_atributo(atributo, valor)
 
-    def modificar_empresa(self, atributos):
-        if "id_" in atributos:
-            if "id" in atributos:
-                del atributos["id_"]
-            else:
-                atributos["id"] = atributos.pop("id_")
-        id_ = atributos.pop("id")
-        empresa = self.buscar_empresa("id", id_)
+    def modificar_empresa(self, atributos, empresa=None):
+        self.__manejar_id_en_atributos(atributos, "id", "id_", True)
+        id_ = atributos.pop("id", None)
         if empresa is None:
-            raise ValueError(Gestor.__MSG_ERROR_EMPRESA_NO_ID + str(id_))
+            empresa = self.buscar_empresa("id", id_)
+            if empresa is None:
+                raise ValueError(Gestor._MSG_ERROR_EMPRESA_NO_ID + str(id_))
         empresa.modificar(atributos)
 
-    def eliminar_empresa(self, id_):
-        empresa = self.buscar_empresa("id", id_)
-        if empresa is None:
-            raise ValueError(Gestor.__MSG_ERROR_EMPRESA_NO_ID + str(id_))
-        self.__empresas.remove(empresa)
+    def eliminar_empresa(self, id_o_empresa):
+        if not isinstance(id_o_empresa, Empresa):
+            empresa = self.buscar_empresa("id", id_o_empresa)
+            if empresa is None:
+                raise ValueError(Gestor._MSG_ERROR_EMPRESA_NO_ID
+                                 + str(id_o_empresa))
+        else:
+            empresa = id_o_empresa
+        self.__empresas.remover(empresa)
+
+    def agregar_proyecto(self, atributos, forzar=False):
+        if self.empresa is None:
+            raise RuntimeError(Gestor.__MSG_ERROR_NO_EMPRESA,
+                               Gestor.ERROR_NO_EMPRESA)
+        self.__manejar_id_en_atributos(atributos, "id_", "id", forzar)
+        if "id_" not in atributos:
+            self.id_proyecto_max += 1
+            atributos["id_"] = self.id_proyecto_max
+        elif self.empresa.buscar_proyecto_por_id(atributos["id_"]) is not None:
+            raise ValueError("Ya existe un proyecto con ese ID")
+        elif atributos["id_"] > self.id_proyecto_max:
+            self.id_proyecto_max = atributos["id_"]
+
+        proyecto = Proyecto(**atributos)
+        self.empresa.agregar_proyecto(proyecto)
+        return proyecto
+
+    def modificar_proyecto(self, atributos, proyecto=None):
+        if self.empresa is None:
+            raise RuntimeError(Gestor.__MSG_ERROR_NO_EMPRESA,
+                               Gestor.ERROR_NO_EMPRESA)
+        self.__manejar_id_en_atributos(atributos, "id", "id_", True)
+        id_ = atributos.pop("id", 0)
+        if proyecto is None:
+            proyecto = self.empresa.buscar_proyecto_por_id(id_)
+            if proyecto is None:
+                raise ValueError(Gestor._MSG_ERROR_PROYECTO_NO_ID + str(id_))
+        proyecto.modificar(atributos)
+
+    def eliminar_proyecto(self, id_o_proyecto):
+        if self.empresa is None:
+            raise RuntimeError(Gestor.__MSG_ERROR_NO_EMPRESA,
+                               Gestor.ERROR_NO_EMPRESA)
+        if not isinstance(id_o_proyecto, Proyecto):
+            proyecto = self.empresa.buscar_proyecto_por_id(id_o_proyecto)
+            if proyecto is None:
+                raise ValueError(Gestor._MSG_ERROR_PROYECTO_NO_ID
+                                 + str(id_o_proyecto))
+        else:
+            proyecto = id_o_proyecto
+        self.empresa.eliminar_proyecto(proyecto)
+
+    def agregar_tarea(self, tarea):
+        if self.empresa is None:
+            raise RuntimeError(Gestor.__MSG_ERROR_NO_EMPRESA,
+                               Gestor.ERROR_NO_EMPRESA)
+        if self.proyecto is None:
+            raise RuntimeError(Gestor.__MSG_ERROR_NO_PROYECTO,
+                               Gestor.ERROR_NO_PROYECTO)
+        self.__manejar_id_en_atributos(atributos, "id_", "id", forzar)
+        subtarea = len(self.__tareas) != 0
+        if "id_" not in atributos:
+            self.id_tarea_max += 1
+            atributos["id_"] = self.id_tarea_max
+        elif self.proyecto.buscar_tarea("id", atributos["id_"]) is not None:
+            raise ValueError("Ya existe una tarea con ese ID")
+        elif atributos["id_"] > self.id_tarea_max:
+            self.id_tarea_max = atributos["id_"]
+
+        tarea = Tarea(**atributos)
+        if len(self.__tareas) == 0:
+            self.proyecto.agregar_tarea(tarea)
+        else:
+            self.__tareas.cima.agregar_subtarea(tarea)
+        return tarea
+
+    def buscar_tarea(self, atributo, valor):
+        if len(self.__tareas) == 0:
+            raiz = self.proyecto.__tareas.raiz
+        else:
+            raiz = self.__tareas.cima.__subtareas.raiz
+        return util.buscar(
+            lambda nodo: nodo.valor is not None \
+                         and getattr(nodo.valor, atributo) == valor,
+            raiz.hijos()
+        )
+
+    def modificar_tarea(self, atributos, tarea=None):
+        if self.empresa is None:
+            raise RuntimeError(Gestor.__MSG_ERROR_NO_EMPRESA,
+                               Gestor.ERROR_NO_EMPRESA)
+        if self.proyecto is None:
+            raise RuntimeError(Gestor.__MSG_ERROR_NO_PROYECTO,
+                               Gestor.ERROR_NO_PROYECTO)
+        self.__manejar_id_en_atributos(atributos, "id", "id_", True)
+        id_ = atributos.pop("id", 0)
+        if tarea is None:
+            tarea = self.buscar_tarea("id", atributos["id_"])
+            if tarea is None:
+                raise ValueError(Gestor._MSG_ERROR_TAREA_NO_ID + str(id_))
+        tarea.modificar(atributos)
+
+    def eliminar_tarea(self, id_o_tarea):
+        if self.empresa is None:
+            raise RuntimeError(Gestor.__MSG_ERROR_NO_EMPRESA,
+                               Gestor.ERROR_NO_EMPRESA)
+        if self.proyecto is None:
+            raise RuntimeError(Gestor.__MSG_ERROR_NO_PROYECTO,
+                               Gestor.ERROR_NO_PROYECTO)
+        if not isinstance(id_o_tarea, Proyecto):
+            tarea = self.buscar_tarea("id", id_o_tarea)
+            if tarea is None:
+                raise ValueError(Gestor._MSG_ERROR_TAREA_NO_ID
+                                 + str(id_o_tarea))
+        else:
+            tarea = id_o_tarea
+        if len(self.__tarea) == 0:
+            self.proyecto.eliminar_tarea(tarea)
+        else:
+            self.__tareas.cima.eliminar_subtarea(tarea)
 
     def gestionar_proyectos(self, empresa, forzar=False):
         if not forzar \
@@ -465,14 +583,7 @@ class Gestor:
         if self.proyecto is None:
             raise RuntimeError("No hay proyecto con tareas siendo gestionadas",
                                Gestor.ERROR_NO_PROYECTO)
-        if len(self.__tareas) == 0:
-            raiz = self.proyecto.tareas.raiz
-        else:
-            raiz = self.__tareas.cima.subtareas.raiz
-        if util.buscar(
-            lambda nodo: nodo.valor is not None and nodo.valor.id == tarea.id,
-            raiz.hijos()
-        ) is None:
+        if self.buscar_tarea("id", tarea.id) is None:
             raise RuntimeError("La tarea no pertenece al proyecto o tarea padre"
                                " en edición", Gestor.ERROR_TAREA_NO_PERTENECE)
         self.__tareas.insertar(tarea)
