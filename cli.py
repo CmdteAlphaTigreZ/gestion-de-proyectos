@@ -15,10 +15,22 @@ import utilidades as util
 contextos = Contextos()
 contextos.agregar("proyectos", {})
 contextos.agregar("tareas", {})
-proyectos = {}
-id_proyecto_max = len(proyectos)
-proyecto_seleccionado = None
-id_tarea_max = -1
+contextos.agregar("subtareas", {})
+gestor = Gestor()
+
+# Tomado del constructor de Empresa en proyectos.py.  Mantener sincronizado
+nombres_argumentos_empresa = (
+    "nombre", "descripcion", "fecha_creacion", "direccion",
+    "telefono", "correo", "gerente", "equipo_contacto" )
+mensajes_argumentos_empresa = (
+    "Nombre de la empresa: ",
+    "Descripción de la empresa: ",
+    "Fecha de creación de la empresa (dd/mm/yyyy): ",
+    "Dirección de la empresa (en una línea): ",
+    "Número de teléfono de la empresa (sin espacios ni guiones): ",
+    "Dirección de correo electrónico de la empresa: ",
+    "Nombre del gerente de la empresa: ",
+    "Nombre del equipo de contacto de la empresa: " )
 
 # Tomado del constructor de Proyecto en proyectos.py.  Mantener sincronizado
 nombres_argumentos_proyecto = (
@@ -61,42 +73,72 @@ def leer_id(consola, mensaje):
                          + id_, None, tipo_error="Valor")
     return id_
 
-def leer_id_proyecto(consola, mensaje):
+_MSG_ERROR_EMPRESA_NO_ID = ("Error: "
+                            + Gestor._MSG_ERROR_EMPRESA_NO_ID[0].lower()
+                            + Gestor._MSG_ERROR_EMPRESA_NO_ID[1:] )
+_MSG_ERROR_PROYECTO_NO_ID = ("Error: "
+                             + Gestor._MSG_ERROR_PROYECTO_NO_ID[0].lower()
+                             + Gestor._MSG_ERROR_PROYECTO_NO_ID[1:] )
+
+def id_a_empresa(consola, mensaje):
+    "Solicita un ID de empresa al usuario."
+    " Devuelve un resultado de error si aplica."
+    id_empresa = leer_id(consola, mensaje)
+    if isinstance(id_empresa, Resultado): return id_empresa
+    empresa = gestor.buscar_empresa("id", id_empresa)
+    if empresa is None:
+        return Resultado(_MSG_ERROR_EMPRESA_NO_ID + str(id_empresa),
+                         None, tipo_error="Valor")
+    return empresa
+
+def id_a_proyecto(consola, mensaje):
     "Solicita un ID de proyecto al usuario."
     " Devuelve un resultado de error si aplica."
     id_proyecto = leer_id(consola, mensaje)
     if isinstance(id_proyecto, Resultado): return id_proyecto
-    if id_proyecto not in proyectos:
-        return Resultado("Error: no existe un proyecto con ese ID: "
-                         + str(id_proyecto), None, tipo_error="Valor")
-    return id_proyecto
+    proyecto = gestor.empresa.buscar_proyecto_por_id(id_proyecto)
+    if proyecto is None:
+        return Resultado(_MSG_ERROR_PROYECTO_NO_ID + str(id_proyecto),
+                         None, tipo_error="Valor")
+    return proyecto
 
-def leer_id_tarea(consola, mensaje):
+def id_a_tarea(consola, mensaje):
     "Solicita un ID de tarea al usuario."
     " Devuelve un resultado de error si aplica."
     id_tarea = leer_id(consola, mensaje)
     if isinstance(id_tarea, Resultado): return id_tarea
-    if proyecto_seleccionado.buscar_tarea("id", id_tarea) is None:
-        return Resultado("Error: no existe una tarea en este proyecto con ese ID: "
-                         + str(id_tarea), None, tipo_error="Valor")
-    return id_tarea
+    tarea = gestor.buscar_tarea("id", id_tarea)
+    if tarea is None:
+        if len(gestor.tareas) == 0:
+            mensaje = "Error: no existe una tarea en este proyecto con ese ID: "
+        else:
+            mensaje = "Error: no existe una subtarea en esta tarea con ese ID: "
+        return Resultado(mensaje + str(id_tarea), None, tipo_error="Valor")
+    return tarea
 
 def leer_fecha(argumentos, nombre):
     "Interpreta una fecha desde los argumentos de línea de comandos."
     " Devuelve un resultado de error si aplica."
     try:
         argumentos[nombre] = util.str_a_fecha(argumentos[nombre])
-
-        # Validación de que fecha_inicio sea menor a fecha_vencimiento
-        if nombre == 'fecha_inicio' and 'fecha_vencimiento' in argumentos:
-            nombre = 'fecha_vencimiento'
-            fecha_vencimiento = util.str_a_fecha(argumentos[nombre])
-            if argumentos['fecha_inicio'] > fecha_vencimiento:
-                return Resultado("Error: La fecha de inicio debe ser menor que la fecha de vencimiento",
-                                 None, tipo_error="Valor")
     except ValueError as e:
         return Resultado("Error: '%s' no es una fecha válida: %s"
                          % (nombre, argumentos[nombre]),
+                         None, tipo_error="Valor" )
+    return None
+
+_traduccion_telefono = str.maketrans("", "", " -")
+_max_telefono = 19999999999999
+
+def leer_telefono(argumentos, nombre):
+    original = argumentos[nombre]
+    try:
+        argumentos[nombre] = int(original.translate(_traduccion_telefono))
+        if argumentos[nombre] > _max_telefono:
+            raise ValueError("")
+    except ValueError:
+        return Resultado("Error: '%s' no es un número de teléfono válido: %s"
+                         % (nombre, original),
                          None, tipo_error="Valor" )
     return None
 
@@ -110,19 +152,134 @@ def leer_fecha(argumentos, nombre):
 ##    consola.cambiar_contexto("principal")
 ##    consola.ayuda()
 ##    return Resultado("", fn_regresar)
+def macro_regresar(consola, linea_comando, contexto, funcion):
+    try:
+        gestor.regresar()
+    except RuntimeError as e:  # No debería pasar
+        return Resultado("Error: " + e.args[0], funcion)
+    consola.cambiar_contexto(contexto)
+    consola.ayuda()
+    return Resultado("", funcion)
+
+
+def fn_agregar_empresa(consola, linea_comando):
+    "Añade una nueva empresa"
+    print("Ingrese la siguiente información requerida.")
+    argumentos = consola.leer_argumentos(nombres_argumentos_empresa,
+                                         mensajes_argumentos_empresa)
+    res = leer_fecha(argumentos, "fecha_creacion")
+    if isinstance(res, Resultado):  # Resultado de error
+        res.origen = fn_agregar_empresa
+        return res
+    res = leer_telefono(argumentos, "telefono")
+    if isinstance(res, Resultado):
+        res.origen = fn_agregar_empresa
+        return res
+
+    try:
+        empresa = gestor.agregar_empresa(argumentos)
+    except ValueError as e:
+        return Resultado("Error: " + e.args[0], fn_agregar_empresa,
+                         tipo_error="Valor")
+    return Resultado("La empresa ha sido creada, su ID es " + str(empresa.id),
+                     fn_agregar_empresa)
+contextos["principal"]["agregar"] = Comando(fn_agregar_empresa, "agregar")
+
+def fn_enumerar_empresas(consola, linea_comando):
+    "Enumera las empresas registradas"
+    if len(gestor.empresas) == 0:
+        return Resultado("No hay empresas para mostrar.", fn_enumerar_empresas)
+    resultado = "\n\n".join(map(str, gestor.empresas))
+    return Resultado(resultado, fn_enumerar_empresas)
+contextos["principal"]["mostrar"] = Comando(fn_enumerar_empresas, "mostrar")
+
+def fn_consultar_empresas(consola, linea_comando):
+    "Consulta una empresa existente"
+    empresa = id_a_empresa(
+        consola, "Ingrese el ID de la empresa que desea consultar: ")
+    if isinstance(empresa, Resultado):  # Resultado de error
+        empresa.origen = fn_consultar_empresas
+        return empresa
+
+    return Resultado(format(empresa, "g"), fn_consultar_empresas)
+contextos["principal"]["consultar"] = \
+    Comando(fn_consultar_empresas, "consultar [id]")
+
+def fn_modificar_empresa(consola, linea_comando):
+    "Modifica una empresa existente"
+    empresa = id_a_empresa(
+        consola, "Ingrese el ID de la empresa que desea modificar: ")
+    if isinstance(empresa, Resultado):  # Resultado de error
+        empresa.origen = fn_modificar_empresa
+        return empresa
+    print(format(empresa, "g"))
+
+    print("\nPara mantener una propiedad de la empresa intacta"
+          " solo presione 'Enter'")
+    argumentos = consola.leer_argumentos(nombres_argumentos_empresa,
+                                         mensajes_argumentos_empresa)
+    if argumentos["fecha_creacion"] != "":
+        res = leer_fecha(argumentos, "fecha_creacion")
+        if isinstance(res, Resultado):
+            res.origen = fn_modificar_empresa
+            return res
+    if argumentos["telefono"] != "":
+        res = leer_telefono(argumentos, "telefono")
+        if isinstance(res, Resultado):
+            res.origen = fn_modificar_empresa
+            return res
+
+    for nombre, valor in list(argumentos.items()):
+        if valor == "":
+            argumentos.pop(nombre)
+    try:
+        gestor.modificar_empresa(argumentos, empresa)
+    except ValueError as e:
+        return Resultado("Error: " + e.args[0], fn_modificar_empresa,
+                         tipo_error="Valor")
+    return Resultado("Empresa modificada exitosamente.", fn_modificar_empresa)
+contextos["principal"]["modificar"] = Comando(fn_modificar_empresa, "modificar")
+
+def fn_eliminar_empresa(consola, linea_comando):
+    "Elimina una empresa"
+    empresa = id_a_empresa(
+        consola, "Ingrese el ID del proyecto que desea eliminar: ")
+    if isinstance(empresa, Resultado):  # Resultado de error
+        empresa.origen = fn_eliminar_empresa
+        return empresa
+
+    print(empresa)
+    if consola.confirmar("Está seguro que desea eliminar esta empresa?"):
+        gestor.eliminar_empresa(empresa)
+        return Resultado(
+            "La empresa con ID %d ha sido eliminada." % empresa.id,
+            fn_eliminar_empresa)
+    return Resultado("", fn_eliminar_empresa)
+contextos["principal"]["eliminar"] = \
+    Comando(fn_eliminar_empresa, "eliminar [id]")
 
 
 def fn_proyectos(consola, linea_comando):
     "Cambia al menú de proyectos"
+    if len(gestor.empresas) == 0:
+        return Resultado("Error: debe crear al menos una empresa antes"
+                         " de ingresar en el menú de proyectos", fn_proyectos)
+    empresa = id_a_empresa(
+        consola, "Ingrese el ID de la empresa cuyos proyectos desea gestionar: ")
+    if isinstance(empresa, Resultado):  # Resultado de error
+        empresa.origen = fn_proyectos
+        return empresa
+
+    gestor.gestionar_proyectos(empresa)
     consola.cambiar_contexto("proyectos")
     consola.ayuda()
     return Resultado("", fn_proyectos)
-contextos["principal"]["proyectos"] = Comando(fn_proyectos, "proyectos")
+contextos["principal"]["proyectos"] = Comando(fn_proyectos, "proyectos [id]")
 # Recordar añadir regresar al final de las secciones
 
 def fn_agregar_proyecto(consola, linea_comando):
     "Añade un nuevo proyecto"
-    global id_proyecto_max
+    print("Ingrese la siguiente información requerida.")
     argumentos = consola.leer_argumentos(nombres_argumentos_proyecto,
                                          mensajes_argumentos_proyecto)
     for nombre in ("fecha_inicio", "fecha_vencimiento"):
@@ -130,46 +287,44 @@ def fn_agregar_proyecto(consola, linea_comando):
         if isinstance(res, Resultado):  # Resultado de error
             res.origen = fn_agregar_proyecto
             return res
-    if argumentos['estado'] not in ESTADOS_VALIDOS:
-        return Resultado("Error: El estado no es válido",
-                         fn_agregar_proyecto, tipo_error="Valor")
 
-    id_proyecto_max += 1
-    argumentos["id_"] = id_proyecto_max
-    proyecto = Proyecto(**argumentos)
-    proyectos[id_proyecto_max] = proyecto
+    try:
+        proyecto = gestor.agregar_proyecto(argumentos)
+    except ValueError as e:
+        return Resultado("Error: " + e.args[0], fn_agregar_proyecto,
+                         tipo_error="Valor")
     return Resultado("El proyecto ha sido creado, su ID es " + str(proyecto.id),
                      fn_agregar_proyecto)
 contextos["proyectos"]["agregar"] = Comando(fn_agregar_proyecto, "agregar")
 
 def fn_enumerar_proyectos(consola, linea_comando):
     "Enumera los proyectos registrados"
-    if len(proyectos) == 0:
+    if len(gestor.empresa.proyectos) == 0:
         return Resultado("No hay proyectos para mostrar.", fn_enumerar_proyectos)
-    resultado = "\n\n".join(str(proyecto) for proyecto in proyectos.values())
+    resultado = "\n\n".join(map(str,
+        (par.valor for par in gestor.empresa.proyectos) ))
     return Resultado(resultado, fn_enumerar_proyectos)
 contextos["proyectos"]["mostrar"] = Comando(fn_enumerar_proyectos, "mostrar")
 
 def fn_consultar_proyecto(consola, linea_comando):
     "Consulta un proyecto existente"
-    id_proyecto = leer_id_proyecto(
+    proyecto = id_a_proyecto(
         consola, "Ingrese el ID del proyecto que desea consultar: ")
-    if isinstance(id_proyecto, Resultado):  # Resultado de error
-        id_proyecto.origen = fn_consultar_proyecto
-        return id_proyecto
+    if isinstance(proyecto, Resultado):  # Resultado de error
+        proyecto.origen = fn_consultar_proyecto
+        return proyecto
 
-    return Resultado(format(proyectos[id_proyecto], "g"), fn_consultar_proyecto)
+    return Resultado(format(proyecto, "g"), fn_consultar_proyecto)
 contextos["proyectos"]["consultar"] = \
     Comando(fn_consultar_proyecto, "consultar [id]")
 
 def fn_modificar_proyecto(consola, linea_comando):
     "Modifica un proyecto existente"
-    id_proyecto = leer_id_proyecto(
-        consola, "Ingrese el ID del proyecto que desea modificar: ")
-    if isinstance(id_proyecto, Resultado):  # Resultado de error
-        id_proyecto.origen = fn_modificar_proyecto
-        return id_proyecto
-    proyecto = proyectos[id_proyecto]
+    proyecto = id_a_proyecto(
+        consola, "Ingrese el ID del proyecto que desea consultar: ")
+    if isinstance(proyecto, Resultado):  # Resultado de error
+        proyecto.origen = fn_modificar_proyecto
+        return proyecto
     print(format(proyecto, "g"))
     
     print("\nPara mantener una propiedad del proyecto intacta"
@@ -182,31 +337,31 @@ def fn_modificar_proyecto(consola, linea_comando):
             if isinstance(res, Resultado):
                 res.origen = fn_modificar_proyecto
                 return res
-    estado = argumentos['estado']
-    if estado != "" and estado not in ESTADOS_VALIDOS:
-        return Resultado("Error: El estado no es válido",
-                         fn_modificar_proyecto, tipo_error="Valor")
 
-
-    for nombre, valor in argumentos.items():
-        if valor == "": continue
-        setattr(proyecto, nombre, valor)
+    for nombre, valor in list(argumentos.items()):
+        if valor == "":
+            argumentos.pop(nombre)
+    try:
+        gestor.modificar_proyecto(argumentos, proyecto)
+    except ValueError as e:
+        return Resultado("Error: " + e.args[0], fn_modificar_proyecto,
+                         tipo_error="Valor")
     return Resultado("Proyecto modificado exitosamente.", fn_modificar_proyecto)
 contextos["proyectos"]["modificar"] = Comando(fn_modificar_proyecto, "modificar")
 
 def fn_eliminar_proyecto(consola, linea_comando):
     "Elimina un proyecto"
-    id_proyecto = leer_id_proyecto(
-        consola, "Ingrese el ID del proyecto que desea eliminar: ")
-    if isinstance(id_proyecto, Resultado):  # Resultado de error
-        id_proyecto.origen = fn_consultar_proyecto
-        return id_proyecto
+    proyecto = id_a_proyecto(
+        consola, "Ingrese el ID del proyecto que desea consultar: ")
+    if isinstance(proyecto, Resultado):  # Resultado de error
+        proyecto.origen = fn_eliminar_proyecto
+        return proyecto
 
-    print(proyectos[id_proyecto])
+    print(proyecto)
     if consola.confirmar("Está seguro que desea eliminar este proyecto?"):
-        del proyectos[id_proyecto]
+        gestor.eliminar_empresa(proyecto)
         return Resultado(
-            "El proyecto con ID %d ha sido eliminado." % id_proyecto,
+            "El proyecto con ID %d ha sido eliminado." % proyecto.id,
             fn_eliminar_proyecto)
     return Resultado("", fn_eliminar_proyecto)
 contextos["proyectos"]["eliminar"] = \
@@ -215,19 +370,15 @@ contextos["proyectos"]["eliminar"] = \
 
 def fn_tareas(consola, linea_comando):
     "Gestiona las tareas de un proyecto"
-    global proyecto_seleccionado, id_tarea_max
-    if len(proyectos) == 0:
+    if len(gestor.empresa.proyectos) == 0:
         return Resultado("Error: debe crear al menos un proyecto antes"
                          " de ingresar en el menú de tareas", fn_tareas)
-    id_proyecto = leer_id_proyecto(
+    proyecto = id_a_proyecto(
         consola, "Ingrese el ID del proyecto cuyas tareas desea gestionar: ")
-    if isinstance(id_proyecto, Resultado):  # Resultado de error
-        id_proyecto.origen = fn_tareas
-        return id_proyecto
-    proyecto_seleccionado = proyectos[id_proyecto]
-    id_tarea_max = (
-        proyecto_seleccionado.tareas[len(proyecto_seleccionado.tareas) - 1].id
-        if len(proyecto_seleccionado.tareas) > 0 else 0 )
+    if isinstance(proyecto, Resultado):  # Resultado de error
+        proyecto.origen = fn_tareas
+        return proyecto
+    gestor.gestionar_tareas(proyecto)
     consola.cambiar_contexto("tareas")
     consola.ayuda()
     return Resultado("", fn_tareas)
@@ -235,7 +386,7 @@ contextos["proyectos"]["tareas"] = Comando(fn_tareas, "tareas [id]")
 
 def fn_agregar_tarea(consola, linea_comando):
     "Añade una nueva tarea al proyecto"
-    global id_tarea_max
+    print("Ingrese la siguiente información requerida.")
     argumentos = consola.leer_argumentos(nombres_argumentos_tarea,
                                          mensajes_argumentos_tarea)
     for nombre in ("fecha_inicio", "fecha_vencimiento"):
@@ -243,54 +394,47 @@ def fn_agregar_tarea(consola, linea_comando):
         if isinstance(res, Resultado):  # Resultado de error
             res.origen = fn_agregar_tarea
             return res
-    if argumentos['estado'] not in ESTADOS_VALIDOS:
-        return Resultado("Error: El estado no es válido",
-                         fn_agregar_tarea, tipo_error="Valor")
-    try:
-        argumentos["porcentaje"] = util.a_float(argumentos["porcentaje"])
-        if argumentos["porcentaje"] < 0 or argumentos["porcentaje"] > 100:
-            raise ValueError("El porcentaje debe estar entre 0 y 100")
-    except ValueError as e:
-        return Resultado(e.args[0], fn_agregar_tarea, tipo_error="Valor")
 
-    id_tarea_max += 1
-    argumentos["id_"] = id_tarea_max
-    tarea = Tarea(**argumentos)
-    proyecto_seleccionado.agregar_tarea(tarea)
+    try:
+        tarea = gestor.agregar_tarea(argumentos)
+    except ValueError as e:
+        return Resultado("Error: " + e.args[0], fn_agregar_tarea,
+                         tipo_error="Valor")
     return Resultado("La tarea ha sido creada, su ID es " + str(tarea.id),
                      fn_agregar_tarea)
 contextos["tareas"]["agregar"] = Comando(fn_agregar_tarea, "agregar")
 
 def fn_enumerar_tareas(consola, linea_comando):
     "Enumera las tareas asignadas al proyecto"
-    if len(proyecto_seleccionado.tareas) == 0:
+    tarea_principal = len(gestor.tareas) == 0
+    if (len(gestor.proyecto.tareas) if tarea_principal
+        else len(gestor.tareas.cima.subtareas)) == 0:
         return Resultado("No hay tareas para mostrar.", fn_enumerar_tareas)
-    resultado = "\n\n".join(str(tarea) for tarea in proyecto_seleccionado.tareas)
+    if tarea_principal:
+        resultado = "\n\n".join(map(str, gestor.proyecto.tareas))
+    else:
+        resultado = "\n\n".join(map(str, gestor.tareas.cima.subtareas))
     return Resultado(resultado, fn_enumerar_tareas)
 contextos["tareas"]["mostrar"] = Comando(fn_enumerar_tareas, "mostrar")
 
 def fn_consultar_tarea(consola, linea_comando):
     "Consulta una tarea existente"
-    id_tarea = leer_id_tarea(
+    tarea = id_a_tarea(
         consola, "Ingrese el ID de la tarea que desea consultar: ")
-    if isinstance(id_tarea, Resultado):  # Resultado de error
-        id_tarea.origen = fn_consultar_tarea
-        return id_tarea
+    if isinstance(tarea, Resultado):  # Resultado de error
+        tarea.origen = fn_consultar_tarea
+        return tarea
 
-    return Resultado(
-        format(proyecto_seleccionado.buscar_tarea("id", id_tarea), "g"),
-        fn_consultar_tarea
-    )
+    return Resultado(format(tarea, "g"), fn_consultar_tarea)
 contextos["tareas"]["consultar"] = Comando(fn_consultar_tarea, "consultar [id]")
 
 def fn_modificar_tarea(consola, linea_comando):
     "Modifica una tarea existente"
-    id_tarea = leer_id_tarea(
+    tarea = id_a_tarea(
         consola, "Ingrese el ID de la tarea que desea modificar: ")
-    if isinstance(id_tarea, Resultado):  # Resultado de error
-        id_tarea.origen = fn_modificar_tarea
-        return id_tarea
-    tarea = proyecto_seleccionado.buscar_tarea("id", id_tarea)
+    if isinstance(tarea, Resultado):  # Resultado de error
+        tarea.origen = fn_modificar_tarea
+        return tarea
     print(format(tarea, "g"))
 
     print("\nPara mantener una propiedad de la tarea intacta"
@@ -303,62 +447,120 @@ def fn_modificar_tarea(consola, linea_comando):
             if isinstance(res, Resultado):
                 res.origen = fn_modificar_tarea
                 return res
-    estado = argumentos['estado']
-    if estado != "" and estado not in ESTADOS_VALIDOS:
-        return Resultado("Error: El estado no es válido",
-                         fn_modificar_tarea, tipo_error="Valor")
-    try:
-        if argumentos["porcentaje"] != "":
-            argumentos["porcentaje"] = util.a_float(argumentos["porcentaje"])
-            if argumentos["porcentaje"] < 0 or argumentos["porcentaje"] > 100:
-                raise ValueError("El porcentaje debe estar entre 0 y 100")
-    except ValueError as e:
-        return Resultado(e.args[0], fn_agregar_tarea, tipo_error="Valor")
 
-    for nombre, valor in argumentos.items():
-        if valor == "": continue
-        setattr(tarea, nombre, valor)
+    for nombre, valor in list(argumentos.items()):
+        if valor == "":
+            argumentos.pop(nombre)
+    try:
+        gestor.modificar_tarea(argumentos, tarea)
+    except ValueError as e:
+        return Resultado("Error: " + e.args[0], fn_modificar_tarea,
+                         tipo_error="Valor")
     return Resultado("Tarea modificada exitosamente.", fn_modificar_tarea)
 contextos["tareas"]["modificar"] = Comando(fn_modificar_tarea, "modificar")
 
 def fn_eliminar_tarea(consola, linea_comando):
     "Elimina una tarea del proyecto"
-    id_tarea = leer_id_tarea(
+    tarea = id_a_tarea(
         consola, "Ingrese el ID de la tarea que desea eliminar: ")
-    if isinstance(id_tarea, Resultado):  # Resultado de error
-        id_tarea.origen = fn_eliminar_tarea
-        return id_tarea
-    tarea = proyecto_seleccionado.buscar_tarea("id", id_tarea)
+    if isinstance(tarea, Resultado):  # Resultado de error
+        tarea.origen = fn_eliminar_tarea
+        return tarea
 
     print(tarea)
     if consola.confirmar("Está seguro que desea eliminar esta tarea?"):
-        del proyecto_seleccionado.tareas[
-            proyecto_seleccionado.tareas.indice(tarea) ]
-        return Resultado(
-            "La tarea con ID %d ha sido eliminada." % id_tarea,
-            fn_eliminar_tarea)
+        gestor.eliminar_tarea(tarea)
+        return Resultado("La tarea con ID %d ha sido eliminada." % tarea.id,
+                         fn_eliminar_tarea)
     return Resultado("", fn_eliminar_tarea)
 contextos["tareas"]["eliminar"] = Comando(fn_eliminar_tarea, "eliminar [id]")
 
 
-# Van al final para que aparezcan de último en la lista de comandos
-def fn_regresar_a_principal(consola, linea_comando):
-    "Regresa al menú principal"
-    consola.cambiar_contexto("principal")
+def fn_subtareas(consola, linea_comando):
+    "Gestiona las subtareas de una tarea"
+    if len(gestor.tareas) == 0:
+        if len(gestor.proyecto.tareas) == 0:
+            return Resultado("Error: debe crear al menos una tarea antes"
+                             " de ingresar en el menú de subtareas",
+                             fn_subtareas)
+    else:
+        if len(gestor.tareas.cima.subtareas) == 0:
+            return Resultado("Error: debe crear al menos una subtarea antes"
+                             " de ingresar en el menú de las subtareas"
+                             " descendientes", fn_subtareas)
+    tarea = id_a_tarea(
+        consola, "Ingrese el ID de la tarea cuyas subtareas desea gestionar: ")
+    if isinstance(tarea, Resultado):  # Resultado de error
+        tarea.origen = fn_subtareas
+        return tarea
+    gestor.gestionar_subtareas(tarea)
+    consola.cambiar_contexto("subtareas")
     consola.ayuda()
-    return Resultado("", fn_regresar_a_principal)
-contextos["proyectos"]["regresar"] = Comando(fn_regresar_a_principal,
+    return Resultado("", fn_subtareas)
+contextos["tareas"]["subtareas"] = Comando(fn_subtareas, "subtareas [id]")
+
+def fn_agregar_subtarea(consola, linea_comando):
+    "Añade una nueva subtarea a la tarea"
+    resultado = fn_agregar_tarea(consola, linea_comando)
+    resultado.origen = fn_agregar_subtarea
+    return resultado
+contextos["subtareas"]["agregar"] = Comando(fn_agregar_subtarea, "agregar")
+
+def fn_enumerar_subtareas(consola, linea_comando):
+    "Enumera las subtareas asignadas a la tarea"
+    resultado = fn_enumerar_tareas(consola, linea_comando)
+    resultado.origen = fn_enumerar_subtareas
+    return resultado
+contextos["subtareas"]["mostrar"] = Comando(fn_enumerar_subtareas, "mostrar")
+
+def fn_consultar_subtarea(consola, linea_comando):
+    "Consulta una subtarea existente"
+    resultado = fn_consultar_tarea(consola, linea_comando)
+    resultado.origen = fn_consultar_subtarea
+    return resultado
+contextos["subtareas"]["consultar"] = \
+    Comando(fn_consultar_subtarea, "consultar [id]")
+
+def fn_modificar_subtarea(consola, linea_comando):
+    "Modifica una subtarea existente"
+    resultado = fn_modificar_tarea(consola, linea_comando)
+    resultado.origen = fn_modificar_subtarea
+    return resultado
+contextos["subtareas"]["modificar"]= Comando(fn_modificar_subtarea, "modificar")
+
+def fn_eliminar_subtarea(consola, linea_comando):
+    "Elimina una subtarea de la tarea"
+    resultado = fn_eliminar_tarea(consola, linea_comando)
+    resultado.origen = fn_eliminar_subtarea
+    return resultado
+contextos["subtareas"]["eliminar"] = \
+    Comando(fn_eliminar_subtarea, "eliminar [id]")
+
+
+# Van al final para que aparezcan de último en la lista de comandos
+def fn_regresar_a_empresas(consola, linea_comando):
+    "Regresa al menú de empresas"
+    return macro_regresar(consola, linea_comando,
+                          "principal", fn_regresar_a_empresas)
+contextos["proyectos"]["regresar"] = Comando(fn_regresar_a_empresas,
                                              "regresar")
 
-def fn_regresar_a_proyecto(consola, linea_comando):
+def fn_regresar_a_proyectos(consola, linea_comando):
     "Regresa al menú de proyectos"
-    global proyecto_seleccionado, id_tarea_max
-    id_tarea_max = -1
-    proyecto_seleccionado = None
-    consola.cambiar_contexto("proyectos")
-    consola.ayuda()
-    return Resultado("", fn_regresar_a_proyecto)
-contextos["tareas"]["regresar"] = Comando(fn_regresar_a_proyecto, "regresar")
+    return macro_regresar(consola, linea_comando,
+                          "proyectos", fn_regresar_a_proyectos)
+contextos["tareas"]["regresar"] = Comando(fn_regresar_a_proyectos, "regresar")
+
+def fn_regresar_a_tarea_padre(consola, linea_comando):
+    "Regresa al menú de la tarea padre"
+    if len(gestor.tareas) <= 1:
+        contexto = "tareas"
+    else:
+        contexto = "subtareas"
+    return macro_regresar(consola, linea_comando,
+                          contexto, fn_regresar_a_tarea_padre)
+contextos["subtareas"]["regresar"] = \
+    Comando(fn_regresar_a_tarea_padre, "regresar")
 
 
 def main():
