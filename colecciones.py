@@ -269,6 +269,22 @@ class ListaEnlazada:
     def __delitem__(self, indice):
         self.extraer(indice)
 
+    def remover(self, valor):
+        nodo = util.buscar_por_atributo(self.IteradorL2E(self, True, True),
+                                        "valor", valor)
+        if nodo is None:
+            raise ValueError("El valor no se encuentra en la lista: "
+                             + str(valor))
+        if nodo.anterior() is None:
+            self.extraer(0)
+        elif nodo.siguiente() is None:
+            self.extraer_ultimo()
+        else:
+            nodo.anterior().enlazar_a(nodo.siguiente())
+            self.__longitud -= 1
+
+    remove = remover
+
     def __iadd__(self, iterable):
         "Anexa todos los elementos de iterable a la lista"
         iterable = iter(iterable)
@@ -327,9 +343,10 @@ class ListaEnlazada:
     class IteradorL2E:
         "Iterador de lista doblemente enlazada"
 
-        def __init__(self, lista, adelante=True):
+        def __init__(self, lista, adelante=True, nodos=False):
             "'adelante' indica la dirección de iteración"
             util.comprobar_tipos("lista", lista, ListaEnlazada)
+            self.__nodos = nodos
             if adelante:
                 self.__nodo = lista._ListaEnlazada__cabeza
                 self.__funcion = NodoLista.siguiente
@@ -343,9 +360,9 @@ class ListaEnlazada:
         def __next__(self):
             if self.__nodo is None:
                 raise StopIteration()
-            valor = self.__nodo.valor
+            nodo_actual = self.__nodo
             self.__nodo = self.__funcion(self.__nodo)
-            return valor
+            return nodo_actual if self.__nodos else nodo_actual.valor
 
     def __iter__(self):
         "Devuelve un iterador eficiente sobre la lista enlazada."
