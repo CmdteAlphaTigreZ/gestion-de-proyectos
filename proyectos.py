@@ -86,6 +86,10 @@ class Empresa:
         par = self.__proyectos.buscar(ClaveValor(id_, None))
         return par.valor if par is not None else None
 
+    def eliminar_proyecto(self, proyecto):
+        util.comprobar_tipos("proyecto", proyecto, Proyecto)
+        self.__proyectos.remover(ClaveValor(proyecto.id, None))
+
     def modificar(self, atributos):
         """Modifica los atributos de esta empresa.
 
@@ -190,6 +194,10 @@ class Proyecto:
         iterador = self.__tareas.en_anchura()
         next(iterador)  # Descartar raíz
         return util.buscar_por_atributo(iterador, atributo, valor)
+
+    def eliminar_tarea(self, tarea):
+        util.comprobar_tipos("tarea", tarea, Tarea)
+        self.__tareas.remover_nodo(tarea, padre=self.__tareas.raiz)
 
     def modificar(self, atributos):
         """Modifica los atributos de este proyecto.
@@ -296,6 +304,10 @@ class Tarea:
         iterador = self.__subtareas.en_anchura()
         next(iterador)  # Descartar raíz
         return util.buscar_por_atributo(iterador, atributo, valor)
+
+    def eliminar_subtarea(self, tarea):
+        util.comprobar_tipos("tarea", tarea, Tarea)
+        self.__subtareas.remover_nodo(tarea, padre=self.__subtareas.raiz)
 
     def modificar(self, atributos):
         """Modifica los atributos de esta tarea.
